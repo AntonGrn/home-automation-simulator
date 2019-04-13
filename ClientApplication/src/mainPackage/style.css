@@ -1,0 +1,32 @@
+.root{
+    -fx-background-color: #231f26;
+}
+
+/*------------------------- CONTAINERS ------------------------------*/
+
+#menuFrame{
+   -fx-border-color: #9d9d9e;
+   -fx-border-width: 0 0 3 0; /* top right bottom left*/
+}
+
+#centerBox{
+   -fx-border-color: #9d9d9e;
+   -fx-border-width: 0 3 0 0;
+}
+
+#loggedInStatusFrame{
+   -fx-border-color: #9d9d9e;
+   -fx-border-width: 3 0 0 0;
+}
+
+/*-------------------------- LABELS ------------------------------*/
+
+.label {
+   -fx-text-fill: white;
+}
+
+#exceptionLabel{
+    -fx-text-fill: red;
+}
+
+
