@@ -1,1 +1,45 @@
+# NOTES:
+#
+# Keeping .iml makes it easier for the cloner. Also recommended to keep.
+#
+# Not ignoring entire .idea makes it easier for the cloner (only ignore user specific content)
+#
+# Helpful notes for .gitignore in repository with multiple applications:
+# A leading "**" followed by a slash means match in all directories. For example, "**/foo" matches file or directory "foo" anywhere
+# "/**" matches everything inside. For example, "abc/**" matches all files inside directory "abc", relative to the location of the .gitignore file, with infinite depth.
+# "a/**/b" matches "a/b", "a/x/b", "a/x/y/b" and so on.
+# 
+#
 
+# User specific (if generated during application execution)
+**/.txt
+**/.ser
+
+#Compiler output (IntelliJ)
+**/out/
+
+**/artifacts/
+
+# File-based project format
+**/.iws 
+
+# Other recommended gitignore files:
+
+# User-specific stuff
+**/.idea/**/workspace.xml
+**/.idea/**/tasks.xml
+**/.idea/**/usage.statistics.xml
+**/.idea/**/dictionaries
+**/.idea/**/shelf
+
+# Generated files
+**/.idea/**/contentModel.xml
+
+# Sensitive or high-churn files
+**/.idea/**/dataSources/
+**/.idea/**/dataSources.ids
+**/.idea/**/dataSources.local.xml
+**/.idea/**/sqlDataSources.xml
+**/.idea/**/dynamic.xml
+**/.idea/**/uiDesigner.xml
+**/.idea/**/dbnavigator.xml
