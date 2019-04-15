@@ -1,4 +1,4 @@
-package mainPackage;
+package mainPackage.modelClasses;
 
 public class Heat extends Gadget<Integer> {
 

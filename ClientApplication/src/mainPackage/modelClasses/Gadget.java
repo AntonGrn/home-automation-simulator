@@ -1,4 +1,4 @@
-package mainPackage;
+package mainPackage.modelClasses;
 
 public abstract class Gadget<T> {
 

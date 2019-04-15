@@ -2,6 +2,7 @@ package mainPackage;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import mainPackage.modelClasses.Account;
 
 public class AccountLoggedin {
 

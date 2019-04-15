@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import mainPackage.modelClasses.Account;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

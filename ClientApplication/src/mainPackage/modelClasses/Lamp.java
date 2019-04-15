@@ -1,4 +1,4 @@
-package mainPackage;
+package mainPackage.modelClasses;
 
 public class Lamp extends Gadget<Boolean>{
 
