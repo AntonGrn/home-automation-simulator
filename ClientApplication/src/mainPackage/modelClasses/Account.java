@@ -1,4 +1,4 @@
-package mainPackage;
+package mainPackage.modelClasses;
 
 /**
  * Just a test class until we got the real one going.

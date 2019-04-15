@@ -1,7 +1,7 @@
 package mainPackage.dynamicFrames;
 
 import javafx.fxml.FXML;
-import mainPackage.Account;
+import mainPackage.modelClasses.Account;
 import mainPackage.AccountLoggedin;
 import mainPackage.DynamicFrame;
 
