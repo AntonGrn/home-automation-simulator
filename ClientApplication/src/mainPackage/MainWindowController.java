@@ -13,10 +13,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import mainPackage.modelClasses.Account;
+import mainPackage.modelClasses.Gadget;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class MainWindowController {
 
@@ -41,6 +43,9 @@ public class MainWindowController {
 
     private String currentDynamicFrame;
 
+    private ArrayList<Gadget> gadgetList;
+    // When model class room is added: private ArrayList<Room> roomList;
+
     @FXML
     public void initialize() {
 
@@ -48,6 +53,8 @@ public class MainWindowController {
         btn1.setUserData("Test");
         btn2.setUserData("testFrame");
         btn3.setUserData("testFrame");
+
+        gadgetList = new ArrayList<>();
 
         //Add listener to loggedInAccount object's loggedInAccountProperty
         AccountLoggedin.getInstance().loggedInAccountProperty().addListener(
@@ -112,7 +119,7 @@ public class MainWindowController {
 
     }
 
-    public void update() {
+    public synchronized void update() { //Can be accessed by client thread, and main thread
         //Update houseFrame + invoke update method of currentFrame
     }
 
