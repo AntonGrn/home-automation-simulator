@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import mainPackage.modelClasses.Account;
 import mainPackage.modelClasses.Gadget;
+import mainPackage.modelClasses.Lamp;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -45,7 +46,7 @@ public class MainWindowController {
 
     private String currentDynamicFrame;
 
-    private ArrayList<Gadget> gadgetList;
+    public ArrayList<Gadget> gadgetList;
     // When model class Room is added: private ArrayList<Room> roomList;
     // Or:                             public ArrayList<Pane> roomList;
 
@@ -57,11 +58,15 @@ public class MainWindowController {
 
         //Set name of dynamic frame to which the button links
         btn1.setUserData("Test");
-        btn2.setUserData("testFrame");
+        btn2.setUserData("RoomsController");
         btn3.setUserData("testFrame");
 
         gadgetList = new ArrayList<>();
         serverRequests = new ArrayBlockingQueue<>(10);
+
+        //Until we can get Gadgets from Server:
+        gadgetList.add(new Lamp("LampOne", 25, "Kitchen"));
+        gadgetList.add(new Lamp("LampTwo", 25, "Kitchen"));
 
         //Add listener to loggedInAccount object's loggedInAccountProperty
         AccountLoggedin.getInstance().loggedInAccountProperty().addListener(
