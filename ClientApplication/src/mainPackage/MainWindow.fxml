@@ -16,7 +16,7 @@
    <top>
       <HBox fx:id="menuFrame" prefHeight="150.0" prefWidth="950.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btn1" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#setDynamicFrame" prefHeight="110.0" prefWidth="120.0" text="Image1">
+            <Button fx:id="btn1" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#setDynamicFrame" prefHeight="110.0" prefWidth="120.0" text="Test">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin>

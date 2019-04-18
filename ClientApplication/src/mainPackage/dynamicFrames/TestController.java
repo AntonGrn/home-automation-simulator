@@ -1,9 +1,13 @@
 package mainPackage.dynamicFrames;
 
 import javafx.fxml.FXML;
+import mainPackage.Main;
 import mainPackage.modelClasses.Account;
 import mainPackage.AccountLoggedin;
 import mainPackage.DynamicFrame;
+import mainPackage.modelClasses.Lamp;
+
+import java.awt.*;
 
 public class TestController implements DynamicFrame {
 
