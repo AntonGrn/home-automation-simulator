@@ -13,10 +13,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import mainPackage.modelClasses.Account;
+import mainPackage.modelClasses.Gadget;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 public class MainWindowController {
 
@@ -41,6 +45,13 @@ public class MainWindowController {
 
     private String currentDynamicFrame;
 
+    private ArrayList<Gadget> gadgetList;
+    // When model class Room is added: private ArrayList<Room> roomList;
+    // Or:                             public ArrayList<Pane> roomList;
+
+    //Producer-consumer pattern. Thread safe. Add requests to send to server.
+    public BlockingQueue<String> serverRequests;
+
     @FXML
     public void initialize() {
 
@@ -48,6 +59,9 @@ public class MainWindowController {
         btn1.setUserData("Test");
         btn2.setUserData("testFrame");
         btn3.setUserData("testFrame");
+
+        gadgetList = new ArrayList<>();
+        serverRequests = new ArrayBlockingQueue<>(10);
 
         //Add listener to loggedInAccount object's loggedInAccountProperty
         AccountLoggedin.getInstance().loggedInAccountProperty().addListener(
@@ -62,8 +76,6 @@ public class MainWindowController {
                     }
                 }
         );
-
-
     }
 
     public void isLoggedIn() {
@@ -77,9 +89,8 @@ public class MainWindowController {
         //+ Set dynamic frame to log in frame
     }
 
-
     @FXML
-    void menuBtnPressed(ActionEvent event) {
+    void setDynamicFrame(ActionEvent event) {
         exceptionLabel.setText("");
 
         //Set all buttons to default layout.
@@ -93,7 +104,6 @@ public class MainWindowController {
         ((Button) event.getSource()).setStyle(
                 "-fx-background-color: orange;" +
                         "-fx-border-color:white;");
-
 
         //Perform scene change within the dynamicFrame of the MainWindow
         String url = ((Button) event.getSource()).getUserData().toString();
@@ -109,10 +119,10 @@ public class MainWindowController {
         } catch (NullPointerException e) {
             exceptionLabel.setText("Unable to load new scene.");
         }
-
     }
 
-    public void update() {
+    public synchronized void update() { //Can be accessed by client thread, and main thread
+        //Should it be synchronized code block instead, since other threads access other methods in this class???
         //Update houseFrame + invoke update method of currentFrame
     }
 
