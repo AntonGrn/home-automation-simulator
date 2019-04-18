@@ -122,6 +122,7 @@ public class MainWindowController {
     }
 
     public synchronized void update() { //Can be accessed by client thread, and main thread
+        //Should it be synchronized code block instead, since other threads access other methods in this class???
         //Update houseFrame + invoke update method of currentFrame
     }
 
