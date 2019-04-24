@@ -7,7 +7,7 @@ public abstract class Gadget<T> {
     private int consumption;
     private String room;
 
-    public Gadget(String name, T state, int consumption, String room) {
+    public Gadget(String name, T state, int consumption, String room) { //Overloaded constructor for when objects are loaded from Server
         this.name = name;
         this.state = state;
         this.consumption = consumption;
