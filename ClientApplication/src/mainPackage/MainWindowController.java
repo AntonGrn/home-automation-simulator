@@ -1,5 +1,7 @@
 package mainPackage;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -51,7 +53,13 @@ public class MainWindowController {
     // Or:                             public ArrayList<Pane> roomList;
 
     //Producer-consumer pattern. Thread safe. Add requests to send to server.
-    public BlockingQueue<String> serverRequests;
+    //Maybe have private, with getters
+    public BlockingQueue<String> requestsToServer;
+
+    public BlockingQueue<String> requestsFromServer;
+
+    //To notify the JavaFX-thread that updates has arrived from the Server.
+    public BooleanProperty doUpdate;
 
     @FXML
     public void initialize() {
@@ -62,7 +70,10 @@ public class MainWindowController {
         btn3.setUserData("testFrame");
 
         gadgetList = new ArrayList<>();
-        serverRequests = new ArrayBlockingQueue<>(10);
+        requestsToServer = new ArrayBlockingQueue<>(10);
+        requestsFromServer = new ArrayBlockingQueue<>(10);
+
+        doUpdate = new SimpleBooleanProperty(false);
 
         //Until we can get Gadgets from Server:
         gadgetList.add(new Lamp("LampOne", 25, "Kitchen"));
@@ -77,6 +88,21 @@ public class MainWindowController {
                             isLoggedIn();
                         } catch (NullPointerException e) {  //If no account is held by the AccountLoggedin-object, newValue == null
                             isNotLoggedIn();
+                        }
+                    }
+                }
+        );
+
+        //Since requests for updates from the Server is received by another thread than JavaFX, we need a way to notify the
+        //JavaFX-Thread to process the new data that has arrived from the server.
+        //Could also be done by an int, representing the number of updates to be done (if more arrives while processing)
+        doUpdate.addListener(
+                new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        if(doUpdate.getValue()) {
+                            update();
+                            doUpdate.setValue(false);
                         }
                     }
                 }
@@ -126,9 +152,45 @@ public class MainWindowController {
         }
     }
 
-    public synchronized void update() { //Can be accessed by client thread, and main thread
-        //Should it be synchronized code block instead, since other threads access other methods in this class???
+    //update() should be run by JavaFX-Thread, so should not be invoked by other threads (ex ClientInputThread)
+    //update while requestsFromServer is not empty
+    public void update() {
         //Update houseFrame + invoke update method of currentFrame
+        try {
+            String request = requestsFromServer.take();
+            String[] commands = request.split(":");
+
+            //Translate the requests according to the LAAS communication protocol:
+            switch (commands[0]) {
+                case "2": //Result of login attempt
+                    if(commands[1].equals("ok")) {
+                        //Create account and send it as parameter to: AccountLoggedin.getInstance().setLoggedInAccount(account);
+                    }
+                    else {
+                        exceptionLabel.setText("Login failed");
+                        //Call the update() of LoginController (to clear it)
+                    }
+                    break;
+                case "4": //Gadgets' states has been updated
+                    break;
+                case "7": //Gadgets info has been updates
+                    break;
+                case"10": //Users' info has been updated
+                    break;
+                case "12": //Log has been sent
+                    //Cast log scene
+                    break;
+                case "13": //Exception message from server
+                    exceptionLabel.setText(commands[2]);
+                    break;
+                default:
+                    exceptionLabel.setText("Unknown update request received");
+            }
+
+        }catch(InterruptedException e) {
+            exceptionLabel.setText("Unable to update from server");
+        }
+
     }
 
 }
