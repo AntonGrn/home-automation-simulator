@@ -41,7 +41,7 @@ public class MainWindowController {
     private GridPane loggedintatusFrame;
 
     @FXML
-    private Button btn1, btn2, btn3;
+    private Button btnRooms, btnUsers, btnGadgets, btnEnergy, btnLogs, btnSettings;
 
     @FXML
     private Label exceptionLabel, loggedInLabel;
@@ -65,9 +65,12 @@ public class MainWindowController {
     public void initialize() {
 
         //Set name of dynamic frame to which the button links
-        btn1.setUserData("Test");
-        btn2.setUserData("RoomsController");
-        btn3.setUserData("testFrame");
+        btnRooms.setUserData("Rooms");
+        btnUsers.setUserData("Users");
+        btnGadgets.setUserData("Gadgets");
+        btnEnergy.setUserData("Energy");
+        btnLogs.setUserData("Logs");
+        btnSettings.setUserData("Settings");
 
         gadgetList = new ArrayList<>();
         requestsToServer = new ArrayBlockingQueue<>(10);
@@ -92,6 +95,7 @@ public class MainWindowController {
                     }
                 }
         );
+
         blueprint();
 
         //Since requests for updates from the Server is received by another thread than JavaFX, we need a way to notify the

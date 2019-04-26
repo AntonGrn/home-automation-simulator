@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<BorderPane maxHeight="600.0" maxWidth="400.0" minHeight="600.0" minWidth="400.0" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <Pane fx:id="paneHeaderRooms" prefHeight="160.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+         <children>
+            <TableView fx:id="tblViewRooms" maxHeight="165.0" maxWidth="400.0" minHeight="145.0" minWidth="400.0" prefHeight="145.0" prefWidth="400.0">
+               <columns>
+                  <TableColumn fx:id="clmOne" editable="false" prefWidth="120.0" resizable="false" sortable="false" text="C1" />
+                  <TableColumn fx:id="clmTwo" editable="false" prefWidth="120.0" resizable="false" sortable="false" text="C2" />
+                  <TableColumn fx:id="clmThree" editable="false" prefWidth="120.0" resizable="false" sortable="false" text="C3" />
+                  <TableColumn fx:id="clmFour" editable="false" prefWidth="120.0" resizable="false" sortable="false" text="C4" />
+                  <TableColumn fx:id="clmFive" editable="false" prefWidth="120.0" resizable="false" sortable="false" text="C5" />
+               </columns>
+               <padding>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </padding>
+            </TableView>
+         </children>
+      </Pane>
+   </top>
+   <center>
+      <Pane fx:id="dynamicFrameRooms" maxHeight="440.0" maxWidth="400.0" minHeight="440.0" minWidth="400.0" prefHeight="440.0" prefWidth="400.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
