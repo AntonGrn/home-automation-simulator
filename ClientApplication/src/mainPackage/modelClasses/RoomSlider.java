@@ -3,6 +3,7 @@ package mainPackage.modelClasses;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import mainPackage.Main;
 
 public class RoomSlider {
 
@@ -35,11 +36,70 @@ public class RoomSlider {
          */
         });
 
-
         /*same as above..*/
         this.kitchen.get().setOnAction(e->{});
         this.garage.get().setOnAction(e->{});
         this.toilet.get().setOnAction(e->{});
         this.livingRoom.get().setOnAction(e->{});
+    }
+    
+    public Button getBedRoom() {
+        return bedRoom.get();
+    }
+
+    public SimpleObjectProperty<Button> bedRoomProperty() {
+        return bedRoom;
+    }
+
+    public void setBedRoom(Button bedRoom) {
+        this.bedRoom.set(bedRoom);
+    }
+
+    public Button getKitchen() {
+        return kitchen.get();
+    }
+
+    public SimpleObjectProperty<Button> kitchenProperty() {
+        return kitchen;
+    }
+
+    public void setKitchen(Button kitchen) {
+        this.kitchen.set(kitchen);
+    }
+
+    public Button getGarage() {
+        return garage.get();
+    }
+
+    public SimpleObjectProperty<Button> garageProperty() {
+        return garage;
+    }
+
+    public void setGarage(Button garage) {
+        this.garage.set(garage);
+    }
+
+    public Button getToilet() {
+        return toilet.get();
+    }
+
+    public SimpleObjectProperty<Button> toiletProperty() {
+        return toilet;
+    }
+
+    public void setToilet(Button toilet) {
+        this.toilet.set(toilet);
+    }
+
+    public Button getLivingRoom() {
+        return livingRoom.get();
+    }
+
+    public SimpleObjectProperty<Button> livingRoomProperty() {
+        return livingRoom;
+    }
+
+    public void setLivingRoom(Button livingRoom) {
+        this.livingRoom.set(livingRoom);
     }
 }

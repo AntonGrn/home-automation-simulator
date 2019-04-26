@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import mainPackage.modelClasses.Account;
 import mainPackage.modelClasses.Gadget;
 import mainPackage.modelClasses.Lamp;
+import mainPackage.modelClasses.Room;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -49,8 +50,8 @@ public class MainWindowController {
     private String currentDynamicFrame;
 
     public ArrayList<Gadget> gadgetList;
-    // When model class Room is added: private ArrayList<Room> roomList;
-    // Or:                             public ArrayList<Pane> roomList;
+
+    public ArrayList<Room> roomList;
 
     //Producer-consumer pattern. Thread safe. Add requests to send to server.
     //Maybe have private, with getters
