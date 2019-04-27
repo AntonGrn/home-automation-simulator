@@ -1,5 +1,6 @@
 package mainPackage;
 
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -14,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import mainPackage.dynamicFrames.TestController;
 import mainPackage.modelClasses.Account;
 import mainPackage.modelClasses.Gadget;
 import mainPackage.modelClasses.Lamp;
@@ -46,7 +48,14 @@ public class MainWindowController {
     @FXML
     private Label exceptionLabel, loggedInLabel;
 
-    private String currentDynamicFrame;
+    //public Thread inOne;
+    //public Thread outOne;
+
+    private DynamicFrame currentDynamicFrameController;
+
+    public void setCurrentDynamicFrameController(DynamicFrame controller) {
+        currentDynamicFrameController = controller;
+    }
 
     public ArrayList<Gadget> gadgetList;
     // When model class Room is added: private ArrayList<Room> roomList;
@@ -74,6 +83,7 @@ public class MainWindowController {
         requestsFromServer = new ArrayBlockingQueue<>(10);
 
         doUpdate = new SimpleBooleanProperty(false);
+        isNotLoggedIn();
 
         //Until we can get Gadgets from Server:
         gadgetList.add(new Lamp("LampOne", 25, "Kitchen"));
@@ -102,7 +112,15 @@ public class MainWindowController {
                     @Override
                     public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                         if(doUpdate.getValue()) {
-                            update();
+
+                            //Iin order to have this sun by FX thread, and not the thread issuing the doUpate.setValue(true).
+                            Platform.runLater(new Runnable() {
+                                @Override public void run() {
+                                    //Update UI here
+                                    update();
+                                }
+                            });
+
                             doUpdate.setValue(false);
                         }
                     }
@@ -145,7 +163,7 @@ public class MainWindowController {
             dynamicFrame.getChildren().add(FXMLLoader.load(getClass().getResource("dynamicFrames/" + url + ".fxml")));
             //dynamicFrame.setLayoutX(100);
             //dynamicFrame.setLayoutY(0);
-            currentDynamicFrame = url;
+            //currentDynamicFrame = url;
         } catch (IOException io) {
             exceptionLabel.setText("Unable to load new scene.");
         } catch (NullPointerException e) {
@@ -163,13 +181,19 @@ public class MainWindowController {
         }
     }
 
+    public void setExceptionLabel(String message) { //To set it from dynamic frames.
+        exceptionLabel.setText(message);
+    }
+
 
     //update() should be run by JavaFX-Thread, so should not be invoked by other threads (ex ClientInputThread)
     //update while requestsFromServer is not empty
     public void update() {
+        exceptionLabel.setText("");
         //Update houseFrame + invoke update method of currentFrame
         try {
             String request = requestsFromServer.take();
+            System.out.println(request);
             String[] commands = request.split(":");
 
             //Translate the requests according to the LAAS communication protocol:
@@ -177,10 +201,20 @@ public class MainWindowController {
                 case "2": //Result of login attempt
                     if(commands[1].equals("ok")) {
                         //Create account and send it as parameter to: AccountLoggedin.getInstance().setLoggedInAccount(account);
+                        String accountID =   commands[3];
+                        String systemID =    commands[4];
+                        String name =        commands[5];
+                        String accessLevel = commands[6];
+                        String password =    commands[7];
+
+                        Account a1 = new Account(name, accountID, Integer.parseInt(systemID), accessLevel, password);
+                        AccountLoggedin.getInstance().setLoggedInAccount(a1);
+
                     }
-                    else {
-                        exceptionLabel.setText("Login failed");
-                        //Call the update() of LoginController (to clear it)
+                    else if(commands[1].equals("no")) {
+                        exceptionLabel.setText(commands[2]);
+                    }else {
+                        exceptionLabel.setText("Login failed for unknown reasons");
                     }
                     break;
                 case "4": //Gadgets' states has been updated
@@ -193,7 +227,7 @@ public class MainWindowController {
                     //Cast log scene
                     break;
                 case "13": //Exception message from server
-                    exceptionLabel.setText(commands[2]);
+                    exceptionLabel.setText(commands[1]);
                     break;
                 default:
                     exceptionLabel.setText("Unknown update request received");
@@ -202,6 +236,7 @@ public class MainWindowController {
         }catch(InterruptedException e) {
             exceptionLabel.setText("Unable to update from server");
         }
+        currentDynamicFrameController.updateFrame();
 
     }
 

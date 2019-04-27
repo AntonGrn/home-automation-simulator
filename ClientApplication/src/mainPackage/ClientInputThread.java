@@ -1,6 +1,7 @@
 package mainPackage;
 
 import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -22,6 +23,7 @@ public class ClientInputThread extends Thread {
             try {
                 //Read data from server
                 messageFromServer = input.readUTF();
+                System.out.println("Message received to inputThread " + Thread.currentThread());
                 //Send data from server to queue: requestsFromServer
                 Main.getMainWindowController().requestsFromServer.put(messageFromServer);
                 //Notify JavaFX-thread to update
@@ -30,7 +32,12 @@ public class ClientInputThread extends Thread {
                 e.printStackTrace();
                 closeResources();
                 break;
-            } catch (IOException e) {
+            } catch (EOFException e) {
+                System.out.println("No connection with server");
+                Main.getMainWindowController().setExceptionLabel("No inbound connection with server");
+                closeResources();
+                break;
+            }catch (IOException e) {
                 e.printStackTrace();
                 closeResources();
                 break;
