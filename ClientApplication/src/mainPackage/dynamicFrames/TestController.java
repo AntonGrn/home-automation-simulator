@@ -2,6 +2,7 @@ package mainPackage.dynamicFrames;
 
 import javafx.fxml.FXML;
 import mainPackage.Main;
+import mainPackage.houseFrame.BlueprintController;
 import mainPackage.modelClasses.Account;
 import mainPackage.AccountLoggedin;
 import mainPackage.DynamicFrame;
@@ -20,6 +21,12 @@ public class TestController implements DynamicFrame {
 
     public void updateFrame() {
 
+    }
+
+
+    @FXML
+    public void sebbetest(){
+    //TODO set room label visible(true);
     }
 
 }
