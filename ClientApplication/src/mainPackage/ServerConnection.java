@@ -54,22 +54,22 @@ public class ServerConnection {
             threadsRunning = true;
 
         } catch (ConnectException e) {
-            closeResources();
             throw new Exception("Unable to connect to Server");
         } catch (IOException e) {
-            closeResources();
             e.printStackTrace();
             throw new Exception("Unable to set up input/output resources");
         }
     }
 
     private void closeResources() {
-        inputThread.interrupt();
-        outputThread.interrupt();
         try {
+            inputThread.interrupt();
+            outputThread.interrupt();
             inputThread.join();
             outputThread.join();
             socket.close();
+            threadsRunning = false;
+            System.out.println("Closed");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (IOException e) {

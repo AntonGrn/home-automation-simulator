@@ -16,11 +16,11 @@ public class TestController implements DynamicFrame {
         Main.getMainWindowController().setCurrentDynamicFrameController(this);
 
         //Simulate a login:
-        Account a1 = new Account("Anton", "anton@mail.com", 1, "admin", "123");
-        AccountLoggedin.getInstance().setLoggedInAccount(a1);
+        //Account a1 = new Account("Anton", "anton@mail.com", 1, "admin", "123");
+        //AccountLoggedin.getInstance().setLoggedInAccount(a1);
     }
 
-/*    @FXML
+    @FXML
     public void login(ActionEvent event) {
         try {
             //Request server connection
@@ -32,10 +32,11 @@ public class TestController implements DynamicFrame {
             //Add request to requestsToServer
             Main.getMainWindowController().requestsToServer.put(serverRequest);
         } catch (Exception e) {
-            Main.getMainWindowController().setExceptionLabel(e.getMessage());
+            System.out.println(e.getMessage());
+            Main.getMainWindowController().exceptionLabel.setText(e.getMessage());
         }
 
-    }*/
+    }
 
 
     //test for changing rooms
