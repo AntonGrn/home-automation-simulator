@@ -12,6 +12,9 @@ public class TestController implements DynamicFrame {
 
     @FXML
     public void initialize() {
+
+        Main.getMainWindowController().setCurrentDynamicFrameController(this);
+
         //Simulate a login:
         Account a1 = new Account("Anton", "anton@mail.com", 1, "admin", "123");
         AccountLoggedin.getInstance().setLoggedInAccount(a1);
