@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="392.0" prefWidth="547.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainPackage.houseFrame.BlueprintController">
+<AnchorPane fx:id="blueprint" prefHeight="392.0" prefWidth="547.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainPackage.houseFrame.BlueprintController">
    <children>
       <ImageView fitHeight="392.0" fitWidth="547.0" layoutX="28.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -33,7 +33,7 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="kitchen" layoutX="33.0" layoutY="195.0" prefHeight="21.0" prefWidth="50.0" text="Kitchen" textFill="#1e97d2">
+      <Label fx:id="kitchen" layoutX="33.0" layoutY="195.0" prefHeight="21.0" prefWidth="50.0" text="Kitchen" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
