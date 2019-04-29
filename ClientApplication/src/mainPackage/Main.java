@@ -5,15 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import mainPackage.dynamicFrames.RoomsController;
 
 public class Main extends Application {
-
-    private static RoomsController roomsController; //so we can reach it.
-
-    public static RoomsController getRoomsController(){ //easy way to access the object.
-        return roomsController;
-    }
 
     private static MainWindowController mainWindowController;  //We set this as instance, so we can reach it later on.
 
