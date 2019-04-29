@@ -2,6 +2,8 @@ package mainPackage;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,7 +20,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import mainPackage.dynamicFrames.RoomsController;
 import mainPackage.modelClasses.*;
-
+import mainPackage.modelClasses.Account;
+import mainPackage.modelClasses.Gadget;
+import mainPackage.modelClasses.Lamp;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -69,6 +73,9 @@ public class MainWindowController {
     //To notify the JavaFX-thread that updates has arrived from the Server.
     public BooleanProperty doUpdate;
 
+    // For the houseFrame to know which room has been chosen by the user.
+    public StringProperty chosenRoom;
+
     @FXML
     public void initialize() {
         //declare class-objects
@@ -80,13 +87,15 @@ public class MainWindowController {
         btnGadgets.setUserData("Gadgets");
         btnEnergy.setUserData("Energy");
         btnLogs.setUserData("Logs");
-        btnSettings.setUserData("Settings");
+        //temporary, shall be named setting later on
+        btnSettings.setUserData("Test");
 
         gadgetList = new ArrayList<>();
         requestsToServer = new ArrayBlockingQueue<>(10);
         requestsFromServer = new ArrayBlockingQueue<>(10);
 
         doUpdate = new SimpleBooleanProperty(false);
+        chosenRoom = new SimpleStringProperty("null");
 
         //Until we can get Gadgets from Server:
         gadgetList.add(new Lamp("LampOne", 25, "Kitchen"));
