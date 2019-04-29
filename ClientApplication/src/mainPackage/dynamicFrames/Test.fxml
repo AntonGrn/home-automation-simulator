@@ -13,12 +13,19 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button mnemonicParsing="false" onAction="#login" text="Login">
-         <font>
-            <Font size="18.0" />
-         </font>
+      <Button fx:id="logintest" mnemonicParsing="false" style="-fx-background-radius: 10 10 10;" text="Login">
          <VBox.margin>
-            <Insets top="20.0" />
+            <Insets top="10.0" />
+         </VBox.margin>
+      </Button>
+      <Button fx:id="sebbetest" mnemonicParsing="false" onAction="#setChosenRoomKitchen" style="-fx-background-radius: 10 10 10;" text="Kitchen">
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </Button>
+      <Button fx:id="sebbetest1" layoutX="25.0" layoutY="53.0" mnemonicParsing="false" onAction="#setChosenRoomLivingroom" style="-fx-background-radius: 10 10 10;" text="Livingroom">
+         <VBox.margin>
+            <Insets top="10.0" />
          </VBox.margin>
       </Button>
    </children>

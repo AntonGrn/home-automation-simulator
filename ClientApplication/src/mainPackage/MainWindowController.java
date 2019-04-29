@@ -3,8 +3,12 @@ package mainPackage;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,11 +19,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import mainPackage.houseFrame.BlueprintController;
+import mainPackage.dynamicFrames.RoomsController;
+import mainPackage.modelClasses.*;
 import mainPackage.modelClasses.Account;
 import mainPackage.modelClasses.Gadget;
 import mainPackage.modelClasses.Lamp;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,6 +33,10 @@ import java.util.concurrent.BlockingQueue;
 
 public class MainWindowController {
 
+    private static RoomsController roomsController; //So we can reach it.
+    public static RoomsController getRoomsController(){ //easy way to access the object.
+        return roomsController;
+    }
 
     @FXML
     private HBox menuFrame;
@@ -43,16 +51,19 @@ public class MainWindowController {
     private GridPane loggedintatusFrame;
 
     @FXML
-    private Button btn1, btn2, btn3;
+    private Button btnRooms, btnUsers, btnGadgets, btnEnergy, btnLogs, btnSettings;
 
     @FXML
-    private Label exceptionLabel, loggedInLabel;
+    public Label exceptionLabel, loggedInLabel;
 
     private DynamicFrame currentDynamicFrameController;
 
     public ArrayList<Gadget> gadgetList;
-    // When model class Room is added: private ArrayList<Room> roomList;
-    // Or:                             public ArrayList<Pane> roomList;
+
+    public ArrayList<Room> roomList;
+
+    //observableArrayList for the gadgets, they need to be instanced before opening the scene, NPE otherwise.
+    public ObservableList<Gadget> gadgetListTableView = FXCollections.observableArrayList();
 
     //Producer-consumer pattern. Thread safe. Add requests to send to server.
     //Maybe have private, with getters
@@ -63,24 +74,37 @@ public class MainWindowController {
     //To notify the JavaFX-thread that updates has arrived from the Server.
     public BooleanProperty doUpdate;
 
+    // For the houseFrame to know which room has been chosen by the user.
+    public StringProperty chosenRoom;
+
     @FXML
     public void initialize() {
+        //declare class-objects
+        roomsController = new RoomsController();
 
         //Set name of dynamic frame to which the button links
-        btn1.setUserData("Test");
-        btn2.setUserData("RoomsController");
-        btn3.setUserData("testFrame");
+        btnRooms.setUserData("Rooms");
+        btnUsers.setUserData("Users");
+        btnGadgets.setUserData("Gadgets");
+        btnEnergy.setUserData("Energy");
+        btnLogs.setUserData("Logs");
+        //temporary, shall be named setting later on
+        btnSettings.setUserData("Test");
 
         gadgetList = new ArrayList<>();
         requestsToServer = new ArrayBlockingQueue<>(10);
         requestsFromServer = new ArrayBlockingQueue<>(10);
 
         doUpdate = new SimpleBooleanProperty(false);
+
         isNotLoggedIn();
+
+        chosenRoom = new SimpleStringProperty("null");
 
         //Until we can get Gadgets from Server:
         gadgetList.add(new Lamp("LampOne", 25, "Kitchen"));
         gadgetList.add(new Lamp("LampTwo", 25, "Kitchen"));
+        gadgetList.add(new Lamp("lampThree",30,"Bedroom"));
 
         //Add listener to loggedInAccount object's loggedInAccountProperty
         AccountLoggedin.getInstance().loggedInAccountProperty().addListener(
@@ -95,6 +119,7 @@ public class MainWindowController {
                     }
                 }
         );
+
         blueprint();
 
         //Since requests for updates from the Server is received by another thread than JavaFX, we need a way to notify the
@@ -162,8 +187,10 @@ public class MainWindowController {
             //dynamicFrame.setLayoutY(0);
             //currentDynamicFrame = url;
         } catch (IOException io) {
+            io.printStackTrace();
             exceptionLabel.setText("Unable to load new scene.");
         } catch (NullPointerException e) {
+            e.printStackTrace();
             exceptionLabel.setText("Unable to load new scene.");
         }
     }
@@ -176,10 +203,6 @@ public class MainWindowController {
         }catch(IOException e){
 
         }
-    }
-
-    public void setExceptionLabel(String message) { //To set it from dynamic frames.
-        exceptionLabel.setText(message);
     }
 
     //update() should be run by JavaFX-Thread, so should not be invoked by other threads (ex ClientInputThread)
@@ -235,5 +258,4 @@ public class MainWindowController {
         currentDynamicFrameController.updateFrame();
 
     }
-
 }
