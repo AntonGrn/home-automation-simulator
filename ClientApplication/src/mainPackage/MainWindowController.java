@@ -2,6 +2,8 @@ package mainPackage;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -14,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import mainPackage.houseFrame.BlueprintController;
 import mainPackage.modelClasses.Account;
 import mainPackage.modelClasses.Gadget;
 import mainPackage.modelClasses.Lamp;
@@ -61,6 +64,9 @@ public class MainWindowController {
     //To notify the JavaFX-thread that updates has arrived from the Server.
     public BooleanProperty doUpdate;
 
+    // For the houseFrame to know which room has been chosen by the user.
+    public StringProperty chosenRoom;
+
     @FXML
     public void initialize() {
 
@@ -74,6 +80,7 @@ public class MainWindowController {
         requestsFromServer = new ArrayBlockingQueue<>(10);
 
         doUpdate = new SimpleBooleanProperty(false);
+        chosenRoom = new SimpleStringProperty("null");
 
         //Until we can get Gadgets from Server:
         gadgetList.add(new Lamp("LampOne", 25, "Kitchen"));
