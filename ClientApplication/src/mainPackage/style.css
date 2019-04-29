@@ -29,6 +29,73 @@
     -fx-text-fill: red;
 }
 
+/*------------------------- DynamicFrame Rooms ------------------------------*/
 
+#tblViewRooms .table-column{
+    -fx-alignment: CENTER;
+}
 
+#tblViewRooms {
+    -fx-text-fill: WHITE;
+    -fx-background-color: #231f26;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-column-border-color: transparent;
+    -fx-background-insets: 0 0 0 0, 0, 1,2;
+}
 
+#tblViewRooms .column-header-background{
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+    -fx-background-insets: 0 0 0 0, 0, 1,2;
+}
+
+#tblViewRooms .table-row{
+visibility:hidden;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0 0 0 0, 0, 1,2;
+}
+
+#tblViewRooms .table-row-cell{
+    -fx-background-color: #231f26;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;                     /*viktig annars blir det laggigt av någon anledning*/
+    -fx-table-cell-border-color: transparent;
+    -fx-background-insets: 0 0 0 0, 0, 1,2;
+}
+
+#tblViewRooms .table-row-cell:selected{
+    -fx-background-color: #231f26;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-text-fill: WHITE;
+    -fx-table-cell-border-color: transparent;
+    -fx-background-insets: 0 0 0 0, 0, 1,2;
+}
+
+#tblViewRooms.scroll-bar:vertical .thumb{
+    -fx-background-color: #231f26;
+}
+
+#tblViewRooms *.scroll-bar:horizontal *.increment-arrow,
+#tblViewRooms *.scroll-bar:horizontal *.decrement-arrow,
+#tblViewRooms *.scroll-bar:horizontal *.increment-button,
+#tblViewRooms *.scroll-bar:horizontal *.decrement-button{
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-shape: null;
+}
+
+#tblViewRooms *.scroll-bar:vertical *.increment-arrow,
+#tblViewRooms *.scroll-bar:vertical *.decrement-arrow,
+#tblViewRooms *.scroll-bar:vertical *.increment-button,
+#tblViewRooms *.scroll-bar:vertical *.decrement-button{
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-shape: null;
+}

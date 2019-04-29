@@ -1,5 +1,6 @@
 package mainPackage.houseFrame;
 
+import mainPackage.DynamicFrame;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
