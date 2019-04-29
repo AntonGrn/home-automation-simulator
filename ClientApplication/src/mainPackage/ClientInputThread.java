@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ClientInputThread extends Thread {
 
@@ -29,12 +30,14 @@ public class ClientInputThread extends Thread {
                 //Notify JavaFX-thread to update
                 Main.getMainWindowController().doUpdate.setValue(true);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                closeResources();
+                break;
+            } catch (SocketException e) {
+                System.out.println("No connection with server");
                 closeResources();
                 break;
             } catch (EOFException e) {
                 System.out.println("No connection with server");
-                Main.getMainWindowController().setExceptionLabel("No inbound connection with server");
                 closeResources();
                 break;
             }catch (IOException e) {
@@ -49,6 +52,7 @@ public class ClientInputThread extends Thread {
         try {
             socket.close();
             input.close();
+            System.out.println("Input Thread closed");
         } catch (IOException e) {
             e.printStackTrace();
         }

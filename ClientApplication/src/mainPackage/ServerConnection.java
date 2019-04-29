@@ -8,42 +8,73 @@ import java.net.Socket;
 
 public class ServerConnection {
 
+    private static ServerConnection instance = null;
+
     private final String ip;
     private final int port;
+    //We need the threads to be accessible in order to interrupt them if necessary.
+    private Thread inputThread;
+    private Thread outputThread;
+    private Socket socket;
+    private boolean threadsRunning;
 
-    public ServerConnection() {
+    private ServerConnection() {
         ip = "134.209.198.123";
         port = 8081;
+        threadsRunning = false;
     }
 
-    public void connectToServer() throws Exception{
+    public static ServerConnection getInstance() {
+        if (instance == null) {
+            instance = new ServerConnection();
+        }
+        return instance;
+    }
+
+    public void connectToServer() throws Exception {
         try {
+            if (threadsRunning) {
+                closeResources();
+            }
+
             // Establish the connection with server
-            Socket socket = new Socket(ip, port);
+            socket = new Socket(ip, port);
 
             // Obtaining input and output streams
             DataInputStream input = new DataInputStream(socket.getInputStream());
             DataOutputStream output = new DataOutputStream(socket.getOutputStream());
 
             //Run input and output on new threads.
-            //If needs to be handled later; better to manage the threads via thread pools (ExecutorService)
-            Thread outputThread = new ClientOutputThread(socket, output);
-            Thread inputThread = new ClientInputThread(socket, input);
+            outputThread = new ClientOutputThread(socket, output);
+            inputThread = new ClientInputThread(socket, input);
 
             outputThread.start();
             inputThread.start();
 
-            /*Main.getMainWindowController().outOne = new ClientOutputThread(socket, output);
-            Main.getMainWindowController().inOne = new ClientInputThread(socket, input);
-            Main.getMainWindowController().outOne.start();
-            Main.getMainWindowController().inOne.start();*/
+            threadsRunning = true;
 
         } catch (ConnectException e) {
+            closeResources();
             throw new Exception("Unable to connect to Server");
         } catch (IOException e) {
+            closeResources();
             e.printStackTrace();
             throw new Exception("Unable to set up input/output resources");
         }
     }
-    
+
+    private void closeResources() {
+        inputThread.interrupt();
+        outputThread.interrupt();
+        try {
+            inputThread.join();
+            outputThread.join();
+            socket.close();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

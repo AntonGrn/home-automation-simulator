@@ -14,7 +14,6 @@ public class ClientThread extends Thread {
         public void run() {
 
             System.out.println(" NEW CLIENT THREAD: " + Thread.currentThread());
-
             //Before continuing the input loop, the thread assures that a login attempt
             //has been succeeded. If not; thread cancels and removes client from clientList
             try {
@@ -35,7 +34,11 @@ public class ClientThread extends Thread {
                         messageFromClient = client.getInput().readUTF();
                         ClientRequest clientRequest = new ClientRequest(client, messageFromClient);
 
-                        //Here: If command is log out; closeResources() + break;
+                        if(messageFromClient.equals("14")) {
+                            System.out.println("Client requested log out");
+                            closeResources();
+                            break;
+                        }
 
                         try {
                             //Add to Server request list

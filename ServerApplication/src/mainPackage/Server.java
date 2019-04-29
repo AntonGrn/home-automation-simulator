@@ -12,12 +12,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
 
     private BlockingQueue<ClientRequest> serverRequest;
 
-    //Maybe add a queue for serverOutputs to clients, which method outputToClient could scan from a new thread???
+    //Maybe add a queue for serverOutputs to clients, which method outputToClient could scan from a new thread
 
     private final List<Client> activeClients;
 
@@ -80,6 +82,9 @@ public class Server {
     public void acceptClientConnections() throws IOException {
         synchronized (lockObject1) {
 
+            // Thread pool for better control of the threads being launched.
+            ExecutorService executor = Executors.newFixedThreadPool(10);
+
             // The server is listening on a port
             ServerSocket server = new ServerSocket(8081);
 
@@ -105,11 +110,7 @@ public class Server {
 
                     client = new Client("null", 0, clientConnection, input, output);
 
-                    // Create a new thread object
-                    clientThread = new ClientThread(client);
-
-                    // Invoking the start() method
-                    clientThread.start();
+                    executor.submit(new ClientThread(client));
 
                 } catch (Exception e) {
                     clientConnection.close();
@@ -134,12 +135,21 @@ public class Server {
             System.out.println("THREAD " + Thread.currentThread().getName() + " REMOVING CLIENT: " + clientToRemove.getAccountID());
             System.out.println("LIST SIZE: " + activeClients.size());
 
-            Iterator<Client> iterator = activeClients.iterator();
-            while (iterator.hasNext()) {
-                if (iterator.next().getSocket().equals(clientToRemove.getSocket())) {
-                    iterator.remove();
-                    System.out.println("Account found and removed");
-                    break;
+            for (int i = 0; i < activeClients.size(); i++) {
+                if (activeClients.get(i).getSocket().equals(clientToRemove.getSocket())) {
+                    try {
+                        activeClients.get(i).getSocket().close();
+                        activeClients.get(i).getOutput().close();
+                        activeClients.get(i).getInput().close();
+                        System.out.println("REMOVE: Closed all resources");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.out.println("Remove: Unable to close all resources");
+                    }
+                    finally {
+                        activeClients.remove(i);
+                        System.out.println("Client removed");
+                    }
                 }
             }
         }
@@ -212,7 +222,7 @@ public class Server {
             clientRequest = null;
             try {
                 //See if there is anything
-                clientRequest = serverRequest.take(); //BEFORE: Server.getInstance().getServerRequest().take();
+                clientRequest = serverRequest.take();
 
                 synchronized (lockObject2) {
 
@@ -225,10 +235,8 @@ public class Server {
 
                     switch (commands[0]) {
                         case "1": //Login request
-
                             String clientOutput = "13:Already logged in";
                             outputToClients(true, (clientOutput), clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
-
                             break;
                     }
                 }

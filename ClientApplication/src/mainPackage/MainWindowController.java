@@ -15,7 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import mainPackage.dynamicFrames.TestController;
+import mainPackage.houseFrame.BlueprintController;
 import mainPackage.modelClasses.Account;
 import mainPackage.modelClasses.Gadget;
 import mainPackage.modelClasses.Lamp;
@@ -48,14 +48,7 @@ public class MainWindowController {
     @FXML
     private Label exceptionLabel, loggedInLabel;
 
-    //public Thread inOne;
-    //public Thread outOne;
-
     private DynamicFrame currentDynamicFrameController;
-
-    public void setCurrentDynamicFrameController(DynamicFrame controller) {
-        currentDynamicFrameController = controller;
-    }
 
     public ArrayList<Gadget> gadgetList;
     // When model class Room is added: private ArrayList<Room> roomList;
@@ -139,6 +132,10 @@ public class MainWindowController {
         //+ Set dynamic frame to log in frame
     }
 
+    public void setCurrentDynamicFrameController(DynamicFrame controller) {
+        currentDynamicFrameController = controller;
+    }
+
     @FXML
     void setDynamicFrame(ActionEvent event) {
         exceptionLabel.setText("");
@@ -184,7 +181,6 @@ public class MainWindowController {
     public void setExceptionLabel(String message) { //To set it from dynamic frames.
         exceptionLabel.setText(message);
     }
-
 
     //update() should be run by JavaFX-Thread, so should not be invoked by other threads (ex ClientInputThread)
     //update while requestsFromServer is not empty

@@ -22,11 +22,11 @@ public class DB {
     }
 
     private void connect() {
-        String ip = "localhost";    //"134.209.198.123"; //or localhost
+        String ip = "localhost";
         String port = "3306";
         String database = "homeAutoLAAS";
         String user = "userLAAS";
-        String password = "detvarsomtusan";
+        String password = "XXXXXXX";
 
         connection = null;
         String url = "jdbc:mysql://" + ip + ":" + port + "/" + database + "?useSSL=false&user=" + user + "&password=" + password + "&serverTimezone=UTC";
@@ -82,8 +82,6 @@ public class DB {
                 items[2] = name;
                 items[3] = accessLevel;
                 items[4] = password;
-
-                System.out.println("Database");
 
             }
             if(results != 1) { //If there was no match, or for some reason, multiple matches
