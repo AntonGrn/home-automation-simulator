@@ -24,6 +24,7 @@ import mainPackage.modelClasses.*;
 import mainPackage.modelClasses.Account;
 import mainPackage.modelClasses.Gadget;
 import mainPackage.modelClasses.Lamp;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +35,8 @@ import java.util.concurrent.BlockingQueue;
 public class MainWindowController {
 
     private static RoomsController roomsController; //So we can reach it.
-    public static RoomsController getRoomsController(){ //easy way to access the object.
+
+    public static RoomsController getRoomsController() { //easy way to access the object.
         return roomsController;
     }
 
@@ -77,6 +79,8 @@ public class MainWindowController {
     // For the houseFrame to know which room has been chosen by the user.
     public StringProperty chosenRoom;
 
+    public ArrayList<String[]> logsList;
+
     @FXML
     public void initialize() {
         //declare class-objects
@@ -92,6 +96,7 @@ public class MainWindowController {
         btnSettings.setUserData("Test");
 
         gadgetList = new ArrayList<>();
+        logsList = new ArrayList<>();
         requestsToServer = new ArrayBlockingQueue<>(10);
         requestsFromServer = new ArrayBlockingQueue<>(10);
 
@@ -104,7 +109,7 @@ public class MainWindowController {
         //Until we can get Gadgets from Server:
         gadgetList.add(new Lamp("LampOne", 25, "Kitchen"));
         gadgetList.add(new Lamp("LampTwo", 25, "Kitchen"));
-        gadgetList.add(new Lamp("lampThree",30,"Bedroom"));
+        gadgetList.add(new Lamp("lampThree", 30, "Bedroom"));
 
         //Add listener to loggedInAccount object's loggedInAccountProperty
         AccountLoggedin.getInstance().loggedInAccountProperty().addListener(
@@ -119,9 +124,7 @@ public class MainWindowController {
                     }
                 }
         );
-
-        blueprint();
-
+        setBlueprint();
         //Since requests for updates from the Server is received by another thread than JavaFX, we need a way to notify the
         //JavaFX-Thread to process the new data that has arrived from the server.
         //Could also be done by an int, representing the number of updates to be done (if more arrives while processing)
@@ -129,11 +132,12 @@ public class MainWindowController {
                 new ChangeListener<Boolean>() {
                     @Override
                     public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        if(doUpdate.getValue()) {
+                        if (doUpdate.getValue()) {
 
                             //Iin order to have this sun by FX thread, and not the thread issuing the doUpate.setValue(true).
                             Platform.runLater(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     //Update UI here
                                     update();
                                 }
@@ -196,11 +200,11 @@ public class MainWindowController {
     }
 
     //Adding blueprint to houseframe window
-    public void blueprint(){
-        try{
+    public void setBlueprint() {
+        try {
             houseFrame.getChildren().clear();
             houseFrame.getChildren().add(FXMLLoader.load(getClass().getResource("houseFrame/Blueprint.fxml")));
-        }catch(IOException e){
+        } catch (IOException e) {
 
         }
     }
@@ -218,21 +222,20 @@ public class MainWindowController {
             //Translate the requests according to the LAAS communication protocol:
             switch (commands[0]) {
                 case "2": //Result of login attempt
-                    if(commands[1].equals("ok")) {
+                    if (commands[1].equals("ok")) {
                         //Create account and send it as parameter to: AccountLoggedin.getInstance().setLoggedInAccount(account);
-                        String accountID =   commands[3];
-                        String systemID =    commands[4];
-                        String name =        commands[5];
+                        String accountID = commands[3];
+                        String systemID = commands[4];
+                        String name = commands[5];
                         String accessLevel = commands[6];
-                        String password =    commands[7];
+                        String password = commands[7];
 
                         Account a1 = new Account(name, accountID, Integer.parseInt(systemID), accessLevel, password);
                         AccountLoggedin.getInstance().setLoggedInAccount(a1);
 
-                    }
-                    else if(commands[1].equals("no")) {
+                    } else if (commands[1].equals("no")) {
                         exceptionLabel.setText(commands[2]);
-                    }else {
+                    } else {
                         exceptionLabel.setText("Login failed for unknown reasons");
                     }
                     break;
@@ -240,11 +243,27 @@ public class MainWindowController {
                     break;
                 case "7": //Gadgets info has been updates
                     break;
-                case"10": //Users' info has been updated
+                case "10": //Users' info has been updated
                     break;
-                case "12": //Log has been sent
-                    //Cast log scene
+                case "12": //Log(s) has been received
+                    String[] log = new String[2];
+                    logsList.clear();
+                    int count = 0;
+                    while (true) {
+                        //timestamp
+                        log[0] = commands[count + 1];
+                        //log message
+                        log[1] = commands[count + 2];
+                        //Add log to logsList
+                        logsList.add(log);
+                        if (commands[count + 3].equals("null")) {
+                            break;
+                        }
+
+                        count += 3;
+                    }
                     break;
+
                 case "13": //Exception message from server
                     exceptionLabel.setText(commands[1]);
                     break;
@@ -252,10 +271,12 @@ public class MainWindowController {
                     exceptionLabel.setText("Unknown update request received");
             }
 
-        }catch(InterruptedException e) {
+        } catch (InterruptedException e) {
             exceptionLabel.setText("Unable to update from server");
         }
         currentDynamicFrameController.updateFrame();
 
     }
+
+
 }
