@@ -79,7 +79,7 @@ public class Server {
     }
 
     //Invoked by t1
-    public void acceptClientConnections() throws IOException {
+    private void acceptClientConnections() throws IOException {
         synchronized (lockObject1) {
 
             // Thread pool for better control of the threads being launched.
@@ -122,7 +122,7 @@ public class Server {
     }
 
     //Invoked by acceptClientConnections() -> t1
-    public void addClient(Client client) {
+    private void addClient(Client client) {
         synchronized (activeClients) {
             activeClients.add(client);
             System.out.println("Client added by thread " + Thread.currentThread().getName());
@@ -185,7 +185,7 @@ public class Server {
                     String accountID = result[0];
                     String systemID = result[1];
                     String name = result[2];
-                    String accessLevel = result[3];
+                    String admin = result[3];
                     String password = result[4];
 
                     client = new Client(
@@ -195,7 +195,7 @@ public class Server {
                     addClient(client);
 
                     String clientOutput = String.format("%s%s%s%s%s%s%s%s%s%s",
-                            "2:ok:null:", accountID, ":", systemID, ":", name, ":", accessLevel, ":", password);
+                            "2:ok:null:", accountID, ":", systemID, ":", name, ":", admin, ":", password);
 
                     outputToClients(true, (clientOutput), loginRequest.getClient().getSocket(), loginRequest.getClient().getSystemID());
                 } catch (Exception e) {
@@ -233,10 +233,51 @@ public class Server {
 
                     System.out.println("THREAD " + Thread.currentThread().getName() + " PROCESSING REQUEST");
 
+                    String clientOutput;
+
                     switch (commands[0]) {
                         case "1": //Login request
-                            String clientOutput = "13:Already logged in";
-                            outputToClients(true, (clientOutput), clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
+                            clientOutput = "13:Already logged in";
+                            outputToClients(true, clientOutput, clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
+                            break;
+                        case "3":
+                            break;
+                        case "5":
+                            break;
+                        case "6":
+                            break;
+                        case "8":
+                            break;
+                        case "9":
+                            break;
+                        case "11": //Log request
+                            try{
+                                int systemId = clientRequest.getClient().getSystemID(); // DO THIS INSTEAD. More reliable. Can't be manipulated at client end. Won't need NumberFormatException
+                                ArrayList<String[]> logs = DB.getInstance().getLogs(systemId);
+
+                                //Form the output string according to LAAS protocol: 12:timestamp:log:next/null
+                                clientOutput = "12:";
+                                for(int i = 0 ; i < logs.size() ; i++) {
+
+                                    // NOTE: timestamp contains colon (ex 18:34:15), which is the break mark for commands in LAAS protocol,
+                                    // so we first need to exchange the colons in the timestamp with "&"
+                                    logs.get(i)[0] = logs.get(i)[0].replace(":", "&");
+                                    //Remove 'seconds' from timestamp        start                       end  (removing ':seconds')
+                                    logs.get(i)[0] = logs.get(i)[0].substring(0, logs.get(i)[0].length() - 3);
+
+                                    //                                    timestamp           log message
+                                    clientOutput = clientOutput.concat(logs.get(i)[0] + ":" + logs.get(i)[1]);
+                                    //if there are more logs to read, or not
+                                    if(i == logs.size() - 1) {
+                                        clientOutput = clientOutput.concat(":null");
+                                    }else {
+                                        clientOutput = clientOutput.concat(":next:");
+                                    }
+                                }
+                                outputToClients(true, clientOutput, clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
+                            } catch (Exception e){
+                                outputToClients(true, "13:".concat(e.getMessage()), clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
+                            }
                             break;
                     }
                 }

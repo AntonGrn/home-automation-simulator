@@ -59,16 +59,16 @@ public class MainWindowController {
     private DynamicFrame currentDynamicFrameController;
 
     public ArrayList<Gadget> gadgetList;
-
     public ArrayList<Room> roomList;
+    public ArrayList<String[]> logsList;
 
     //observableArrayList for the gadgets, they need to be instanced before opening the scene, NPE otherwise.
     public ObservableList<Gadget> gadgetListTableView = FXCollections.observableArrayList();
 
     //Producer-consumer pattern. Thread safe. Add requests to send to server.
     //Maybe have private, with getters
+    //ADD: This should not be accessible when not logged in. Maybe add getter
     public BlockingQueue<String> requestsToServer;
-
     public BlockingQueue<String> requestsFromServer;
 
     //To notify the JavaFX-thread that updates has arrived from the Server.
@@ -76,6 +76,9 @@ public class MainWindowController {
 
     // For the houseFrame to know which room has been chosen by the user.
     public StringProperty chosenRoom;
+
+    //Fake button for the enabling of loginScene
+    private Button btnLogin;
 
     @FXML
     public void initialize() {
@@ -90,14 +93,15 @@ public class MainWindowController {
         btnLogs.setUserData("Logs");
         //temporary, shall be named setting later on
         btnSettings.setUserData("Test");
+        btnLogin = new Button();
+        btnLogin.setUserData("Login");
 
         gadgetList = new ArrayList<>();
+        logsList = new ArrayList<>();
         requestsToServer = new ArrayBlockingQueue<>(10);
         requestsFromServer = new ArrayBlockingQueue<>(10);
 
         doUpdate = new SimpleBooleanProperty(false);
-
-        isNotLoggedIn();
 
         chosenRoom = new SimpleStringProperty("null");
 
@@ -138,23 +142,50 @@ public class MainWindowController {
                                     update();
                                 }
                             });
-
                             doUpdate.setValue(false);
                         }
                     }
                 }
         );
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                isNotLoggedIn();
+            }
+        });
     }
 
     public void isLoggedIn() {
         //Code to execute when logged in
         loggedInLabel.setText("Logged in as  " + AccountLoggedin.getInstance().getLoggedInAccount().getName() + "  " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        //btnRooms.fire();
+
+        //Access to system according to if logged in account is admin or not
+        if(AccountLoggedin.getInstance().getLoggedInAccount().isAdmin()) {
+            for (Node node : menuFrame.getChildren()) {
+                if (node instanceof Button) {
+                    ((Button)node).setDisable(false);
+                }
+            }
+        }else{
+            //What to show if logged in user is not admin
+        }
     }
 
     public void isNotLoggedIn() {
         //Code to execute when  not logged in, ex disable controls
         loggedInLabel.setText("Not logged in");
-        //+ Set dynamic frame to log in frame
+
+        //Go to login screen
+        btnSettings.fire();
+
+        //Set all menu buttons to dosabled
+        for (Node node : menuFrame.getChildren()) {
+            if (node instanceof Button) {
+                ((Button)node).setDisable(true);
+            }
+        }
     }
 
     public void setCurrentDynamicFrameController(DynamicFrame controller) {
@@ -174,7 +205,7 @@ public class MainWindowController {
 
         //Style the pressed button
         ((Button) event.getSource()).setStyle(
-                "-fx-background-color: orange;" +
+                "-fx-background-color: #1e97d2;" +
                         "-fx-border-color:white;");
 
         //Perform scene change within the dynamicFrame of the MainWindow
@@ -185,7 +216,6 @@ public class MainWindowController {
             dynamicFrame.getChildren().add(FXMLLoader.load(getClass().getResource("dynamicFrames/" + url + ".fxml")));
             //dynamicFrame.setLayoutX(100);
             //dynamicFrame.setLayoutY(0);
-            //currentDynamicFrame = url;
         } catch (IOException io) {
             io.printStackTrace();
             exceptionLabel.setText("Unable to load new scene.");
@@ -223,30 +253,47 @@ public class MainWindowController {
                         String accountID =   commands[3];
                         String systemID =    commands[4];
                         String name =        commands[5];
-                        String accessLevel = commands[6];
+                        String admin =       commands[6];
                         String password =    commands[7];
 
-                        Account a1 = new Account(name, accountID, Integer.parseInt(systemID), accessLevel, password);
+                        Account a1 = new Account(name, accountID, Integer.parseInt(systemID), (admin.equals("1") ? true : false), password);
                         AccountLoggedin.getInstance().setLoggedInAccount(a1);
 
                     }
                     else if(commands[1].equals("no")) {
                         exceptionLabel.setText(commands[2]);
+                        AccountLoggedin.getInstance().setLoggedInAccount(null);
                     }else {
                         exceptionLabel.setText("Login failed for unknown reasons");
+                        AccountLoggedin.getInstance().setLoggedInAccount(null);
                     }
                     break;
                 case "4": //Gadgets' states has been updated
                     break;
-                case "7": //Gadgets info has been updates
+                case "7": //Gadgets info has been updated
                     break;
                 case"10": //Users' info has been updated
                     break;
-                case "12": //Log has been sent
-                    //Cast log scene
+                case "12": //Log(s) has been received
+                    logsList.clear();
+                    int count = 0;
+                    while (true) {
+                        String timestamp = commands[count + 1].replace("&", ":"); // Reformat to regain colon in timestamp
+                        String logMessage = commands[count + 2];
+
+                        String[] log = {timestamp, logMessage};
+                        logsList.add(log);
+                        if(commands[count + 3].equals("null")) {
+                            break;
+                        }
+                        count += 3;
+                    }
                     break;
                 case "13": //Exception message from server
                     exceptionLabel.setText(commands[1]);
+                    break;
+                case "15": //ClientInputThread lost connection with server
+                    AccountLoggedin.getInstance().setLoggedInAccount(null);
                     break;
                 default:
                     exceptionLabel.setText("Unknown update request received");

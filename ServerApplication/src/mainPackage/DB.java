@@ -2,6 +2,7 @@ package mainPackage;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DB {
 
@@ -26,7 +27,7 @@ public class DB {
         String port = "3306";
         String database = "homeAutoLAAS";
         String user = "userLAAS";
-        String password = "XXXXXXX";
+        String password = "detvarsomtusan";
 
         connection = null;
         String url = "jdbc:mysql://" + ip + ":" + port + "/" + database + "?useSSL=false&user=" + user + "&password=" + password + "&serverTimezone=UTC";
@@ -64,6 +65,7 @@ public class DB {
     }
 
     public String[] login(String accountID, String password) throws Exception {
+        //catch or declare. We chose to declare so we can pass exception messages back to client application
         connect();
         String[] items = new String[5];
         int results = 0;
@@ -75,12 +77,12 @@ public class DB {
                 //We already have accountID and password from the login() parameters.
                 String systemID = resultSet.getString("systemID"); //Seems to work to take it as String, while it is an integer in MySQL
                 String name = resultSet.getString("name");
-                String accessLevel = resultSet.getString("accessLevel");
+                String admin = resultSet.getString("admin");
 
                 items[0] = accountID;
                 items[1] = systemID;
                 items[2] = name;
-                items[3] = accessLevel;
+                items[3] = admin;
                 items[4] = password;
 
             }
@@ -98,5 +100,5 @@ public class DB {
         return items;
     }
 
-}
+   /**/}
 
