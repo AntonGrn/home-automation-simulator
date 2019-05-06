@@ -79,6 +79,8 @@ public class MainWindowController {
     // For the houseFrame to know which room has been chosen by the user.
     public StringProperty chosenRoom;
 
+    public ArrayList<String[]> logsList;
+
     @FXML
     public void initialize() {
         //declare class-objects
@@ -94,6 +96,7 @@ public class MainWindowController {
         btnSettings.setUserData("Test");
 
         gadgetList = new ArrayList<>();
+        logsList = new ArrayList<>();
         requestsToServer = new ArrayBlockingQueue<>(10);
         requestsFromServer = new ArrayBlockingQueue<>(10);
 
@@ -242,9 +245,25 @@ public class MainWindowController {
                     break;
                 case "10": //Users' info has been updated
                     break;
-                case "12": //Log has been sent
-                    //Cast log scene
+                case "12": //Log(s) has been received
+                    String[] log = new String[2];
+                    logsList.clear();
+                    int count = 0;
+                    while (true) {
+                        //timestamp
+                        log[0] = commands[count + 1];
+                        //log message
+                        log[1] = commands[count + 2];
+                        //Add log to logsList
+                        logsList.add(log);
+                        if (commands[count + 3].equals("null")) {
+                            break;
+                        }
+
+                        count += 3;
+                    }
                     break;
+
                 case "13": //Exception message from server
                     exceptionLabel.setText(commands[1]);
                     break;
