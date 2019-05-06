@@ -99,7 +99,7 @@ public class MainWindowController {
                     }
                 }
         );
-        blueprint();
+        setBlueprint();
 
         //Since requests for updates from the Server is received by another thread than JavaFX, we need a way to notify the
         //JavaFX-Thread to process the new data that has arrived from the server.
@@ -161,7 +161,7 @@ public class MainWindowController {
     }
 
     //Adding blueprint to houseframe window
-    public void blueprint(){
+    public void setBlueprint(){
         try{
             houseFrame.getChildren().clear();
             houseFrame.getChildren().add(FXMLLoader.load(getClass().getResource("houseFrame/Blueprint.fxml")));
