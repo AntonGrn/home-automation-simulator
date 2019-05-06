@@ -5,8 +5,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import mainPackage.AccountLoggedin;
 import mainPackage.DynamicFrame;
 import mainPackage.Main;
+import mainPackage.ServerConnection;
 
 public class LoginController implements DynamicFrame {
 
@@ -41,12 +43,17 @@ public class LoginController implements DynamicFrame {
             inputErrorLabel.setVisible(true);
         } else {
             try {
+                //Request server connection
+                ServerConnection.getInstance().connectToServer();
                 // Form a proper login request, according to communiaction protocol: 1:accountID:password
                 String serverRequest = String.format("%s%s%s%s", "1:", accountID, ":", password);
                 //Add request to requestsToServer
                 Main.getMainWindowController().requestsToServer.put(serverRequest);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+                AccountLoggedin.getInstance().setLoggedInAccount(null);
+                Main.getMainWindowController().exceptionLabel.setText(e.getMessage());
             }
         }
     }
