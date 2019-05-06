@@ -36,8 +36,15 @@ public class ClientInputThread extends Thread {
                 System.out.println("No connection with server");
                 closeResources();
                 break;
-            } catch (EOFException e) {
+            } catch (EOFException e) { //If server shuts down
                 System.out.println("No connection with server");
+                /*try {
+                    //SOLVE THIS IN ANOTHER WAY
+                    Main.getMainWindowController().requestsFromServer.put("15"); //Signal connection error
+                    Main.getMainWindowController().doUpdate.setValue(true);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }*/
                 closeResources();
                 break;
             }catch (IOException e) {

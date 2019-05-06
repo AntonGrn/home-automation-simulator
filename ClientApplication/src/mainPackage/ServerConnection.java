@@ -61,14 +61,17 @@ public class ServerConnection {
         }
     }
 
-    private void closeResources() {
+    public void closeResources() {
         try {
-            inputThread.interrupt();
-            outputThread.interrupt();
-            inputThread.join();
-            outputThread.join();
-            socket.close();
+            if (threadsRunning) {
+                inputThread.interrupt();
+                outputThread.interrupt();
+                inputThread.join();
+                outputThread.join();
+                socket.close();
+            }
             threadsRunning = false;
+            AccountLoggedin.getInstance().setLoggedInAccount(null);
             System.out.println("Closed");
         } catch (InterruptedException e) {
             e.printStackTrace();
