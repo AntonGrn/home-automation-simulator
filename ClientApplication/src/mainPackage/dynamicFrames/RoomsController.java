@@ -31,7 +31,6 @@ import java.util.Set;
 
 public class RoomsController implements DynamicFrame {
     private ObservableList<RoomSlider> listOfRoomPics;
-
     private Timeline timeLineLeft;
     private Timeline timeLineRight;
 
@@ -97,14 +96,14 @@ public class RoomsController implements DynamicFrame {
 
     @Override
     public void updateFrame() {
-        //Setting properties for RoomSlider tableview.
+        //Setting properties for RoomSlider in tableview.
         clmOne.setCellValueFactory(new PropertyValueFactory<>("bedRoom"));
         clmTwo.setCellValueFactory(new PropertyValueFactory<>("kitchen"));
         clmThree.setCellValueFactory(new PropertyValueFactory<>("garage"));
         clmFour.setCellValueFactory(new PropertyValueFactory<>("toilet"));
         clmFive.setCellValueFactory(new PropertyValueFactory<>("livingRoom"));
 
-        //Setting properties for Gadgets tableview.
+        //Setting properties for Gadgets in tableview.
         clmType.setCellValueFactory(new PropertyValueFactory<>("typeImage"));
         clmId.setCellValueFactory(new PropertyValueFactory<>("name"));
         clmState.setCellValueFactory(new PropertyValueFactory<>("onOffImage"));
@@ -127,7 +126,7 @@ public class RoomsController implements DynamicFrame {
                 tblViewDynamicGadgets.getItems().addAll(gadgetList);
             }
         } catch (Exception ex) {
-            Main.getMainWindowController().exceptionLabel.setText("Could not load gadgets..");
+            Main.getMainWindowController().exceptionLabel.setText("Could not load gadgets..hmm");
         }
     }
 

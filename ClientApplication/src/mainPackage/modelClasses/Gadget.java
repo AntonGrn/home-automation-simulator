@@ -8,12 +8,12 @@ import mainPackage.Main;
 
 public abstract class Gadget<T> {
 
-    private SimpleObjectProperty<javafx.scene.image.ImageView> typeImage = new SimpleObjectProperty<ImageView>();
+    private SimpleObjectProperty<javafx.scene.image.ImageView> typeImage;
     private String name;
     protected T state;
     private int consumption;
     private String room;
-    private SimpleObjectProperty<javafx.scene.image.ImageView> onOffImage = new SimpleObjectProperty<ImageView>();
+    private SimpleObjectProperty<javafx.scene.image.ImageView> onOffImage;
 
     public Gadget(String name, T state, int consumption, String room) { //Overloaded constructor for when objects are loaded from Server
         this.name = name;
@@ -60,38 +60,44 @@ public abstract class Gadget<T> {
         return room;
     }
 
-    public ImageView typeImageProperty() {
+
+    //Used from tableview PropertyValue when loading gadgets.
+    public SimpleObjectProperty<ImageView> typeImageProperty() {
         try {
             String type = this.getClass().getSimpleName();
             T stateOnOff = this.getState();
+            System.out.println("Type: " + type);
+            System.out.println("State: " + stateOnOff);
+            System.out.println(type+stateOnOff+".png");
 
-            typeImage = new SimpleObjectProperty<ImageView>(new ImageView(new Image(String.valueOf(type + String.valueOf(stateOnOff) + ".png"))));
+            typeImage = new SimpleObjectProperty<ImageView>(new ImageView(new Image("images/"+type + String.valueOf(stateOnOff) + ".png")));
             typeImage.get().setFitHeight(25);
             typeImage.get().setFitWidth(60);
         } catch (Exception e) {
             e.printStackTrace();
-            Main.getMainWindowController().exceptionLabel.setText("Could not load gadget images..");
+            Main.getMainWindowController().exceptionLabel.setText("Could not load gadget images.. heh");
         }
-        return typeImage.get();
+        return typeImage;
     }
 
-    public ImageView onOffImageProperty() {
+    //Used from tableview PropertyValue when loading gadgets.
+    public SimpleObjectProperty<ImageView> onOffImageProperty() {
         try {
             if (this.state instanceof Boolean) {
                 if (this.state.equals(true)) {
-                    onOffImage = new SimpleObjectProperty<ImageView>(new ImageView(new Image(getClass().getResourceAsStream("/src/mainPackage/images/switchButtonOn.png"))));
+                    onOffImage = new SimpleObjectProperty<ImageView>(new ImageView(new Image(getClass().getResourceAsStream("src/mainPackage/images/switchButtonOn.png"))));
                 } else {
-                    onOffImage = new SimpleObjectProperty<ImageView>(new ImageView(new Image(getClass().getResourceAsStream("/src/mainPackage/images/switchButtonOff.png"))));
+                    onOffImage = new SimpleObjectProperty<ImageView>(new ImageView(new Image(getClass().getResourceAsStream("src/mainPackage/images/switchButtonOff.png"))));
                 }
             } else {
-                onOffImage = new SimpleObjectProperty<ImageView>(new ImageView(new Image(getClass().getResourceAsStream("/src/mainPackage/images/heatButton.png"))));
+                onOffImage = new SimpleObjectProperty<ImageView>(new ImageView(new Image(getClass().getResourceAsStream("src/mainPackage/images/heatButton.png"))));
             }
-            onOffImage.get().setFitWidth(60);
             onOffImage.get().setFitHeight(25);
+            onOffImage.get().setFitWidth(60);
         } catch (Exception e) {
             e.printStackTrace();
             Main.getMainWindowController().exceptionLabel.setText("could not load gadget images..");
         }
-        return onOffImage.get();
+        return onOffImage;
     }
 }

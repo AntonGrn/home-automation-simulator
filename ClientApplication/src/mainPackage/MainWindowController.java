@@ -116,6 +116,7 @@ public class MainWindowController {
                 }
         );
 
+        //loads the blueprint into the mainwindow HouseFrame
         blueprint();
 
         //Since requests for updates from the Server is received by another thread than JavaFX, we need a way to notify the
