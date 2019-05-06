@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class ClientOutputThread extends Thread{
+
     private final Socket socket;
     private final DataOutputStream output;
 
@@ -25,11 +26,9 @@ public class ClientOutputThread extends Thread{
                 output.writeUTF(messageToServer);
                 output.flush();
             } catch (InterruptedException e) {
-                e.printStackTrace();
                 closeResources();
                 break;
             } catch (IOException e) {
-                e.printStackTrace();
                 closeResources();
                 break;
             }
@@ -40,6 +39,7 @@ public class ClientOutputThread extends Thread{
         try {
             socket.close();
             output.close();
+            System.out.println("Output Thread closed");
         } catch (IOException e) {
             e.printStackTrace();
         }
