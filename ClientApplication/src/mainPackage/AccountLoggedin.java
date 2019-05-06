@@ -31,5 +31,4 @@ public class AccountLoggedin {
     public ObjectProperty<Account> loggedInAccountProperty() {
         return loggedInAccount;
     }
-
 }

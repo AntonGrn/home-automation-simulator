@@ -98,5 +98,56 @@ public class DB {
         return items;
     }
 
+    public ArrayList<String[]> getLogs(int systemID) throws Exception {
+        connect();
+        ArrayList<String[]> logs = new ArrayList<>();
+        int results = 0;
+        try {
+            resultSet = statement.executeQuery("SELECT * FROM Log WHERE systemID = '" + String.valueOf(systemID) + "';");
+            while (resultSet.next()) {
+                results++;
+                String timestamp = resultSet.getString("timestamp");
+                String log = resultSet.getString("log");
+
+                String[] items = {timestamp, log};
+                logs.add(items);
+            }
+
+            if(results < 1) {
+                throw new Exception("No logs stored");
+            }
+
+        } catch (SQLException e) {
+            throw new Exception("Error on SQL query");
+        } catch (NullPointerException e) {
+            throw new Exception("Nullpointer Exception");
+        } finally {
+            closeConnection();
+        }
+        return logs;
+    }
+
+    public void addLog(int systemID, String logMessage) throws Exception {
+        connect();
+        try {
+            //Count the logs of the system
+            resultSet = statement.executeQuery("SELECT COUNT(*) FROM Log WHERE systemID = "+ String.valueOf(systemID) + ";");
+            int systemLogs = resultSet.getInt(1);
+            //Only store 10 logs for each system. If more; delete oldest
+            if (systemLogs >= 10) {
+                statement.executeUpdate("DELETE * FROM Log WHERE systemID = " +String.valueOf(systemID)+ " AND logID = (SELECT MIN(logID) FROM Log WHERE systemID = " +String.valueOf(systemID)+ ")");
+            }
+            //Add new log. Note: timestamp is added by default by MySQL
+            statement.executeUpdate("INSERT INTO Log`(systemID`, log) VALUES ("+String.valueOf(systemID)+", '"+ logMessage +"');");
+
+        } catch (SQLException e) {
+            throw new Exception("Error on SQL query");
+        } catch (NullPointerException e) {
+            throw new Exception("Nullpointer Exception");
+        } finally {
+            closeConnection();
+        }
+    }
+
 }
 

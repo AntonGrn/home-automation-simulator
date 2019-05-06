@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class  Main extends Application {
 
     private static MainWindowController mainWindowController;  //We set this as instance, so we can reach it later on.
 
