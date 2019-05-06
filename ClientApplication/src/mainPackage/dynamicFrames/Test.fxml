@@ -13,7 +13,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="logintest" mnemonicParsing="false" style="-fx-background-radius: 10 10 10;" text="Login">
+      <Button fx:id="logintest" mnemonicParsing="false" onAction="#login" style="-fx-background-radius: 10 10 10;" text="Login">
          <VBox.margin>
             <Insets top="10.0" />
          </VBox.margin>

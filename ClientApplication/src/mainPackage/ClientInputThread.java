@@ -1,8 +1,10 @@
 package mainPackage;
 
 import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ClientInputThread extends Thread {
 
@@ -22,15 +24,23 @@ public class ClientInputThread extends Thread {
             try {
                 //Read data from server
                 messageFromServer = input.readUTF();
+                System.out.println("Message received to inputThread " + Thread.currentThread());
                 //Send data from server to queue: requestsFromServer
                 Main.getMainWindowController().requestsFromServer.put(messageFromServer);
                 //Notify JavaFX-thread to update
                 Main.getMainWindowController().doUpdate.setValue(true);
             } catch (InterruptedException e) {
-                e.printStackTrace();
                 closeResources();
                 break;
-            } catch (IOException e) {
+            } catch (SocketException e) {
+                System.out.println("No connection with server");
+                closeResources();
+                break;
+            } catch (EOFException e) {
+                System.out.println("No connection with server");
+                closeResources();
+                break;
+            }catch (IOException e) {
                 e.printStackTrace();
                 closeResources();
                 break;
@@ -42,6 +52,7 @@ public class ClientInputThread extends Thread {
         try {
             socket.close();
             input.close();
+            System.out.println("Input Thread closed");
         } catch (IOException e) {
             e.printStackTrace();
         }
