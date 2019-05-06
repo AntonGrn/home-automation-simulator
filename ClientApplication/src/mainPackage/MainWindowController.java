@@ -88,9 +88,9 @@ public class MainWindowController {
         chosenRoom = new SimpleStringProperty("null");
 
         //Until we can get Gadgets from Server:
-        gadgetList.add(new Lamp("LampOne", 25, "Kitchen"));
-        gadgetList.add(new Lamp("LampTwo", 25, "Kitchen"));
-        gadgetList.add(new Lamp("lampThree",30,"Bedroom"));
+        gadgetList.add(new Lamp("LampOne",false,25,"Kitchen",1));
+        gadgetList.add(new Lamp("LampTwo",false,25,"Kitchen",2));
+        gadgetList.add(new Lamp("LampThree",false,25,"Bedroom",3));
 
         //Add listener to loggedInAccount object's loggedInAccountProperty
         AccountLoggedin.getInstance().loggedInAccountProperty().addListener(

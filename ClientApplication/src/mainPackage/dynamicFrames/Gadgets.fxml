@@ -45,7 +45,7 @@
             <TableView fx:id="tblViewCurrentGadgets" prefHeight="200.0" prefWidth="200.0">
               <columns>
                 <TableColumn fx:id="clmType" prefWidth="133.0" text="type" />
-                <TableColumn fx:id="clmId" prefWidth="133.0" text="id" />
+                <TableColumn fx:id="clmName" prefWidth="133.0" text="name" />
                   <TableColumn fx:id="clmRoom" prefWidth="133.0" text="room" />
               </columns>
                <GridPane.margin>

@@ -13,19 +13,15 @@ public abstract class Gadget<T> {
     protected T state;
     private int consumption;
     private String room;
+    private final int id;
     private SimpleObjectProperty<javafx.scene.image.ImageView> onOffImage;
 
-    public Gadget(String name, T state, int consumption, String room) { //Overloaded constructor for when objects are loaded from Server
+    public Gadget(String name, T state, int consumption, String room, int id) { //constructor
         this.name = name;
         this.state = state;
         this.consumption = consumption;
         this.room = room;
-    }
-
-    public Gadget(String name, int consumption, String room) { //Overloaded constructor for when objects are created.
-        this.name = name;
-        this.consumption = consumption;
-        this.room = room;
+        this.id = id;
     }
 
     public void setConsumption(int consumption) throws IllegalArgumentException {
@@ -60,6 +56,9 @@ public abstract class Gadget<T> {
         return room;
     }
 
+    public int getId() {
+        return id;
+    }
 
     //Used from tableview PropertyValue when loading gadgets.
     public SimpleObjectProperty<ImageView> typeImageProperty() {
