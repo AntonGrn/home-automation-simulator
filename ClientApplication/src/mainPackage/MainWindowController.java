@@ -1,9 +1,14 @@
 package mainPackage;
 
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,10 +19,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import mainPackage.dynamicFrames.RoomsController;
+import mainPackage.modelClasses.*;
 import mainPackage.modelClasses.Account;
 import mainPackage.modelClasses.Gadget;
 import mainPackage.modelClasses.Lamp;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,6 +33,10 @@ import java.util.concurrent.BlockingQueue;
 
 public class MainWindowController {
 
+    private static RoomsController roomsController; //So we can reach it.
+    public static RoomsController getRoomsController(){ //easy way to access the object.
+        return roomsController;
+    }
 
     @FXML
     private HBox menuFrame;
@@ -41,16 +51,19 @@ public class MainWindowController {
     private GridPane loggedintatusFrame;
 
     @FXML
-    private Button btn1, btn2, btn3;
+    private Button btnRooms, btnUsers, btnGadgets, btnEnergy, btnLogs, btnSettings;
 
     @FXML
-    private Label exceptionLabel, loggedInLabel;
+    public Label exceptionLabel, loggedInLabel;
 
-    private String currentDynamicFrame;
+    private DynamicFrame currentDynamicFrameController;
 
     public ArrayList<Gadget> gadgetList;
-    // When model class Room is added: private ArrayList<Room> roomList;
-    // Or:                             public ArrayList<Pane> roomList;
+
+    public ArrayList<Room> roomList;
+
+    //observableArrayList for the gadgets, they need to be instanced before opening the scene, NPE otherwise.
+    public ObservableList<Gadget> gadgetListTableView = FXCollections.observableArrayList();
 
     //Producer-consumer pattern. Thread safe. Add requests to send to server.
     //Maybe have private, with getters
@@ -61,13 +74,22 @@ public class MainWindowController {
     //To notify the JavaFX-thread that updates has arrived from the Server.
     public BooleanProperty doUpdate;
 
+    // For the houseFrame to know which room has been chosen by the user.
+    public StringProperty chosenRoom;
+
     @FXML
     public void initialize() {
+        //declare class-objects
+        roomsController = new RoomsController();
 
         //Set name of dynamic frame to which the button links
-        btn1.setUserData("Test");
-        btn2.setUserData("RoomsController");
-        btn3.setUserData("testFrame");
+        btnRooms.setUserData("Rooms");
+        btnUsers.setUserData("Users");
+        btnGadgets.setUserData("Gadgets");
+        btnEnergy.setUserData("Energy");
+        btnLogs.setUserData("Logs");
+        //temporary, shall be named setting later on
+        btnSettings.setUserData("Test");
 
         gadgetList = new ArrayList<>();
         requestsToServer = new ArrayBlockingQueue<>(10);
@@ -75,9 +97,14 @@ public class MainWindowController {
 
         doUpdate = new SimpleBooleanProperty(false);
 
+        isNotLoggedIn();
+
+        chosenRoom = new SimpleStringProperty("null");
+
         //Until we can get Gadgets from Server:
         gadgetList.add(new Lamp("LampOne", 25, "Kitchen"));
         gadgetList.add(new Lamp("LampTwo", 25, "Kitchen"));
+        gadgetList.add(new Lamp("lampThree",30,"Bedroom"));
 
         //Add listener to loggedInAccount object's loggedInAccountProperty
         AccountLoggedin.getInstance().loggedInAccountProperty().addListener(
@@ -93,6 +120,8 @@ public class MainWindowController {
                 }
         );
 
+        blueprint();
+
         //Since requests for updates from the Server is received by another thread than JavaFX, we need a way to notify the
         //JavaFX-Thread to process the new data that has arrived from the server.
         //Could also be done by an int, representing the number of updates to be done (if more arrives while processing)
@@ -101,7 +130,15 @@ public class MainWindowController {
                     @Override
                     public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                         if(doUpdate.getValue()) {
-                            update();
+
+                            //Iin order to have this sun by FX thread, and not the thread issuing the doUpate.setValue(true).
+                            Platform.runLater(new Runnable() {
+                                @Override public void run() {
+                                    //Update UI here
+                                    update();
+                                }
+                            });
+
                             doUpdate.setValue(false);
                         }
                     }
@@ -118,6 +155,10 @@ public class MainWindowController {
         //Code to execute when  not logged in, ex disable controls
         loggedInLabel.setText("Not logged in");
         //+ Set dynamic frame to log in frame
+    }
+
+    public void setCurrentDynamicFrameController(DynamicFrame controller) {
+        currentDynamicFrameController = controller;
     }
 
     @FXML
@@ -144,20 +185,34 @@ public class MainWindowController {
             dynamicFrame.getChildren().add(FXMLLoader.load(getClass().getResource("dynamicFrames/" + url + ".fxml")));
             //dynamicFrame.setLayoutX(100);
             //dynamicFrame.setLayoutY(0);
-            currentDynamicFrame = url;
+            //currentDynamicFrame = url;
         } catch (IOException io) {
+            io.printStackTrace();
             exceptionLabel.setText("Unable to load new scene.");
         } catch (NullPointerException e) {
+            e.printStackTrace();
             exceptionLabel.setText("Unable to load new scene.");
+        }
+    }
+
+    //Adding blueprint to houseframe window
+    public void blueprint(){
+        try{
+            houseFrame.getChildren().clear();
+            houseFrame.getChildren().add(FXMLLoader.load(getClass().getResource("houseFrame/Blueprint.fxml")));
+        }catch(IOException e){
+
         }
     }
 
     //update() should be run by JavaFX-Thread, so should not be invoked by other threads (ex ClientInputThread)
     //update while requestsFromServer is not empty
     public void update() {
+        exceptionLabel.setText("");
         //Update houseFrame + invoke update method of currentFrame
         try {
             String request = requestsFromServer.take();
+            System.out.println(request);
             String[] commands = request.split(":");
 
             //Translate the requests according to the LAAS communication protocol:
@@ -165,10 +220,20 @@ public class MainWindowController {
                 case "2": //Result of login attempt
                     if(commands[1].equals("ok")) {
                         //Create account and send it as parameter to: AccountLoggedin.getInstance().setLoggedInAccount(account);
+                        String accountID =   commands[3];
+                        String systemID =    commands[4];
+                        String name =        commands[5];
+                        String accessLevel = commands[6];
+                        String password =    commands[7];
+
+                        Account a1 = new Account(name, accountID, Integer.parseInt(systemID), accessLevel, password);
+                        AccountLoggedin.getInstance().setLoggedInAccount(a1);
+
                     }
-                    else {
-                        exceptionLabel.setText("Login failed");
-                        //Call the update() of LoginController (to clear it)
+                    else if(commands[1].equals("no")) {
+                        exceptionLabel.setText(commands[2]);
+                    }else {
+                        exceptionLabel.setText("Login failed for unknown reasons");
                     }
                     break;
                 case "4": //Gadgets' states has been updated
@@ -181,7 +246,7 @@ public class MainWindowController {
                     //Cast log scene
                     break;
                 case "13": //Exception message from server
-                    exceptionLabel.setText(commands[2]);
+                    exceptionLabel.setText(commands[1]);
                     break;
                 default:
                     exceptionLabel.setText("Unknown update request received");
@@ -190,7 +255,7 @@ public class MainWindowController {
         }catch(InterruptedException e) {
             exceptionLabel.setText("Unable to update from server");
         }
+        currentDynamicFrameController.updateFrame();
 
     }
-
 }
