@@ -34,12 +34,6 @@ import java.util.concurrent.BlockingQueue;
 
 public class MainWindowController {
 
-    private static RoomsController roomsController; //So we can reach it.
-
-    public static RoomsController getRoomsController() { //easy way to access the object.
-        return roomsController;
-    }
-
     @FXML
     private HBox menuFrame;
 
@@ -64,9 +58,6 @@ public class MainWindowController {
 
     public ArrayList<Room> roomList;
 
-    //observableArrayList for the gadgets, they need to be instanced before opening the scene, NPE otherwise.
-    public ObservableList<Gadget> gadgetListTableView = FXCollections.observableArrayList();
-
     //Producer-consumer pattern. Thread safe. Add requests to send to server.
     //Maybe have private, with getters
     public BlockingQueue<String> requestsToServer;
@@ -83,8 +74,6 @@ public class MainWindowController {
 
     @FXML
     public void initialize() {
-        //declare class-objects
-        roomsController = new RoomsController();
 
         //Set name of dynamic frame to which the button links
         btnRooms.setUserData("Rooms");
@@ -107,9 +96,10 @@ public class MainWindowController {
         chosenRoom = new SimpleStringProperty("null");
 
         //Until we can get Gadgets from Server:
-        gadgetList.add(new Lamp("LampOne", 25, "Kitchen"));
-        gadgetList.add(new Lamp("LampTwo", 25, "Kitchen"));
-        gadgetList.add(new Lamp("lampThree", 30, "Bedroom"));
+        gadgetList.add(new Lamp("LampOne",false,25,"Kitchen",1));
+        gadgetList.add(new Lamp("LampTwo",false,25,"Kitchen",2));
+        gadgetList.add(new Lamp("LampThree",false,25,"Bedroom",3));
+
 
         //Add listener to loggedInAccount object's loggedInAccountProperty
         AccountLoggedin.getInstance().loggedInAccountProperty().addListener(
@@ -124,7 +114,11 @@ public class MainWindowController {
                     }
                 }
         );
+
+
+        //loads the blueprint into the mainwindow HouseFrame
         setBlueprint();
+
         //Since requests for updates from the Server is received by another thread than JavaFX, we need a way to notify the
         //JavaFX-Thread to process the new data that has arrived from the server.
         //Could also be done by an int, representing the number of updates to be done (if more arrives while processing)

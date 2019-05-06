@@ -25,9 +25,9 @@
          <children>
             <Button fx:id="btnLeftHover" maxHeight="60.0" maxWidth="20.0" minHeight="60.0" minWidth="20.0" mnemonicParsing="false" onMouseEntered="#scrollLeft" onMouseExited="#stopScrollLeft" prefHeight="60.0" prefWidth="20.0">
                <HBox.margin>
-                  <Insets bottom="5.0" left="5.0" top="5.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
                </HBox.margin></Button>
-            <TableView fx:id="tblViewRooms" maxHeight="100.0" maxWidth="350.0" minHeight="100.0" minWidth="350.0" prefHeight="100.0" prefWidth="350.0">
+            <TableView fx:id="tblViewRooms" maxHeight="100.0" maxWidth="340.0" minHeight="100.0" minWidth="340.0" prefHeight="100.0" prefWidth="340.0">
                <columns>
                   <TableColumn fx:id="clmOne" editable="false" prefWidth="120.0" resizable="false" sortable="false" text="C1" />
                   <TableColumn fx:id="clmTwo" editable="false" prefWidth="120.0" resizable="false" sortable="false" text="C2" />
@@ -41,7 +41,7 @@
             </TableView>
             <Button fx:id="btnRightHover" maxHeight="60.0" maxWidth="20.0" minHeight="60.0" minWidth="20.0" mnemonicParsing="false" onMouseEntered="#scrollRight" onMouseExited="#stopScrollRight" prefHeight="60.0" prefWidth="20.0">
                <HBox.margin>
-                  <Insets bottom="5.0" right="5.0" top="5.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
                </HBox.margin></Button>
          </children>
       </HBox>

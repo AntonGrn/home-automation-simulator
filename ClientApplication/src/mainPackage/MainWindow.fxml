@@ -79,7 +79,7 @@
       <Pane fx:id="dynamicFrame" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" BorderPane.alignment="CENTER" />
    </right>
    <bottom>
-      <GridPane fx:id="loggedInStatusFrame" BorderPane.alignment="CENTER">
+      <GridPane fx:id="loggedInStatusFrame" style="-fx-background-color: #231f26;" BorderPane.alignment="CENTER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="50.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

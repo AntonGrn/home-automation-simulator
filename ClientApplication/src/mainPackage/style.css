@@ -31,6 +31,7 @@
 
 /*------------------------- DynamicFrame Rooms ------------------------------*/
 
+/*
 #tblViewRooms .table-column{
     -fx-alignment: CENTER;
 }
@@ -60,7 +61,7 @@ visibility:hidden;
 #tblViewRooms .table-row-cell{
     -fx-background-color: #231f26;
     -fx-border-color: transparent;
-    -fx-border-width: 0;                     /*viktig annars blir det laggigt av någon anledning*/
+    -fx-border-width: 0;
     -fx-table-cell-border-color: transparent;
     -fx-background-insets: 0 0 0 0, 0, 1,2;
 }
@@ -99,3 +100,4 @@ visibility:hidden;
     -fx-padding: 0;
     -fx-shape: null;
 }
+*/
