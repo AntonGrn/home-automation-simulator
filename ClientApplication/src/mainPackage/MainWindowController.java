@@ -32,11 +32,6 @@ import java.util.concurrent.BlockingQueue;
 
 public class MainWindowController {
 
-    private static RoomsController roomsController; //So we can reach it.
-    public static RoomsController getRoomsController(){ //easy way to access the object.
-        return roomsController;
-    }
-
     @FXML
     private HBox menuFrame;
 
@@ -61,9 +56,6 @@ public class MainWindowController {
 
     public ArrayList<Room> roomList;
 
-    //observableArrayList for the gadgets, they need to be instanced before opening the scene, NPE otherwise.
-    public ObservableList<Gadget> gadgetListTableView = FXCollections.observableArrayList();
-
     //Producer-consumer pattern. Thread safe. Add requests to send to server.
     //Maybe have private, with getters
     public BlockingQueue<String> requestsToServer;
@@ -78,8 +70,6 @@ public class MainWindowController {
 
     @FXML
     public void initialize() {
-        //declare class-objects
-        roomsController = new RoomsController();
 
         //Set name of dynamic frame to which the button links
         btnRooms.setUserData("Rooms");

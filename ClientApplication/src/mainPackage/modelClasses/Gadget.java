@@ -75,6 +75,7 @@ public abstract class Gadget<T> {
             typeImage.get().setFitWidth(60);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("images 1");
             Main.getMainWindowController().exceptionLabel.setText("Could not load gadget images.. heh");
         }
         return typeImage;
@@ -96,6 +97,7 @@ public abstract class Gadget<T> {
             onOffImage.get().setFitWidth(60);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("images 2");
             Main.getMainWindowController().exceptionLabel.setText("could not load gadget images..");
         }
         return onOffImage;

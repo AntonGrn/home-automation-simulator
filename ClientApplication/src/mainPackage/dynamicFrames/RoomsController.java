@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class RoomsController implements DynamicFrame {
-    private ObservableList<RoomSlider> listOfRoomPics;
+    private ObservableList<RoomSlider> listOfRoomButtonsHeader;
     private Timeline timeLineLeft;
     private Timeline timeLineRight;
 
@@ -62,7 +62,7 @@ public class RoomsController implements DynamicFrame {
     public Pane dynamicFrameRooms;
 
     public void initialize() {
-        listOfRoomPics = FXCollections.observableArrayList(RoomSlider.getRoomSliderInstance());
+        listOfRoomButtonsHeader = FXCollections.observableArrayList(RoomSlider.getRoomSliderInstance());
 
         //update all clients and tables and such, when a request is confirmed from server.
         updateFrame();
@@ -108,11 +108,12 @@ public class RoomsController implements DynamicFrame {
         clmId.setCellValueFactory(new PropertyValueFactory<>("name"));
         clmState.setCellValueFactory(new PropertyValueFactory<>("onOffImage"));
 
-        //add to room tblView, will never be changed
-        tblViewDynamicGadgets.getItems().addAll(Main.getMainWindowController().gadgetListTableView);
+        /*from beginning the tableview will not have any items inside it,
+        when a room button is pressed then it will go through gadgetList in MainWindow
+        and add all rooms with the same name as button. */
 
-        //add to gadget tblView
-        tblViewRooms.getItems().addAll(listOfRoomPics);
+        //add to tblView roomsheader, will never be changed
+        tblViewRooms.getItems().addAll(listOfRoomButtonsHeader);
     }
 
     public void updateTableView(String roomName) {
