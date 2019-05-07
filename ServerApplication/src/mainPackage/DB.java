@@ -140,7 +140,7 @@ public class DB {
                 statement.executeUpdate("DELETE * FROM Log WHERE systemID = " +String.valueOf(systemID)+ " AND logID = (SELECT MIN(logID) FROM Log WHERE systemID = " +String.valueOf(systemID)+ ")");
             }
             //Add new log. Note: timestamp is added by default by MySQL
-            statement.executeUpdate("INSERT INTO Log`(systemID`, log) VALUES ("+String.valueOf(systemID)+", '"+ logMessage +"');");
+            statement.executeUpdate("INSERT INTO Log (`systemID`, `log`) VALUES ("+String.valueOf(systemID)+", '"+ logMessage +"');");
 
         } catch (SQLException e) {
             throw new Exception("Error on SQL query");
