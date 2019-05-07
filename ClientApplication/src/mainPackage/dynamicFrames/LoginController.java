@@ -32,14 +32,15 @@ public class LoginController implements DynamicFrame {
     void login(ActionEvent event) {
         inputErrorLabel.setVisible(false);
         String accountID = usernametextfield.getText();
-        // + Make sure user does not type any colon (":")
         String password = passfield.getText();
-        // + Make sure user does not type any colon (":")
 
         //Assure accountID and password does not contain colon
-        String regex = "^(?:.*:).+$";
-        if (accountID.matches(regex) || password.matches(regex)) {
+        if (accountID.contains(":") || password.contains(":")) {
             inputErrorLabel.setText("Name and password may not contain colon");
+            inputErrorLabel.setVisible(true);
+            //Assure no text fields are empty
+        }else if (accountID.trim().isEmpty() || password.trim().isEmpty()){
+            inputErrorLabel.setText("Please fill in both fields");
             inputErrorLabel.setVisible(true);
         } else {
             try {

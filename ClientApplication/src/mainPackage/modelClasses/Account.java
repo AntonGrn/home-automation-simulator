@@ -8,14 +8,14 @@ public class Account {
     private String name;
     private String email;
     private int systemID;
-    private String accessLevel;
+    private boolean admin;
     private String password;
 
-    public Account(String name, String email, int systemID, String accessLevel, String password){
+    public Account(String name, String email, int systemID, boolean admin, String password){
         this.name=name;
         this.email=email;
         this.systemID=systemID;
-        this.accessLevel=accessLevel;
+        this.admin = admin;
         this.password=password;
     }
 
@@ -43,12 +43,12 @@ public class Account {
         this.systemID = systemID;
     }
 
-    public String getAccessLevel() {
-        return accessLevel;
+    public boolean isAdmin() {
+        return admin;
     }
 
-    public void setAccessLevel(String accessLevel) {
-        this.accessLevel = accessLevel;
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     public String getPassword() {
