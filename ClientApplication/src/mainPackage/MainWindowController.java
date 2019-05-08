@@ -175,7 +175,7 @@ public class MainWindowController {
         //Set all menu buttons to dosabled
         for (Node node : menuFrame.getChildren()) {
             if (node instanceof Button) {
-                // Uncomment when Server is demon: ((Button)node).setDisable(true);
+                ((Button)node).setDisable(true);
             }
         }
     }
