@@ -87,13 +87,13 @@ public class DB {
 
             }
             if(results != 1) { //If there was no match, or for some reason, multiple matches
-                throw new Exception("Login failed. Invalid input");
+                throw new Exception("Login failed. Connection is good");
             }
 
         } catch (SQLException e) {
             throw new Exception("Error on SQL query");
         } catch (NullPointerException e) {
-            throw new Exception("Nullpointer Exception");
+            throw new Exception("NullPointer Exception");
         } finally {
             closeConnection();
         }
@@ -122,7 +122,7 @@ public class DB {
         } catch (SQLException e) {
             throw new Exception("Error on SQL query");
         } catch (NullPointerException e) {
-            throw new Exception("Nullpointer Exception");
+            throw new Exception("NullPointer Exception");
         } finally {
             closeConnection();
         }
@@ -145,7 +145,7 @@ public class DB {
         } catch (SQLException e) {
             throw new Exception("Error on SQL query");
         } catch (NullPointerException e) {
-            throw new Exception("Nullpointer Exception");
+            throw new Exception("NullPointer Exception");
         } finally {
             closeConnection();
         }

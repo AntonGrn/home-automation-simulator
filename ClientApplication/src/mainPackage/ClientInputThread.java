@@ -40,12 +40,12 @@ public class ClientInputThread extends Thread {
                 System.out.println("No connection with server");
                 /*try {
                     //SOLVE THIS IN ANOTHER WAY
-                    Main.getMainWindowController().requestsFromServer.put("15"); //Signal connection error
+                    Main.getMainWindowController().requestsFromServer.put("XXX"); //Signal connection error
                     Main.getMainWindowController().doUpdate.setValue(true);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }*/
-                closeResources();
+                closeResources(); //If calls 17; this is not needed
                 break;
             }catch (IOException e) {
                 e.printStackTrace();
@@ -57,8 +57,8 @@ public class ClientInputThread extends Thread {
 
     private void closeResources() {
         try {
-            socket.close();
             input.close();
+            socket.close();
             System.out.println("Input Thread closed");
         } catch (IOException e) {
             e.printStackTrace();
