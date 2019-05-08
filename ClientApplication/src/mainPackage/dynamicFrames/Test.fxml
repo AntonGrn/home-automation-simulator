@@ -13,9 +13,9 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="logintest" mnemonicParsing="false" onAction="#login" style="-fx-background-radius: 10 10 10;" text="Login">
+      <Button mnemonicParsing="false" onAction="#logout" text="Logout">
          <VBox.margin>
-            <Insets top="10.0" />
+            <Insets top="14.0" />
          </VBox.margin>
       </Button>
       <Button fx:id="sebbetest" mnemonicParsing="false" onAction="#setChosenRoomKitchen" style="-fx-background-radius: 10 10 10;" text="Kitchen">

@@ -1,6 +1,7 @@
 package mainPackage;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,6 +31,20 @@ public class  Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+
+    //Cleanup executed before closing application
+    @Override
+    public void stop() {
+        System.out.println("Closing application");
+        try {
+            Main.getMainWindowController().requestsToServer.put("14"); //Closes clean at server + ClientInputThread
+            Thread.sleep(500);
+            ServerConnection.getInstance().closeResources(); //Closes at server + entire client
+        }catch (InterruptedException e) {
+            System.out.println("Exit interrupted");
+        }
     }
 }
 
