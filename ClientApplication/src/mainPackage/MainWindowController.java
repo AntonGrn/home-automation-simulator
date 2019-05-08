@@ -175,7 +175,7 @@ public class MainWindowController {
         //Set all menu buttons to dosabled
         for (Node node : menuFrame.getChildren()) {
             if (node instanceof Button) {
-                ((Button)node).setDisable(true);
+                //Uncomment later: ((Button)node).setDisable(true);
             }
         }
     }
