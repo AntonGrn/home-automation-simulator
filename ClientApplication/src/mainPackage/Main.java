@@ -33,7 +33,6 @@ public class  Main extends Application {
         launch(args);
     }
 
-
     //Cleanup executed before closing application
     @Override
     public void stop() {
