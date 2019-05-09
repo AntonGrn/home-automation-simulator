@@ -93,23 +93,19 @@ public class Server {
             while (true) {
 
                 Socket clientConnection = null;
-                Thread clientThread = null;
                 Client client = null;
 
                 try {
                     // socket object to receive incoming client requests
                     clientConnection = server.accept();
 
-                    System.out.println("New client connected : " + clientConnection);
-
                     // obtaining input and output streams
                     DataInputStream input = new DataInputStream(clientConnection.getInputStream());
                     DataOutputStream output = new DataOutputStream(clientConnection.getOutputStream());
 
-                    System.out.println("Assigning new thread for client");
+                    client = new Client("null", 0, false, clientConnection, input, output);
 
-                    client = new Client("null", 0, clientConnection, input, output);
-
+                    // Assigning new thread for client
                     executor.submit(new ClientThread(client));
 
                 } catch (Exception e) {
@@ -125,15 +121,14 @@ public class Server {
     private void addClient(Client client) {
         synchronized (activeClients) {
             activeClients.add(client);
-            System.out.println("Client added by thread " + Thread.currentThread().getName());
+            //LOG PURPOSE
+            iterateActiveClients();
         }
     }
 
     //Invoked by ClientThreads
     public void removeClient(Client clientToRemove) {
         synchronized (activeClients) {
-            System.out.println("THREAD " + Thread.currentThread().getName() + " REMOVING CLIENT: " + clientToRemove.getAccountID());
-            System.out.println("LIST SIZE: " + activeClients.size());
 
             for (int i = 0; i < activeClients.size(); i++) {
                 if (activeClients.get(i).getSocket().equals(clientToRemove.getSocket())) {
@@ -141,28 +136,32 @@ public class Server {
                         activeClients.get(i).getSocket().close();
                         activeClients.get(i).getOutput().close();
                         activeClients.get(i).getInput().close();
-                        System.out.println("REMOVE: Closed all resources");
                     } catch (IOException e) {
-                        e.printStackTrace();
-                        System.out.println("Remove: Unable to close all resources");
+                        //e.printStackTrace();
+                        System.out.println("Remove client error: Unable to close all resources for client " + activeClients.get(i).getAccountID());
                     }
                     finally {
                         activeClients.remove(i);
-                        System.out.println("Client removed");
                     }
                 }
             }
+            //LOG PURPOSE
+            iterateActiveClients();
         }
     }
 
     //Invoked by acceptClientConnections() t1,
     public void iterateActiveClients() {
         synchronized (activeClients) {
-            System.out.println("THREAD " + Thread.currentThread().getName() + " ACTIVE CLIENTS METHOD:");
-
-            for (Client client : activeClients) {
-                System.out.println(client.getAccountID());
+            String clients = "THREAD " + Thread.currentThread().getName() + " Active clients:\n";
+            if(activeClients.size() == 0) {
+                clients = clients.concat("Zero");
+            } else {
+                for (Client client : activeClients) {
+                    clients = clients.concat(client.getAccountID() + " " + (client.isAdmin() ? "[Admin]" : "[Non-admin]") + "  " + client.getSocket().getInetAddress()  + "\n");
+                }
             }
+            System.out.println(clients);
         }
     }
 
@@ -174,13 +173,10 @@ public class Server {
             String[] commands = loginRequest.getRequest().split(":");
 
             if (commands[0].equals("1")) { //If it is a login request
-                System.out.println("Login attempt");
 
                 try {
                     //Try to log in with [1] accountID and [2] password
                     String[] result = DB.getInstance().login(commands[1], commands[2]); //login() throws Exception
-
-                    System.out.println("HAS been at DB");
 
                     String accountID = result[0];
                     String systemID = result[1];
@@ -189,7 +185,7 @@ public class Server {
                     String password = result[4];
 
                     client = new Client(
-                            accountID, Integer.parseInt(systemID), loginRequest.getClient().getSocket(), loginRequest.getClient().getInput(), loginRequest.getClient().getOutput());
+                            accountID, Integer.parseInt(systemID), admin.equals("1") ? true : false, loginRequest.getClient().getSocket(), loginRequest.getClient().getInput(), loginRequest.getClient().getOutput());
 
                     //Add client to list of active clients
                     addClient(client);
@@ -197,7 +193,7 @@ public class Server {
                     String clientOutput = String.format("%s%s%s%s%s%s%s%s%s%s",
                             "2:ok:null:", accountID, ":", systemID, ":", name, ":", admin, ":", password);
 
-                    outputToClients(true, (clientOutput), loginRequest.getClient().getSocket(), loginRequest.getClient().getSystemID());
+                    outputToClients(true, false, (clientOutput), loginRequest.getClient().getSocket(), loginRequest.getClient().getSystemID());
                 } catch (Exception e) {
                     String exceptionMessage = e.getMessage();
                     try {
@@ -213,50 +209,47 @@ public class Server {
 
     //Invoked by t2
     public void processClientRequests() {
-        System.out.println("process clients requests");
-
         ClientRequest clientRequest;
-        while (true) {
 
-            iterateActiveClients();
-            clientRequest = null;
+        while (true) {
             try {
                 //See if there is anything
                 clientRequest = serverRequest.take();
 
                 synchronized (lockObject2) {
 
-                    System.out.println("CLIENT REQUEST: " + clientRequest.getRequest());
-
                     //Process the request according to LAAS communication protocol
                     String commands[] = clientRequest.getRequest().split(":");
-
-                    System.out.println("THREAD " + Thread.currentThread().getName() + " PROCESSING REQUEST");
 
                     String clientOutput;
 
                     switch (commands[0]) {
                         case "1": //Login request
-                            clientOutput = "13:Already logged in";
-                            outputToClients(true, clientOutput, clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
+                            clientOutput = "15:Already logged in";
+                            outputToClients(true, false, clientOutput, clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
                             break;
-                        case "3":
+                        case "3": //Request to update a gadget's state
+                            //Will form a 4:XX command
                             break;
-                        case "5":
+                        case "5": //Individual request for all gadgets info
                             break;
-                        case "6":
+                        case "6": //Request to alter gadget's info
                             break;
-                        case "8":
+                        case "7": //Request to add a gadget
                             break;
-                        case "9":
+                        case "9": // Individual request for all users info
                             break;
-                        case "11": //Log request
+                        case "10": // Request to alter user info
+                            break;
+                        case "11": // Request add a user
+                            break;
+                        case "13": //Log request
                             try{
                                 int systemId = clientRequest.getClient().getSystemID(); // DO THIS INSTEAD. More reliable. Can't be manipulated at client end. Won't need NumberFormatException
                                 ArrayList<String[]> logs = DB.getInstance().getLogs(systemId);
 
                                 //Form the output string according to LAAS protocol: 12:timestamp:log:next/null
-                                clientOutput = "12:";
+                                clientOutput = "14:";
                                 for(int i = 0 ; i < logs.size() ; i++) {
 
                                     // NOTE: timestamp contains colon (ex 18:34:15), which is the break mark for commands in LAAS protocol,
@@ -274,9 +267,9 @@ public class Server {
                                         clientOutput = clientOutput.concat(":next:");
                                     }
                                 }
-                                outputToClients(true, clientOutput, clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
+                                outputToClients(true, false, clientOutput, clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
                             } catch (Exception e){
-                                outputToClients(true, "13:".concat(e.getMessage()), clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
+                                outputToClients(true, false, "13:".concat(e.getMessage()), clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
                             }
                             break;
                     }
@@ -288,25 +281,29 @@ public class Server {
     }
 
     //Invoked by processClientRequests() -> t2
-    public void outputToClients(boolean individual, String message, Socket connection, int systemID) {
+    public void outputToClients(boolean onlyToIndividual, boolean onlyToAdmins, String message, Socket connection, int systemID) {
         synchronized (activeClients) {
-            System.out.println("LIST SIZE = " + activeClients.size());
+            //System.out.println("LIST SIZE = " + activeClients.size());
             try {
-                if (individual) {
+                if (onlyToIndividual) {
                     for (Client client : activeClients) {
                         if (client.getSocket().equals(connection)) {
-                            try {
-                                client.getOutput().writeUTF(message);
-                            } catch (IOException e) {
-                                //Won't be used. Inactive clients are removed before this
-                                System.out.println("Unable to write to: " + client.getAccountID());
+                            if ((onlyToAdmins & client.isAdmin()) || !onlyToAdmins) {
+                                try {
+                                    client.getOutput().writeUTF(message);
+                                } catch (IOException e) {
+                                    //Won't be used. Inactive clients are removed before this
+                                    System.out.println("Unable to write to: " + client.getAccountID());
+                                }
                             }
                         }
                     }
                 } else {
                     for (Client client : activeClients) {
                         if (client.getSystemID() == systemID) {
-                            client.getOutput().writeUTF(message);
+                            if ((onlyToAdmins & client.isAdmin()) || !onlyToAdmins) {
+                                client.getOutput().writeUTF(message);
+                            }
                         }
                     }
                 }

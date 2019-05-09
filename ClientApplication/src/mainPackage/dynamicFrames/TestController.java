@@ -22,7 +22,7 @@ public class TestController implements DynamicFrame {
     @FXML
     public void logout (ActionEvent event) {
             try {
-                Main.getMainWindowController().requestsToServer.put("14");
+                Main.getMainWindowController().requestsToServer.put("16");
                 Thread.sleep(100);
                 ServerConnection.getInstance().closeResources();
             }catch (InterruptedException e) {
