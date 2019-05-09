@@ -23,6 +23,7 @@ import javafx.util.Duration;
 import mainPackage.DynamicFrame;
 import mainPackage.Main;
 import mainPackage.MainWindowController;
+import mainPackage.ServerConnection;
 import mainPackage.modelClasses.Gadget;
 import mainPackage.modelClasses.GuiObject;
 import mainPackage.modelClasses.Room;
@@ -150,7 +151,7 @@ public class RoomsController implements DynamicFrame {
                     } else {
                         stateOfGadget = g.getClass().getSimpleName() + String.valueOf(g.getState()); //example 'Heat20'
                     }
-                    GuiObject guiObject = new GuiObject(typeOfGadget,gadgetName,stateOfGadget);
+                    GuiObject guiObject = new GuiObject(typeOfGadget, gadgetName, stateOfGadget, g.getId());
                     gadgetList.add(guiObject);
                 }
             }
@@ -161,6 +162,39 @@ public class RoomsController implements DynamicFrame {
             ex.printStackTrace();
             Main.getMainWindowController().exceptionLabel.setText("Could not load gadgets..hmm");
         }
+    }
+
+
+    private void onChangeStateOfGadget(ActionEvent event) {
+        GuiObject gui = tblViewDynamicGadgets.getSelectionModel().getSelectedItem();
+
+        for (Gadget g : Main.getMainWindowController().gadgetList) {
+            if (g.getId() == gui.getId() && g.getName() == gui.getGadgetName()) {
+
+                String type = g.getClass().getSimpleName();
+                String id = String.valueOf(g.getId());
+                String state = "";
+
+                if (gui.getStateOfGadget().toString().contains("true")){
+                    state = "false";
+                } else {
+                    state = "true";
+                }
+                /*try {
+                    //connect your computer to server
+                    ServerConnection.getInstance().connectToServer();
+                    //create a protocol string according to Laas protocol.
+                    String serverRequest = String.format("/s/s/s", type, id, state);
+                    //add to request to server
+                    Main.getMainWindowController().requestsToServer.put(serverRequest);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }catch (Exception ex){
+                    Main.getMainWindowController().exceptionLabel.setText("Could not change state of gadget");
+                }*/
+            }
+        }
+
     }
 
     public void scrollLeft() {
@@ -206,6 +240,4 @@ public class RoomsController implements DynamicFrame {
     public void stopScrollRight() {
         timeLineRight.stop();
     }
-
-
 }

@@ -15,7 +15,7 @@ public class SettingsController implements DynamicFrame {
     private TextArea textAreaInfoAboutUs;
 
     public void initialize(){
-        //making sure so the mainwindow knows which controller that is in charge.
+        //making sure so the mainWindow knows which controller that is in charge.
         Main.getMainWindowController().setCurrentDynamicFrameController(this);
         updateFrame();
     }
