@@ -14,7 +14,6 @@ public class TestController implements DynamicFrame {
 
     @FXML
     public void initialize() {
-
         Main.getMainWindowController().setCurrentDynamicFrameController(this);
 
     }
