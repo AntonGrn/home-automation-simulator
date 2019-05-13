@@ -22,6 +22,7 @@ import javafx.util.Duration;
 import mainPackage.DynamicFrame;
 import mainPackage.Main;
 import mainPackage.MainWindowController;
+import mainPackage.houseFrame.BlueprintController;
 import mainPackage.modelClasses.Gadget;
 import mainPackage.modelClasses.Room;
 import mainPackage.modelClasses.RoomSlider;
@@ -74,22 +75,32 @@ public class RoomsController implements DynamicFrame {
                 RoomSlider.getRoomSliderInstance().getBedRoom().setOnAction(e -> {
                     String roomName = ((Button) e.getSource()).getUserData().toString();
                     updateTableView(roomName);
+                    //show bedroom text on blueprint
+                    Main.getMainWindowController().chosenRoom.setValue("bedRoom");
                 });
                 RoomSlider.getRoomSliderInstance().getKitchen().setOnAction(e -> {
                     String roomName = ((Button) e.getSource()).getUserData().toString();
                     updateTableView(roomName);
+                    //show kitchen text on blueprint
+                    Main.getMainWindowController().chosenRoom.setValue("kitchen");
                 });
                 RoomSlider.getRoomSliderInstance().getGarage().setOnAction(e -> {
                     String roomName = ((Button) e.getSource()).getUserData().toString();
                     updateTableView(roomName);
+                    //show garage text on blueprint
+                    Main.getMainWindowController().chosenRoom.setValue("garage");
                 });
                 RoomSlider.getRoomSliderInstance().getToilet().setOnAction(e -> {
                     String roomName = ((Button) e.getSource()).getUserData().toString();
                     updateTableView(roomName);
+                    //show toilet text on blueprint
+                    Main.getMainWindowController().chosenRoom.setValue("toilet");
                 });
                 RoomSlider.getRoomSliderInstance().getLivingRoom().setOnAction(e -> {
                     String roomName = ((Button) e.getSource()).getUserData().toString();
                     updateTableView(roomName);
+                    //show livingroom text on blueprint
+                    Main.getMainWindowController().chosenRoom.setValue("livingRoom");
                 });
             }
         });

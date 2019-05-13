@@ -20,25 +20,15 @@ public class TestController implements DynamicFrame {
     }
 
     @FXML
-    public void logout (ActionEvent event) {
-            try {
-                Main.getMainWindowController().requestsToServer.put("16");
-                Thread.sleep(100);
-                ServerConnection.getInstance().closeResources();
-            }catch (InterruptedException e) {
-                System.out.println("Exit interrupted");
-            }
-    }
 
-    //test for changing rooms
-    @FXML
-    public void setChosenRoomKitchen(ActionEvent event) {
-        Main.getMainWindowController().chosenRoom.setValue("kitchen");
-    }
-
-    @FXML
-    public void setChosenRoomLivingroom(ActionEvent event) {
-        Main.getMainWindowController().chosenRoom.setValue("livingroom");
+    public void logout(ActionEvent event) {
+        try {
+            Main.getMainWindowController().requestsToServer.put("16");
+            Thread.sleep(100);
+            ServerConnection.getInstance().closeResources();
+        } catch (InterruptedException e) {
+            System.out.println("Exit interrupted");
+        }
     }
 
     public void updateFrame() {
