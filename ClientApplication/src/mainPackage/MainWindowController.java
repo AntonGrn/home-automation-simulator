@@ -95,9 +95,9 @@ public class MainWindowController {
         chosenRoom = new SimpleStringProperty("null");
 
         //Until we can get Gadgets from Server:
-        gadgetList.add(new Lamp("LampOne",false,25,"Kitchen",1));
-        gadgetList.add(new Lamp("LampTwo",false,25,"Kitchen",2));
-        gadgetList.add(new Lamp("LampThree",false,25,"Bedroom",3));
+        gadgetList.add(new Lamp("LampOne", false, 25, "Kitchen", 1));
+        gadgetList.add(new Lamp("LampTwo", false, 25, "Kitchen", 2));
+        gadgetList.add(new Lamp("LampThree", false, 25, "Bedroom", 3));
 
         //Loads the blueprint into the mainwindow HouseFrame
         setBlueprint();
@@ -150,16 +150,28 @@ public class MainWindowController {
     public void isLoggedIn() {
         //Code to execute when logged in
         loggedInLabel.setText("Logged in as  " + AccountLoggedin.getInstance().getLoggedInAccount().getName() + "  " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        //Request gadgets from server
+        try {
+            requestsToServer.put("5");
+        } catch (InterruptedException e) {
+            System.out.println("Unable to request gadgets at log in");
+        }
 
         //Access to system according to if logged in account is admin or not
-        if(AccountLoggedin.getInstance().getLoggedInAccount().isAdmin()) {
-            for (Node node : menuFrame.getChildren()) {
-                if (node instanceof Button) {
-                    ((Button)node).setDisable(false);
+        for (Node node : menuFrame.getChildren()) {
+            if (node instanceof Button) {
+                if (AccountLoggedin.getInstance().getLoggedInAccount().isAdmin()) {
+                    ((Button) node).setDisable(false);
+                } else {
+                    if(node.getUserData().equals("Rooms") ||
+                            node.getUserData().equals("Energy") ||
+                            node.getUserData().equals("Logs") ||
+                            node.getUserData().equals("Settings")) {
+                        ((Button) node).setDisable(false);
+                    }
+
                 }
             }
-        }else{
-            //What to show if logged in user is not admin
         }
         //Scene to load when logged in
         btnRooms.fire();
@@ -167,6 +179,11 @@ public class MainWindowController {
 
     public void isNotLoggedIn() {
         //Code to execute when  not logged in, ex disable controls
+        gadgetList.clear();
+        logsList.clear();
+        requestsToServer.clear();
+        requestsFromServer.clear();
+
         loggedInLabel.setText("Not logged in");
 
         //Go to login screen
@@ -175,7 +192,7 @@ public class MainWindowController {
         //Set all menu buttons to dosabled
         for (Node node : menuFrame.getChildren()) {
             if (node instanceof Button) {
-                //Uncomment later: ((Button)node).setDisable(true);
+                ((Button) node).setDisable(true);
             }
         }
     }
@@ -197,7 +214,7 @@ public class MainWindowController {
 
         //Style the pressed button
         ((Button) event.getSource()).setStyle(
-                "-fx-background-color: #1e97d2;" +
+                "-fx-background-color: #346189;" +
                         "-fx-border-color:white;");
 
         //Perform scene change within the dynamicFrame of the MainWindow
@@ -228,7 +245,7 @@ public class MainWindowController {
     }
 
     //update() should be run by JavaFX-Thread, so should not be invoked by other threads (ex ClientInputThread)
-    public void update() {
+    private void update() {
         exceptionLabel.setText("");
         //Update houseFrame + invoke update method of currentFrame
         try {
@@ -239,47 +256,19 @@ public class MainWindowController {
             //Translate the requests according to the LAAS communication protocol:
             switch (commands[0]) {
                 case "2": //Result of login attempt
-                    if (commands[1].equals("ok")) {
-                        //Create account and send it as parameter to: AccountLoggedin.getInstance().setLoggedInAccount(account);
-                        String accountID =   commands[3];
-                        String systemID =    commands[4];
-                        String name =        commands[5];
-                        String admin =       commands[6];
-                        String password =    commands[7];
-
-                        Account a1 = new Account(name, accountID, Integer.parseInt(systemID), (admin.equals("1") ? true : false), password);
-                        AccountLoggedin.getInstance().setLoggedInAccount(a1);
-
-                    } else if (commands[1].equals("no")) {
-                        exceptionLabel.setText(commands[2]);
-                        AccountLoggedin.getInstance().setLoggedInAccount(null);
-                    }else {
-                        exceptionLabel.setText("Login failed for unknown reasons");
-                        AccountLoggedin.getInstance().setLoggedInAccount(null);
-                    }
+                    loginAttempt(commands);
                     break;
                 case "4": //Gadgets' states has been updated
+                    updateGadgetsStates(commands);
                     break;
                 case "8": //Gadgets info has been updated
+                    updateGadgetsInfo(commands);
                     break;
                 case "12": //Users' info has been updated
                     break;
                 case "14": //Log(s) has been received
-                    logsList.clear();
-                    int count = 0;
-                    while (true) {
-                        String timestamp = commands[count + 1].replace("&", ":"); // Reformat to regain colon in timestamp
-                        String logMessage = commands[count + 2];
-
-                        String[] log = {timestamp, logMessage};
-                        logsList.add(log);
-                        if(commands[count + 3].equals("null")) {
-                            break;
-                        }
-                        count += 3;
-                    }
+                    updateLogs(commands);
                     break;
-
                 case "15": //Exception message from server
                     exceptionLabel.setText(commands[1]);
                     break;
@@ -291,7 +280,6 @@ public class MainWindowController {
                 default:
                     exceptionLabel.setText("Unknown update request received");
             }
-
         } catch (InterruptedException e) {
             exceptionLabel.setText("Unable to update from server");
         }
@@ -299,5 +287,25 @@ public class MainWindowController {
 
     }
 
+    private void loginAttempt(String[] commands) {
+        if (commands[1].equals("ok")) {
+            //Create account and send it as parameter to: AccountLoggedin.getInstance().setLoggedInAccount(account);
+            String accountID = commands[3];
+            String systemID = commands[4];
+            String name = commands[5];
+            String admin = commands[6];
+            String password = commands[7];
+
+            Account a1 = new Account(name, accountID, Integer.parseInt(systemID), (admin.equals("1") ? true : false), password);
+            AccountLoggedin.getInstance().setLoggedInAccount(a1);
+
+        } else if (commands[1].equals("no")) {
+            exceptionLabel.setText(commands[2]);
+            AccountLoggedin.getInstance().setLoggedInAccount(null);
+        } else {
+            exceptionLabel.setText("Login failed for unknown reasons");
+            AccountLoggedin.getInstance().setLoggedInAccount(null);
+        }
+    }
 
 }

@@ -13,14 +13,14 @@ public class ClientThread extends Thread {
         @Override
         public void run() {
 
-            //Before continuing the input loop, the thread assures that a login attempt
-            //has been succeeded. If not; thread cancels and removes client from clientList
+            // Before continuing the input loop, the thread assures that a login attempt
+            // has been succeeded. If not; thread cancels and removes client from clientList
             try {
                 String request = client.getInput().readUTF();
                 ClientRequest loginRequest = new ClientRequest(client, request);
                 client = Server.getInstance().login(loginRequest); //Assign the complete client information gathered by the login operation.
             } catch (IOException e) {
-                System.out.println("Exception on login in clientThread " + Thread.currentThread() + "Client IP " + client.getSocket().getInetAddress());
+                System.out.println("IOException on login in ClientThread " + Thread.currentThread().getName() + "Client IP " + client.getSocket().getInetAddress());
             }
 
             if(!client.getAccountID().equals("null")) { //If login succeeded (account has been assigned with other than "null"; proceed:
@@ -70,7 +70,7 @@ public class ClientThread extends Thread {
                 client.getOutput().close();
 
             } catch (IOException e) {
-                System.out.println("IOException on closing clientThread: " + Thread.currentThread());
+                System.out.println("IOException on closing clientThread: " + Thread.currentThread().getName());
             }
 
         }
