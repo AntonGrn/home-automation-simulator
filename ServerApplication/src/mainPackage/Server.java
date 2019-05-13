@@ -247,6 +247,40 @@ public class Server {
             }
         }
     }
+
+    private void updateGadgetState(String[] commands, Client fromClient) {
+        //Note: In the database; all gadget states are integers; heat=value, others=boolean(1/0)
+        int systemID = fromClient.getSystemID();
+        int gadgetID = Integer.parseInt(commands[1]);
+        int newState = Integer.parseInt(commands[2]);
+        try{
+            DB.getInstance().setGadgetState(systemID, gadgetID, newState);
+            //output to clients
+            gadgetsRequest(fromClient, true, false);
+        } catch(Exception e) {
+            outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
+        }
+        //Add gadget usage log
+        try {
+            addLog(fromClient, gadgetID, newState);
+        } catch (Exception e) {
+            System.out.println("Adding logs error " + e.getMessage() );
+        }
+    }
+
+    private void updateAddGadget(String[] commands, Client fromClient) {
+        String type = commands[1];
+        String name = commands[2];
+        String room = commands[3];
+        String consumption = commands[4];
+        try {
+            DB.getInstance().addGadget(fromClient.getSystemID(), type, name, room, consumption);
+            gadgetsRequest(fromClient, false, false);
+        } catch (Exception e) {
+            outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
+        }
+    }
+
     // Produces output commands 4 and 8 of LAAS communication protocol
     private void gadgetsRequest(Client fromClient, boolean onlyGadgetStates, boolean onlyToIndividual) {
         String clientOutput = onlyGadgetStates ? "4:" : "8:";
@@ -353,39 +387,6 @@ public class Server {
                 }
             }
             outputToClients(true, false, clientOutput, fromClient.getSocket(), fromClient.getSystemID());
-        } catch (Exception e) {
-            outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
-        }
-    }
-
-    private void updateGadgetState(String[] commands, Client fromClient) {
-        //Note: In the database; all gadget states are integers; heat=value, others=boolean(1/0)
-        int systemID = fromClient.getSystemID();
-        int gadgetID = Integer.parseInt(commands[1]);
-        int newState = Integer.parseInt(commands[2]);
-        try{
-            DB.getInstance().setGadgetState(systemID, gadgetID, newState);
-            //output to clients
-            gadgetsRequest(fromClient, true, false);
-        } catch(Exception e) {
-            outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
-        }
-        //Add gadget usage log
-        try {
-            addLog(fromClient, gadgetID, newState);
-        } catch (Exception e) {
-            System.out.println("Adding logs error " + e.getMessage() );
-        }
-    }
-
-    private void updateAddGadget(String[] commands, Client fromClient) {
-        String type = commands[1];
-        String name = commands[2];
-        String room = commands[3];
-        String consumption = commands[4];
-        try {
-            DB.getInstance().addGadget(fromClient.getSystemID(), type, name, room, consumption);
-            gadgetsRequest(fromClient, false, false);
         } catch (Exception e) {
             outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
         }
