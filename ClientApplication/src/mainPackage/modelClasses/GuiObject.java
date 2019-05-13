@@ -5,10 +5,10 @@ import javafx.scene.image.ImageView;
 
 public class GuiObject {
 
-    private ImageView typeOfGadget; //ex LampFalse.png
+    private ImageView typeOfGadget; //ex Lampfalse.png
     private String gadgetName; //ex Lamp One
     private ImageView stateOfGadget; //ex switchButtonOff.png
-    private int id;
+    private int id; //for database usage
 
 
     public GuiObject(String typeOfGadget,String gadgetName,String stateOfGadget, int id) {
