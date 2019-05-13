@@ -5,11 +5,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import mainPackage.DynamicFrame;
 import mainPackage.Main;
-import mainPackage.MainWindowController;
 import mainPackage.modelClasses.Gadget;
 import mainPackage.modelClasses.GadgetTableItem;
-
-import java.awt.font.FontRenderContext;
 import java.util.ArrayList;
 
 public class GadgetsController implements DynamicFrame {
@@ -59,6 +56,9 @@ public class GadgetsController implements DynamicFrame {
 
 
     public void initialize(){
+        //making sure so the mainwindow knows which controller that is in charge.
+        Main.getMainWindowController().setCurrentDynamicFrameController(this);
+
         gadgetTableItemsList = new ArrayList<>();
         updateFrame();
     }
@@ -75,7 +75,7 @@ public class GadgetsController implements DynamicFrame {
 
     }
 
-    public void createGadgetTableItems(){
+    private void createGadgetTableItems(){
         for (Gadget g : Main.getMainWindowController().gadgetList){
             GadgetTableItem gTI = new GadgetTableItem(g.getName(),g.getClass().getSimpleName(),g.getRoom(),g.getId());
             gadgetTableItemsList.add(gTI);
