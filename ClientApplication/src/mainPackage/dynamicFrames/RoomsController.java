@@ -23,6 +23,7 @@ import javafx.util.Duration;
 import mainPackage.DynamicFrame;
 import mainPackage.Main;
 import mainPackage.MainWindowController;
+import mainPackage.ServerConnection;
 import mainPackage.modelClasses.Gadget;
 import mainPackage.modelClasses.GuiObject;
 import mainPackage.modelClasses.Room;
@@ -180,30 +181,30 @@ public class RoomsController implements DynamicFrame {
         for (Gadget g : Main.getMainWindowController().gadgetList) {
             if (g.getId() == gui.getId() && g.getName() == gui.getGadgetName()) {
 
-                String type = g.getClass().getSimpleName();
+                String serverRequest;
                 String id = String.valueOf(g.getId());
-                String state = "";
+                boolean state;
+                int temp;
 
-                if (gui.getStateOfGadget().toString().contains("true")){
-                    state = "false";
-                } else {
-                    state = "true";
-                }
-                /*try {
-                    //connect your computer to server
-                    ServerConnection.getInstance().connectToServer();
+                if (g.getState() instanceof Boolean){
+                    state = !(Boolean)g.getState();
                     //create a protocol string according to Laas protocol.
-                    String serverRequest = String.format("/s/s/s", type, id, state);
+                    serverRequest = String.format("/s/s/s/s", "3:", id, ":", (state ? "1" :"0"));
+                }else {
+                    //create a protocol string according to Laas protocol.
+                    temp = (Integer)g.getState();
+                    serverRequest = String.format("/s/s/s/s", "3:", id, ":", String.valueOf(temp));
+                }
+                try {
                     //add to request to server
                     Main.getMainWindowController().requestsToServer.put(serverRequest);
                 }catch (InterruptedException e){
                     e.printStackTrace();
                 }catch (Exception ex){
                     Main.getMainWindowController().exceptionLabel.setText("Could not change state of gadget");
-                }*/
+                }
             }
         }
-
     }
 
     public void scrollLeft() {
