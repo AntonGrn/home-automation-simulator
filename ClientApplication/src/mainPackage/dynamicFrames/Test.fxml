@@ -18,6 +18,16 @@
             <Insets top="14.0" />
          </VBox.margin>
       </Button>
+      <Button mnemonicParsing="false" onAction="#toggleLamp" text="Toggle Lamp">
+         <VBox.margin>
+            <Insets top="14.0" />
+         </VBox.margin>
+      </Button>
+      <Button mnemonicParsing="false" onAction="#addGadget" text="Add gadget">
+         <VBox.margin>
+            <Insets top="14.0" />
+         </VBox.margin>
+      </Button>
    </children>
    <padding>
       <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
