@@ -83,7 +83,14 @@ public class UsersController implements DynamicFrame {
 
     @FXML
     void initialize() {
+        String name  = nameField.getText();
+        String email = emailField.getText();
+        String pass  = passwordField.getText();
+        String accessLevel = checkboxAdmin.getText();
 
+        if (name.contains(":") | email.contains(":") | pass.contains(":")){
+
+        }
     }
 
     @Override
