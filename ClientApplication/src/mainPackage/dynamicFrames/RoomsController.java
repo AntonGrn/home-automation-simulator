@@ -31,9 +31,6 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class RoomsController implements DynamicFrame {
-    private ObservableList<RoomSlider> listOfRoomButtonsHeader;
-    private Timeline timeLineLeft;
-    private Timeline timeLineRight;
 
     @FXML
     private TableColumn<RoomSlider, Button> clmFive;
@@ -61,6 +58,10 @@ public class RoomsController implements DynamicFrame {
 
     @FXML
     public Pane dynamicFrameRooms;
+
+    private ObservableList<RoomSlider> listOfRoomButtonsHeader;
+    private Timeline timeLineLeft;
+    private Timeline timeLineRight;
 
     public void initialize() {
         listOfRoomButtonsHeader = FXCollections.observableArrayList(RoomSlider.getRoomSliderInstance());

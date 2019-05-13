@@ -8,13 +8,15 @@ public class Client {
 
     private final String accountID;
     private int systemID;
+    private boolean admin;
     private final Socket socket;
     private final DataInputStream input;
     private final DataOutputStream output;
 
-    public Client(String accountID, int systemID, Socket socket, DataInputStream input, DataOutputStream output) {
+    public Client(String accountID, int systemID, boolean admin, Socket socket, DataInputStream input, DataOutputStream output) {
         this.accountID = accountID;
         this.systemID = systemID;
+        this.admin = admin;
         this.socket = socket;
         this.input = input;
         this.output = output;
@@ -36,11 +38,12 @@ public class Client {
         return accountID;
     }
 
+    public boolean isAdmin() {
+        return admin;
+    }
+
     public int getSystemID() {
         return systemID;
     }
 
-    public void setSystemID(int systemID) {
-        this.systemID = systemID;
-    }
 }

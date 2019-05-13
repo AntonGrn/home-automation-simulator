@@ -37,8 +37,8 @@ public class ClientOutputThread extends Thread{
 
     private void closeResources() {
         try {
-            socket.close();
             output.close();
+            socket.close();
             System.out.println("Output Thread closed");
         } catch (IOException e) {
             e.printStackTrace();

@@ -17,7 +17,7 @@ public class LogsController implements DynamicFrame {
         Main.getMainWindowController().setCurrentDynamicFrameController(this);
 
         try {
-            Main.getMainWindowController().requestsToServer.put("11");
+            Main.getMainWindowController().requestsToServer.put("13");
         } catch (InterruptedException e) {
             Main.getMainWindowController().exceptionLabel.setText("Server request failed");
         }
@@ -34,6 +34,5 @@ public class LogsController implements DynamicFrame {
             Label label = new Label(timestamp + "     " + logMessage);
             logsContainer.getChildren().add(label);
         }
-
     }
 }

@@ -175,7 +175,7 @@ public class MainWindowController {
         //Set all menu buttons to dosabled
         for (Node node : menuFrame.getChildren()) {
             if (node instanceof Button) {
-                // Uncomment when Server is demon: ((Button)node).setDisable(true);
+                //Uncomment later: ((Button)node).setDisable(true);
             }
         }
     }
@@ -228,7 +228,6 @@ public class MainWindowController {
     }
 
     //update() should be run by JavaFX-Thread, so should not be invoked by other threads (ex ClientInputThread)
-    //update while requestsFromServer is not empty
     public void update() {
         exceptionLabel.setText("");
         //Update houseFrame + invoke update method of currentFrame
@@ -261,11 +260,11 @@ public class MainWindowController {
                     break;
                 case "4": //Gadgets' states has been updated
                     break;
-                case "7": //Gadgets info has been updated
+                case "8": //Gadgets info has been updated
                     break;
-                case "10": //Users' info has been updated
+                case "12": //Users' info has been updated
                     break;
-                case "12": //Log(s) has been received
+                case "14": //Log(s) has been received
                     logsList.clear();
                     int count = 0;
                     while (true) {
@@ -281,10 +280,12 @@ public class MainWindowController {
                     }
                     break;
 
-                case "13": //Exception message from server
+                case "15": //Exception message from server
                     exceptionLabel.setText(commands[1]);
                     break;
-                case "15": //ClientInputThread lost connection with server
+                case "17": //ClientInputThread lost connection with server
+                    exceptionLabel.setText("Lost connection with server");
+                    ServerConnection.getInstance().closeResources();
                     AccountLoggedin.getInstance().setLoggedInAccount(null);
                     break;
                 default:

@@ -13,7 +13,6 @@ public class ClientThread extends Thread {
         @Override
         public void run() {
 
-            System.out.println(" NEW CLIENT THREAD: " + Thread.currentThread());
             //Before continuing the input loop, the thread assures that a login attempt
             //has been succeeded. If not; thread cancels and removes client from clientList
             try {
@@ -21,8 +20,7 @@ public class ClientThread extends Thread {
                 ClientRequest loginRequest = new ClientRequest(client, request);
                 client = Server.getInstance().login(loginRequest); //Assign the complete client information gathered by the login operation.
             } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("Exception on login");
+                System.out.println("Exception on login in clientThread " + Thread.currentThread() + "Client IP " + client.getSocket().getInetAddress());
             }
 
             if(!client.getAccountID().equals("null")) { //If login succeeded (account has been assigned with other than "null"; proceed:
@@ -34,8 +32,7 @@ public class ClientThread extends Thread {
                         messageFromClient = client.getInput().readUTF();
                         ClientRequest clientRequest = new ClientRequest(client, messageFromClient);
 
-                        if(messageFromClient.equals("14")) {
-                            System.out.println("Client requested log out");
+                        if(messageFromClient.equals("16")) { //Logout request
                             closeResources();
                             break;
                         }
@@ -43,38 +40,37 @@ public class ClientThread extends Thread {
                         try {
                             //Add to Server request list
                             Server.getInstance().getServerRequest().put(clientRequest);
-                            System.out.println("Message from client has been added to serverRequests");
+                            //System.out.println("Message from client has been added to serverRequests");
                         } catch (InterruptedException i) {
                             i.printStackTrace();
                         }
 
-                    } catch (IOException e) {  //SocketException is subclass
-                        System.out.println("Client has disconnected");
+                    } catch (IOException e) {  //SocketException is subclass. Client has disconnected
                         closeResources();
                         break;
                     }
                 }
             } else{
-                System.out.println("Client did not log in successfully");
+                System.out.println("Client did not log in successfully. Client: " + client.getSocket().getInetAddress());
                 closeResources();
             }
         }
 
+        private boolean loginAttempt() {
+            return true;
+        }
+
         private void closeResources() {
             try {
-                System.out.println("Closing this connection...");
+                //Remove client from activeClients.
+                Server.getInstance().removeClient(client);
+                //Close resources
                 client.getSocket().close();
                 client.getInput().close();
                 client.getOutput().close();
-                //+Remove client from activeClients.
-                Server.getInstance().removeClient(client);
 
-                //PRINT JUST TO SHOW
-                Server.getInstance().iterateActiveClients();
-
-                System.out.println("Connection closed");
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("IOException on closing clientThread: " + Thread.currentThread());
             }
 
         }
