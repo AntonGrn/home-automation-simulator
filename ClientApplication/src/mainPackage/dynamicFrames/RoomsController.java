@@ -11,10 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,7 +23,6 @@ import mainPackage.MainWindowController;
 import mainPackage.ServerConnection;
 import mainPackage.modelClasses.Gadget;
 import mainPackage.modelClasses.GuiObject;
-import mainPackage.modelClasses.Room;
 import mainPackage.modelClasses.RoomSlider;
 
 import java.util.ArrayList;
@@ -70,7 +66,9 @@ public class RoomsController implements DynamicFrame {
         //making sure so the mainwindow knows which controller that is in charge.
         Main.getMainWindowController().setCurrentDynamicFrameController(this);
 
-        //Later on we will set the btnLeftHover and btnRightHover opacity to 0 so they are not visible.
+        //Make so only one cell is selected at once in tblview
+        tblViewDynamicGadgets.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        tblViewDynamicGadgets.getSelectionModel().setCellSelectionEnabled(true);
 
         listOfRoomButtonsHeader = FXCollections.observableArrayList(RoomSlider.getRoomSliderInstance());
 
@@ -128,9 +126,9 @@ public class RoomsController implements DynamicFrame {
         clmId.setCellValueFactory(new PropertyValueFactory<>("gadgetName"));
         clmState.setCellValueFactory(new PropertyValueFactory<>("stateOfGadget"));
 
-        /*from beginning the tableview will not have any items inside it,
-        when a room button is pressed then it will go through gadgetList in MainWindow
-        and add all rooms with the same name as button. */
+        //Hiding buttons with the hoverEffect
+        btnLeftHover.setOpacity(1);
+        btnRightHover.setOpacity(1);
 
         //add to tblView roomsHeader, will never be changed
         tblViewRooms.getItems().addAll(listOfRoomButtonsHeader);
@@ -175,33 +173,43 @@ public class RoomsController implements DynamicFrame {
     }
 
 
-    private void onChangeStateOfGadget(ActionEvent event) {
-        GuiObject gui = tblViewDynamicGadgets.getSelectionModel().getSelectedItem();
+    public void onChangeStateOfGadget() {
+        TablePosition pos = (TablePosition) tblViewDynamicGadgets.getSelectionModel().getSelectedCells().get(0);
+        int row = pos.getRow();
+        TableColumn tableColumn = pos.getTableColumn();
+        GuiObject gui = tblViewDynamicGadgets.getItems().get(row);
 
-        for (Gadget g : Main.getMainWindowController().gadgetList) {
-            if (g.getId() == gui.getId() && g.getName() == gui.getGadgetName()) {
+        if (tableColumn.getCellObservableValue(gui).getValue() instanceof ImageView) {
+            ImageView data = (ImageView) tableColumn.getCellObservableValue(gui).getValue();
+            if (data.getImage().getUrl().contains("switchButton") || data.getImage().getUrl().contains("Heat2")) {
 
-                String serverRequest;
-                String id = String.valueOf(g.getId());
-                boolean state;
-                int temp;
+                for (Gadget g : Main.getMainWindowController().gadgetList) {
+                    if (g.getId() == gui.getId() && g.getName() == gui.getGadgetName()) {
 
-                if (g.getState() instanceof Boolean){
-                    state = !(Boolean)g.getState();
-                    //create a protocol string according to Laas protocol.
-                    serverRequest = String.format("/s/s/s/s", "3:", id, ":", (state ? "1" :"0"));
-                }else {
-                    //create a protocol string according to Laas protocol.
-                    temp = (Integer)g.getState();
-                    serverRequest = String.format("/s/s/s/s", "3:", id, ":", String.valueOf(temp));
-                }
-                try {
-                    //add to request to server
-                    Main.getMainWindowController().requestsToServer.put(serverRequest);
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                }catch (Exception ex){
-                    Main.getMainWindowController().exceptionLabel.setText("Could not change state of gadget");
+                        System.out.println("Hello");
+                        String serverRequest;
+                        String id = String.valueOf(g.getId());
+                        boolean state;
+                        int temp;
+
+                        if (g.getState() instanceof Boolean) {
+                            state = !(Boolean) g.getState();
+                            //create a protocol string according to Laas protocol.
+                            serverRequest = String.format("/s/s/s/s", "3:", id, ":", (state ? "1" : "0"));
+                        } else {
+                            //create a protocol string according to Laas protocol.
+                            temp = (Integer) g.getState();
+                            serverRequest = String.format("/s/s/s/s", "3:", id, ":", String.valueOf(temp));
+                        }
+                        try {
+                            //add to request to server
+                            Main.getMainWindowController().requestsToServer.put(serverRequest);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (Exception ex) {
+                            Main.getMainWindowController().exceptionLabel.setText("Could not change state of gadget");
+                        }
+                    }
                 }
             }
         }

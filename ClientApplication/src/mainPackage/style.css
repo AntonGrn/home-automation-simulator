@@ -71,11 +71,12 @@
 /*------------------------- DynamicFrame Rooms ------------------------------*/
 
 /*
-#tblViewRooms .table-column{
+.table-view .table-column{
     -fx-alignment: CENTER;
+    -fx-text-fill: WHITE;
 }
 
-#tblViewRooms {
+.table-view {
     -fx-text-fill: WHITE;
     -fx-background-color: #231f26;
     -fx-table-cell-border-color: transparent;
@@ -83,21 +84,21 @@
     -fx-background-insets: 0 0 0 0, 0, 1,2;
 }
 
-#tblViewRooms .column-header-background{
+.table-view .column-header-background{
     -fx-min-height: 0;
     -fx-max-height: 0;
-    -fx-pref-height: 0;
+    -fx-pref-height: 6;
     -fx-background-insets: 0 0 0 0, 0, 1,2;
 }
 
-#tblViewRooms .table-row{
+.table-view .table-row{
 visibility:hidden;
     -fx-border-color: transparent;
     -fx-background-color: transparent;
     -fx-background-insets: 0 0 0 0, 0, 1,2;
 }
 
-#tblViewRooms .table-row-cell{
+.table-view .table-row-cell{
     -fx-background-color: #231f26;
     -fx-border-color: transparent;
     -fx-border-width: 0;
@@ -105,7 +106,7 @@ visibility:hidden;
     -fx-background-insets: 0 0 0 0, 0, 1,2;
 }
 
-#tblViewRooms .table-row-cell:selected{
+.table-view .table-row-cell:selected{
     -fx-background-color: #231f26;
     -fx-border-color: transparent;
     -fx-border-width: 0;
@@ -114,14 +115,14 @@ visibility:hidden;
     -fx-background-insets: 0 0 0 0, 0, 1,2;
 }
 
-#tblViewRooms.scroll-bar:vertical .thumb{
+.table-view .scroll-bar:vertical .thumb{
     -fx-background-color: #231f26;
 }
 
-#tblViewRooms *.scroll-bar:horizontal *.increment-arrow,
-#tblViewRooms *.scroll-bar:horizontal *.decrement-arrow,
-#tblViewRooms *.scroll-bar:horizontal *.increment-button,
-#tblViewRooms *.scroll-bar:horizontal *.decrement-button{
+.table-view *.scroll-bar:horizontal *.increment-arrow,
+.table-view *.scroll-bar:horizontal *.decrement-arrow,
+.table-view *.scroll-bar:horizontal *.increment-button,
+.table-view *.scroll-bar:horizontal *.decrement-button{
     -fx-background-color: null;
     -fx-background-radius: 0;
     -fx-background-insets: 0;
@@ -129,10 +130,10 @@ visibility:hidden;
     -fx-shape: null;
 }
 
-#tblViewRooms *.scroll-bar:vertical *.increment-arrow,
-#tblViewRooms *.scroll-bar:vertical *.decrement-arrow,
-#tblViewRooms *.scroll-bar:vertical *.increment-button,
-#tblViewRooms *.scroll-bar:vertical *.decrement-button{
+.table-view *.scroll-bar:vertical *.increment-arrow,
+.table-view *.scroll-bar:vertical *.decrement-arrow,
+.table-view *.scroll-bar:vertical *.increment-button,
+.table-view *.scroll-bar:vertical *.decrement-button{
     -fx-background-color: null;
     -fx-background-radius: 0;
     -fx-background-insets: 0;
@@ -140,3 +141,4 @@ visibility:hidden;
     -fx-shape: null;
 }
 */
+

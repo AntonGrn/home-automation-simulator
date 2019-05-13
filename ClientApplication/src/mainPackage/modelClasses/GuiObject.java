@@ -17,11 +17,11 @@ public class GuiObject {
         this.stateOfGadget = new ImageView(new Image("mainPackage/images/" + stateOfGadget + ".png"));
         this.id= id;
 
-        this.typeOfGadget.setFitHeight(25);
-        this.typeOfGadget.setFitWidth(60);
+        this.typeOfGadget.setFitHeight(40);
+        this.typeOfGadget.setFitWidth(40);
 
-        this.stateOfGadget.setFitHeight(25);
-        this.stateOfGadget.setFitWidth(60);
+        this.stateOfGadget.setFitHeight(30);
+        this.stateOfGadget.setFitWidth(70);
     }
 
     public GuiObject(String typeOfGadget){

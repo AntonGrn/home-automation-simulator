@@ -98,6 +98,9 @@ public class MainWindowController {
         gadgetList.add(new Lamp("LampOne",false,25,"Kitchen",1));
         gadgetList.add(new Lamp("LampTwo",false,25,"Kitchen",2));
         gadgetList.add(new Lamp("LampThree",false,25,"Bedroom",3));
+        gadgetList.add(new Door("DoorOne",false,25,"Livingroom",4));
+        gadgetList.add(new Lamp("LampFour",true,25,"Bedroom",5));
+        gadgetList.add(new Lamp("LampFive",false,25,"Bedroom",6));
 
         //Loads the blueprint into the mainwindow HouseFrame
         setBlueprint();
