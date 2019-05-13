@@ -9,29 +9,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import mainPackage.DynamicFrame;
 import mainPackage.Main;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class BlueprintController implements DynamicFrame, Initializable {
-
-
-    @FXML
-    private Label toilet;
-
-    @FXML
-    private Label bedroom;
-
-    @FXML
-    private Label livingroom;
-
-    @FXML
-    private Label garage;
-
-    @FXML
-    private Label kitchen;
 
     @FXML
     private AnchorPane blueprint;

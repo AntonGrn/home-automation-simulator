@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -8,35 +10,60 @@
 
 <AnchorPane fx:id="blueprint" prefHeight="392.0" prefWidth="547.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainPackage.houseFrame.BlueprintController">
    <children>
-      <ImageView fitHeight="392.0" fitWidth="547.0" layoutX="28.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="392.0" fitWidth="547.0" layoutX="28.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Blueprint.png" />
          </image>
       </ImageView>
-      <Label fx:id="toilet" layoutX="375.0" layoutY="153.0" prefHeight="21.0" prefWidth="64.0" text="Toilet" textFill="#1e97d2">
+      <Label fx:id="toilet" layoutX="426.0" layoutY="4.0" prefHeight="21.0" prefWidth="39.0" text="Toilet" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="bedroom" layoutX="373.0" layoutY="327.0" prefHeight="21.0" prefWidth="64.0" text="Bedroom" textFill="#1e97d2">
+      <Label fx:id="bedroom" layoutX="414.0" layoutY="177.0" prefHeight="21.0" prefWidth="64.0" text="Bedroom" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="livingroom" layoutX="180.0" layoutY="239.0" prefHeight="21.0" prefWidth="82.0" text="Livingroom" textFill="#1e97d2">
+      <Label fx:id="livingroom" layoutX="235.0" layoutY="4.0" prefHeight="21.0" prefWidth="82.0" text="Livingroom" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="garage" layoutX="33.0" layoutY="366.0" prefHeight="21.0" prefWidth="50.0" text="Garage" textFill="#1e97d2">
+      <Label fx:id="garage" layoutX="75.0" layoutY="216.0" prefHeight="21.0" prefWidth="50.0" text="Garage" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="kitchen" layoutX="33.0" layoutY="195.0" prefHeight="21.0" prefWidth="50.0" text="Kitchen" textFill="WHITE">
+      <Label fx:id="kitchen" layoutX="75.0" layoutY="4.0" prefHeight="21.0" prefWidth="50.0" text="Kitchen" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
+      <TableView fx:id="tableViewKitchen" layoutX="31.0" layoutY="23.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="193.0" prefWidth="145.0">
+        <columns>
+          <TableColumn prefWidth="144.00000127156576" text="show" />
+        </columns>
+      </TableView>
+      <TableView fx:id="tableViewLivingroom" layoutX="180.0" layoutY="23.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="237.0" prefWidth="189.0">
+        <columns>
+          <TableColumn prefWidth="188.00000508626303" text="show" />
+        </columns>
+      </TableView>
+      <TableView fx:id="tableViewToilet" layoutX="373.0" layoutY="22.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0" prefWidth="137.0">
+        <columns>
+          <TableColumn prefWidth="135.99998982747397" text="show" />
+        </columns>
+      </TableView>
+      <TableView fx:id="tableViewGarage" layoutX="31.0" layoutY="236.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0" prefWidth="145.0">
+        <columns>
+          <TableColumn prefWidth="144.00000127156576" text="type" />
+        </columns>
+      </TableView>
+      <TableView fx:id="tableViewBedroom" layoutX="373.0" layoutY="199.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0" prefWidth="137.0">
+        <columns>
+          <TableColumn prefWidth="135.99998982747397" text="show" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>
