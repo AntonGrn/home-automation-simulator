@@ -18,7 +18,6 @@ public class TestController implements DynamicFrame {
 
     @FXML
     public void initialize() {
-
         Main.getMainWindowController().setCurrentDynamicFrameController(this);
 
     }
@@ -65,17 +64,6 @@ public class TestController implements DynamicFrame {
             e.printStackTrace();
         }
 
-    }
-
-    //test for changing rooms
-    @FXML
-    public void setChosenRoomKitchen(ActionEvent event) {
-        Main.getMainWindowController().chosenRoom.setValue("kitchen");
-    }
-
-    @FXML
-    public void setChosenRoomLivingroom(ActionEvent event) {
-        Main.getMainWindowController().chosenRoom.setValue("livingroom");
     }
 
     public void updateFrame() {

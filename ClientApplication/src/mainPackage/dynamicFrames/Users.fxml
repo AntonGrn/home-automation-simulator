@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainPackage.dynamicFrames.UsersController">
+   <children>
+      <AnchorPane fx:id="tableAnchorPane" prefHeight="161.0" prefWidth="400.0">
+         <children>
+            <TableView fx:id="tableView" layoutY="-2.0" prefHeight="129.0" prefWidth="400.0">
+              <columns>
+                <TableColumn fx:id="nameColumn" prefWidth="123.0" text="Name" />
+                <TableColumn fx:id="emailColumn" prefWidth="119.0" text="Email" />
+                  <TableColumn fx:id="accesslevelColumn" prefWidth="157.0" text="Password" />
+              </columns>
+            </TableView>
+            <Button fx:id="deleteUserButton" layoutX="317.0" layoutY="127.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Delete" />
+            <Button fx:id="addUserButton" layoutX="209.0" layoutY="127.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="94.0" text="Add User" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="nonAdminPassWd" prefHeight="39.0" prefWidth="400.0">
+         <children>
+            <PasswordField fx:id="nonAdminPwField" layoutX="151.0" layoutY="10.0" promptText="********" />
+            <Button fx:id="nonAdminButton" layoutX="313.0" layoutY="9.0" mnemonicParsing="false" text="Go" />
+            <Label layoutX="14.0" layoutY="13.0" text="Non-Admins Password" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="adminPassWd" prefHeight="38.0" prefWidth="400.0">
+         <children>
+            <PasswordField fx:id="adminPwField" layoutX="151.0" layoutY="19.0" promptText="********" />
+            <Button fx:id="adminButton" layoutX="313.0" layoutY="18.0" mnemonicParsing="false" text="Go" />
+            <Label layoutX="14.0" layoutY="22.0" text="Admins Password" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="editUSer" prefHeight="298.0" prefWidth="400.0">
+         <children>
+            <Label fx:id="addOrEditUserLabel" layoutX="105.0" layoutY="7.0" prefHeight="25.0" prefWidth="159.0" text="Add User/Edit User/Your Info" AnchorPane.topAnchor="7.0" />
+            <TextField fx:id="nameField" layoutX="22.0" layoutY="35.0" promptText="Name" />
+            <TextField fx:id="emailField" layoutX="22.0" layoutY="71.0" promptText="Email" />
+            <PasswordField fx:id="passwordField" layoutX="184.0" layoutY="72.0" promptText="********" AnchorPane.topAnchor="72.0" />
+            <CheckBox fx:id="checkboxAdmin" layoutX="214.0" layoutY="39.0" mnemonicParsing="false" text="Admin" />
+            <Button fx:id="submitButton" layoutX="141.0" layoutY="110.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Submit" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
