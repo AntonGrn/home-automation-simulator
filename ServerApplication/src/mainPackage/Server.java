@@ -5,10 +5,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -139,8 +137,7 @@ public class Server {
                     } catch (IOException e) {
                         //e.printStackTrace();
                         System.out.println("Remove client error: Unable to close all resources for client " + activeClients.get(i).getAccountID());
-                    }
-                    finally {
+                    } finally {
                         activeClients.remove(i);
                     }
                 }
@@ -150,18 +147,18 @@ public class Server {
         }
     }
 
-    //Invoked by acceptClientConnections() t1,
+    // Server log purpose. Standard output -> Server log
     public void iterateActiveClients() {
         synchronized (activeClients) {
-            String clients = "THREAD " + Thread.currentThread().getName() + " Active clients:\n";
-            if(activeClients.size() == 0) {
+            String clients = "=========== " + " Active clients ======== " + Thread.currentThread().getName() + "\n";
+            if (activeClients.size() == 0) {
                 clients = clients.concat("Zero");
             } else {
                 for (Client client : activeClients) {
-                    clients = clients.concat(client.getAccountID() + " " + (client.isAdmin() ? "[Admin]" : "[Non-admin]") + "  " + client.getSocket().getInetAddress()  + "\n");
+                    clients = clients.concat(client.getAccountID() + " " + (client.isAdmin() ? "[Admin]" : "[Non-admin]") + " " + client.getSocket().getInetAddress() + "\n");
                 }
             }
-            System.out.println(clients);
+            System.out.println(clients + "\n==========================================");
         }
     }
 
@@ -185,7 +182,7 @@ public class Server {
                     String password = result[4];
 
                     client = new Client(
-                            accountID, Integer.parseInt(systemID), admin.equals("1") ? true : false, loginRequest.getClient().getSocket(), loginRequest.getClient().getInput(), loginRequest.getClient().getOutput());
+                            accountID, Integer.parseInt(systemID), admin.equals("1"), loginRequest.getClient().getSocket(), loginRequest.getClient().getInput(), loginRequest.getClient().getOutput());
 
                     //Add client to list of active clients
                     addClient(client);
@@ -207,35 +204,32 @@ public class Server {
         }
     }
 
-    //Invoked by t2
+    //Process requests from logged in clients
     public void processClientRequests() {
         ClientRequest clientRequest;
-
         while (true) {
             try {
-                //See if there is anything
+                //Waits here until there are any requests
                 clientRequest = serverRequest.take();
 
                 synchronized (lockObject2) {
-
                     //Process the request according to LAAS communication protocol
                     String commands[] = clientRequest.getRequest().split(":");
 
-                    String clientOutput;
-
                     switch (commands[0]) {
-                        case "1": //Login request
-                            clientOutput = "15:Already logged in";
-                            outputToClients(true, false, clientOutput, clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
+                        case "1": //Login request. If user can reach this; user is already logged in.
+                            outputToClients(true, false, "15:Already logged in", clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
                             break;
                         case "3": //Request to update a gadget's state
-                            //Will form a 4:XX command
+                            updateGadgetState(commands, clientRequest.getClient());
                             break;
                         case "5": //Individual request for all gadgets info
+                            gadgetsRequest(clientRequest.getClient(), false, true);
                             break;
                         case "6": //Request to alter gadget's info
                             break;
                         case "7": //Request to add a gadget
+                            updateAddGadget(commands, clientRequest.getClient());
                             break;
                         case "9": // Individual request for all users info
                             break;
@@ -244,33 +238,7 @@ public class Server {
                         case "11": // Request add a user
                             break;
                         case "13": //Log request
-                            try{
-                                int systemId = clientRequest.getClient().getSystemID(); // DO THIS INSTEAD. More reliable. Can't be manipulated at client end. Won't need NumberFormatException
-                                ArrayList<String[]> logs = DB.getInstance().getLogs(systemId);
-
-                                //Form the output string according to LAAS protocol: 12:timestamp:log:next/null
-                                clientOutput = "14:";
-                                for(int i = 0 ; i < logs.size() ; i++) {
-
-                                    // NOTE: timestamp contains colon (ex 18:34:15), which is the break mark for commands in LAAS protocol,
-                                    // so we first need to exchange the colons in the timestamp with "&"
-                                    logs.get(i)[0] = logs.get(i)[0].replace(":", "&");
-                                    //Remove 'seconds' from timestamp        start                       end  (removing ':seconds')
-                                    logs.get(i)[0] = logs.get(i)[0].substring(0, logs.get(i)[0].length() - 3);
-
-                                    //                                    timestamp           log message
-                                    clientOutput = clientOutput.concat(logs.get(i)[0] + ":" + logs.get(i)[1]);
-                                    //if there are more logs to read, or not
-                                    if(i == logs.size() - 1) {
-                                        clientOutput = clientOutput.concat(":null");
-                                    }else {
-                                        clientOutput = clientOutput.concat(":next:");
-                                    }
-                                }
-                                outputToClients(true, false, clientOutput, clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
-                            } catch (Exception e){
-                                outputToClients(true, false, "13:".concat(e.getMessage()), clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
-                            }
+                           logRequest(clientRequest.getClient());
                             break;
                     }
                 }
@@ -279,6 +247,40 @@ public class Server {
             }
         }
     }
+
+    private void updateGadgetState(String[] commands, Client fromClient) {
+        //Note: In the database; all gadget states are integers; heat=value, others=boolean(1/0)
+        int systemID = fromClient.getSystemID();
+        int gadgetID = Integer.parseInt(commands[1]);
+        int newState = Integer.parseInt(commands[2]);
+        try{
+            DB.getInstance().setGadgetState(systemID, gadgetID, newState);
+            //output to clients
+            gadgetsRequest(fromClient, true, false);
+        } catch(Exception e) {
+            outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
+        }
+        //Add gadget usage log
+        try {
+            addLog(fromClient, gadgetID, newState);
+        } catch (Exception e) {
+            System.out.println("Adding logs error " + e.getMessage() );
+        }
+    }
+
+    private void updateAddGadget(String[] commands, Client fromClient) {
+        String type = commands[1];
+        String name = commands[2];
+        String room = commands[3];
+        String consumption = commands[4];
+        try {
+            DB.getInstance().addGadget(fromClient.getSystemID(), type, name, room, consumption);
+            gadgetsRequest(fromClient, false, false);
+        } catch (Exception e) {
+            outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
+        }
+    }
+
     // Produces output commands 4 and 8 of LAAS communication protocol
     private void gadgetsRequest(Client fromClient, boolean onlyGadgetStates, boolean onlyToIndividual) {
         String clientOutput = onlyGadgetStates ? "4:" : "8:";
@@ -390,8 +392,8 @@ public class Server {
         }
     }
 
-    //Invoked by processClientRequests() -> t2
-    public void outputToClients(boolean onlyToIndividual, boolean onlyToAdmins, String message, Socket connection, int systemID) {
+    //The output operation
+    private void outputToClients(boolean onlyToIndividual, boolean onlyToAdmins, String message, Socket connection, int systemID) {
         synchronized (activeClients) {
             //System.out.println("LIST SIZE = " + activeClients.size());
             try {
