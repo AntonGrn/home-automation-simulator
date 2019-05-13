@@ -19,6 +19,17 @@
    -fx-border-width: 3 0 0 0;
 }
 
+#nonAdminPassWd, #adminPassWd, #editUSer, #tableAnchorPane {
+    -fx-border-color: #9d9d9e;
+    -fx-border-width: 3 0 0 0;
+
+
+
+
+}
+
+
+
 /*-------------------------- LABELS ------------------------------*/
 
 .label {
@@ -66,6 +77,19 @@
 .button:disabled{
   -fx-background-color: #444444;
   -fx-color: #666666;
+}
+#addUserButton, #deleteUserButton, #submitButton, #nonAdminButton, #adminButton{
+    -fx-background-color: #444444;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-border-radius: 3 3 3 3;
+    -fx-background-radius: 3 3 3 3;
+    -fx-border-width: 0 0 0 0;
+}
+
+/*-------------------------Checkbox------------------------------------------*/
+#checkboxAdmin{
+    -fx-text-fill: white;
 }
 
 /*------------------------- DynamicFrame Rooms ------------------------------*/

@@ -298,6 +298,82 @@ public class MainWindowController {
         currentDynamicFrameController.updateFrame();
 
     }
+    private void updateGadgetsStates(String[] commands) {
+        if (commands[1].equals("notnull")) {
+            int count = 1;
+            while (true) {
+                int gadgetID = Integer.parseInt(commands[count + 1]);
+                int state = Integer.parseInt(commands[count + 2]);
+                for (Gadget gadget : Main.getMainWindowController().gadgetList) {
+                    if (gadget.getId() == gadgetID) {
+                        if (gadget instanceof Heat) {
+                            ((Heat) gadget).setState(state);
+                        } else {
+                            //We allow the unchecked warning, knowing all thees gadget types has boolean state variables.
+                            gadget.setState(state == 1);
+                        }
+                    }
+                }
+                if (commands[count + 3].equals("null")) {
+                    break;
+                }
+                count += 3;
+            }
+        }
+    }
+
+    private void updateGadgetsInfo(String[] commands) {
+        gadgetList.clear();
+        if (commands[1].equals("notnull")) {
+            int count = 1;
+            while (true) {
+                String gadgetType = commands[count + 1];
+                int gadgetID = Integer.parseInt(commands[count + 2]);
+                String gadgetName = commands[count + 3];
+                String gadgetRoom = commands[count + 4];
+                int gadgetState = Integer.parseInt(commands[count + 5]);
+                int gadgetConsumption = Integer.parseInt(commands[count + 6]);
+
+                Gadget gadget = null;
+                switch (gadgetType) {
+                    case "Door":
+                        gadget = new Door(gadgetName, gadgetState == 1, gadgetConsumption, gadgetRoom, gadgetID);
+                        break;
+                    case "Heat":
+                        gadget = new Heat(gadgetName, gadgetState, gadgetConsumption, gadgetRoom, gadgetID);
+                        break;
+                    case "Lamp":
+                        gadget = new Lamp(gadgetName, gadgetState == 1, gadgetConsumption, gadgetRoom, gadgetID);
+                        break;
+                    case "Multimedia":
+                        gadget = new Multimedia(gadgetName, gadgetState == 1, gadgetConsumption, gadgetRoom, gadgetID);
+                        break;
+                }
+                gadgetList.add(gadget);
+
+                if (commands[count + 7].equals("null")) {
+                    break;
+                }
+                count += 7;
+            }
+        }
+    }
+
+    private void updateLogs(String[] commands) {
+        logsList.clear();
+        int count = 0;
+        while (true) {
+            String timestamp = commands[count + 1].replace("&", ":"); // Reformat to regain colon in timestamp
+            String logMessage = commands[count + 2];
+
+            String[] log = {timestamp, logMessage};
+            logsList.add(log);
+            if (commands[count + 3].equals("null")) {
+                break;
+            }
+            count += 3;
+        }
+    }
 
 
 }
