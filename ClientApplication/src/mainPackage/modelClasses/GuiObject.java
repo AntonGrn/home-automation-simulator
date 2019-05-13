@@ -26,6 +26,9 @@ public class GuiObject {
 
     public GuiObject(String typeOfGadget){
         this.typeOfGadget = new ImageView(new Image("mainPackage/images/" + typeOfGadget + ".png"));
+
+
+
     }
 
     public String getGadgetName() {
