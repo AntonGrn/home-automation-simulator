@@ -62,12 +62,10 @@ public class BlueprintController implements DynamicFrame, Initializable {
         });
 
 
-
     }
 
     @Override
     public void updateFrame() {
-
     }
 
     @FXML

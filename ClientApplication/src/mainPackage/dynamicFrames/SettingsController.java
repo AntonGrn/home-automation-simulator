@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import mainPackage.DynamicFrame;
+import mainPackage.Main;
 
 public class SettingsController implements DynamicFrame {
 
@@ -14,7 +15,9 @@ public class SettingsController implements DynamicFrame {
     private TextArea textAreaInfoAboutUs;
 
     public void initialize(){
-    updateFrame();
+        //making sure so the mainWindow knows which controller that is in charge.
+        Main.getMainWindowController().setCurrentDynamicFrameController(this);
+        updateFrame();
     }
 
     @Override

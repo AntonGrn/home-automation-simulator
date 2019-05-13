@@ -4,6 +4,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,7 +23,9 @@ import javafx.util.Duration;
 import mainPackage.DynamicFrame;
 import mainPackage.Main;
 import mainPackage.MainWindowController;
+import mainPackage.ServerConnection;
 import mainPackage.modelClasses.Gadget;
+import mainPackage.modelClasses.GuiObject;
 import mainPackage.modelClasses.Room;
 import mainPackage.modelClasses.RoomSlider;
 
@@ -42,27 +45,33 @@ public class RoomsController implements DynamicFrame {
     @FXML
     private TableColumn<RoomSlider, Button> clmFour;
     @FXML
-    private TableColumn<Gadget, ImageView> clmType;
+    private TableColumn<GuiObject, ImageView> clmType;
     @FXML
-    private TableColumn<Gadget, String> clmId;
+    private TableColumn<GuiObject, String> clmId;
     @FXML
-    private TableColumn<Gadget, ImageView> clmState;
+    private TableColumn<GuiObject, ImageView> clmState;
     @FXML
     private Button btnLeftHover, btnRightHover;
 
     @FXML
     private TableView<RoomSlider> tblViewRooms;
     @FXML
-    public TableView tblViewDynamicGadgets;
+    private TableView<GuiObject> tblViewDynamicGadgets;
 
     @FXML
-    public Pane dynamicFrameRooms;
+    private Pane dynamicFrameRooms;
 
     private ObservableList<RoomSlider> listOfRoomButtonsHeader;
     private Timeline timeLineLeft;
     private Timeline timeLineRight;
+    private String currentRoomButtonSelected;
 
     public void initialize() {
+        //making sure so the mainwindow knows which controller that is in charge.
+        Main.getMainWindowController().setCurrentDynamicFrameController(this);
+
+        //Later on we will set the btnLeftHover and btnRightHover opacity to 0 so they are not visible.
+
         listOfRoomButtonsHeader = FXCollections.observableArrayList(RoomSlider.getRoomSliderInstance());
 
         //update all clients and tables and such, when a request is confirmed from server.
@@ -74,22 +83,32 @@ public class RoomsController implements DynamicFrame {
                 RoomSlider.getRoomSliderInstance().getBedRoom().setOnAction(e -> {
                     String roomName = ((Button) e.getSource()).getUserData().toString();
                     updateTableView(roomName);
+                    //show bedroom text on blueprint
+                    Main.getMainWindowController().chosenRoom.setValue("bedRoom");
                 });
                 RoomSlider.getRoomSliderInstance().getKitchen().setOnAction(e -> {
                     String roomName = ((Button) e.getSource()).getUserData().toString();
                     updateTableView(roomName);
+                    //show kitchen text on blueprint
+                    Main.getMainWindowController().chosenRoom.setValue("kitchen");
                 });
                 RoomSlider.getRoomSliderInstance().getGarage().setOnAction(e -> {
                     String roomName = ((Button) e.getSource()).getUserData().toString();
                     updateTableView(roomName);
+                    //show garage text on blueprint
+                    Main.getMainWindowController().chosenRoom.setValue("garage");
                 });
                 RoomSlider.getRoomSliderInstance().getToilet().setOnAction(e -> {
                     String roomName = ((Button) e.getSource()).getUserData().toString();
                     updateTableView(roomName);
+                    //show toilet text on blueprint
+                    Main.getMainWindowController().chosenRoom.setValue("toilet");
                 });
                 RoomSlider.getRoomSliderInstance().getLivingRoom().setOnAction(e -> {
                     String roomName = ((Button) e.getSource()).getUserData().toString();
                     updateTableView(roomName);
+                    //show livingroom text on blueprint
+                    Main.getMainWindowController().chosenRoom.setValue("livingRoom");
                 });
             }
         });
@@ -105,30 +124,86 @@ public class RoomsController implements DynamicFrame {
         clmFive.setCellValueFactory(new PropertyValueFactory<>("livingRoom"));
 
         //Setting properties for Gadgets in tableview.
-        clmType.setCellValueFactory(new PropertyValueFactory<>("typeImage"));
-        clmId.setCellValueFactory(new PropertyValueFactory<>("name"));
-        clmState.setCellValueFactory(new PropertyValueFactory<>("onOffImage"));
+        clmType.setCellValueFactory(new PropertyValueFactory<>("typeOfGadget"));
+        clmId.setCellValueFactory(new PropertyValueFactory<>("gadgetName"));
+        clmState.setCellValueFactory(new PropertyValueFactory<>("stateOfGadget"));
 
         /*from beginning the tableview will not have any items inside it,
         when a room button is pressed then it will go through gadgetList in MainWindow
         and add all rooms with the same name as button. */
 
-        //add to tblView roomsheader, will never be changed
+        //add to tblView roomsHeader, will never be changed
         tblViewRooms.getItems().addAll(listOfRoomButtonsHeader);
+
+        /*This variable is important so the application knows which room it is going to reload when
+        a request is sent back from server, for example if you have turned on a lamp in bedroom
+        the tableview is going to reload bedroom with the gadget turned on. */
+        updateTableView(currentRoomButtonSelected);
     }
 
-    public void updateTableView(String roomName) {
-        ArrayList<Gadget> gadgetList = new ArrayList<>();
+    private void updateTableView(String roomName) {
+        ArrayList<GuiObject> gadgetList = new ArrayList<>();
+        currentRoomButtonSelected = roomName;
         try {
             for (Gadget g : Main.getMainWindowController().gadgetList) {
                 if (g.getRoom().equals(roomName)) {
-                    gadgetList.add(g);
+                    String stateOfGadget;
+                    String gadgetName = "";
+                    String typeOfGadget = "";
+                    if (g.getState() instanceof Boolean) {
+                        if (g.getState().equals(true)) {
+                            stateOfGadget = "switchButtonOn";
+                        } else {
+                            stateOfGadget = "switchButtonOff";
+                        }
+                        gadgetName = g.getName(); // example 'Lamp One'
+                        typeOfGadget = g.getClass().getSimpleName() + g.getState(); //example 'Lampfalse'
+                    } else {
+                        stateOfGadget = g.getClass().getSimpleName() + String.valueOf(g.getState()); //example 'Heat20'
+                    }
+                    GuiObject guiObject = new GuiObject(typeOfGadget, gadgetName, stateOfGadget, g.getId());
+                    gadgetList.add(guiObject);
                 }
-                tblViewDynamicGadgets.getItems().clear();
-                tblViewDynamicGadgets.getItems().addAll(gadgetList);
             }
+            tblViewDynamicGadgets.getItems().clear();
+            tblViewDynamicGadgets.getItems().addAll(gadgetList);
+
         } catch (Exception ex) {
+            ex.printStackTrace();
             Main.getMainWindowController().exceptionLabel.setText("Could not load gadgets..hmm");
+        }
+    }
+
+
+    private void onChangeStateOfGadget(ActionEvent event) {
+        GuiObject gui = tblViewDynamicGadgets.getSelectionModel().getSelectedItem();
+
+        for (Gadget g : Main.getMainWindowController().gadgetList) {
+            if (g.getId() == gui.getId() && g.getName() == gui.getGadgetName()) {
+
+                String serverRequest;
+                String id = String.valueOf(g.getId());
+                boolean state;
+                int temp;
+
+                if (g.getState() instanceof Boolean){
+                    state = !(Boolean)g.getState();
+                    //create a protocol string according to Laas protocol.
+                    serverRequest = String.format("/s/s/s/s", "3:", id, ":", (state ? "1" :"0"));
+                }else {
+                    //create a protocol string according to Laas protocol.
+                    temp = (Integer)g.getState();
+                    serverRequest = String.format("/s/s/s/s", "3:", id, ":", String.valueOf(temp));
+                }
+                try {
+                    //add to request to server
+                    Main.getMainWindowController().requestsToServer.put(serverRequest);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }catch (Exception ex){
+                    Main.getMainWindowController().exceptionLabel.setText("Could not change state of gadget");
+                }
+            }
         }
     }
 
@@ -175,6 +250,4 @@ public class RoomsController implements DynamicFrame {
     public void stopScrollRight() {
         timeLineRight.stop();
     }
-
-
 }
