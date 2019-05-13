@@ -24,6 +24,10 @@ public class GuiObject {
         this.stateOfGadget.setFitWidth(60);
     }
 
+    public GuiObject(String typeOfGadget){
+        this.typeOfGadget = new ImageView(new Image("mainPackage/images/" + typeOfGadget + ".png"));
+    }
+
     public String getGadgetName() {
         return gadgetName;
     }
