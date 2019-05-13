@@ -74,7 +74,6 @@ public class RoomsController implements DynamicFrame {
                 RoomSlider.getRoomSliderInstance().getBedRoom().setOnAction(e -> {
                     String roomName = ((Button) e.getSource()).getUserData().toString();
                     updateTableView(roomName);
-                    System.out.println("test");
                     //show bedroom text on blueprint
                     Main.getMainWindowController().chosenRoom.setValue("bedRoom");
                 });
