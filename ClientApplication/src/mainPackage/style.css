@@ -166,3 +166,39 @@ visibility:hidden;
 }
 */
 
+/*---------------------------Gadget dynamicFrames--------------------*/
+
+/*
+#231f26 BLACK like root
+#346189 BLUE like textfields
+*/
+
+
+.choice-box{
+-fx-background-color: #346189;
+-fx-mark-color: #231f26;
+}
+
+/* Background color of the whole context menu */
+.choice-box .context-menu {
+-fx-background-color: #346189;
+}
+
+/* Focused item background color in the list */
+.choice-box .menu-item:focused {
+-fx-background-color: #231f26;
+}
+
+/* Text color of non-focused items in the list */
+.choice-box .menu-item > .label {
+ -fx-text-fill: WHITE§;
+ }
+
+/* Text color of focused item in the list */
+.choice-box .menu-item:focused > .label {
+-fx-text-fill: WHITE;
+}
+
+
+
+

@@ -186,7 +186,6 @@ public class RoomsController implements DynamicFrame {
                 for (Gadget g : Main.getMainWindowController().gadgetList) {
                     if (g.getId() == gui.getId() && g.getName() == gui.getGadgetName()) {
 
-                        System.out.println("Hello");
                         String serverRequest;
                         String id = String.valueOf(g.getId());
                         boolean state;
@@ -195,8 +194,10 @@ public class RoomsController implements DynamicFrame {
                         if (g.getState() instanceof Boolean) {
                             state = !(Boolean) g.getState();
                             //create a protocol string according to Laas protocol.
-                            serverRequest = String.format("/s/s/s/s", "3:", id, ":", (state ? "1" : "0"));
+                            serverRequest = String.format("%s%s%s%s", "3:", id, ":", (state ? "1" : "0"));
+                            System.out.println(serverRequest);
                         } else {
+                            System.out.println("2");
                             //create a protocol string according to Laas protocol.
                             temp = (Integer) g.getState();
                             serverRequest = String.format("/s/s/s/s", "3:", id, ":", String.valueOf(temp));
