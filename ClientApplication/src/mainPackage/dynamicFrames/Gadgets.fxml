@@ -28,7 +28,7 @@
          <children>
             <HBox alignment="CENTER" maxWidth="400.0" minWidth="400.0" prefHeight="17.0" prefWidth="400.0" GridPane.rowIndex="1">
                <children>
-                  <Button fx:id="btnEditGadget" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="Edit Gadget">
+                  <Button fx:id="btnEditGadget" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onEditGadgetClicked" prefHeight="35.0" prefWidth="100.0" text="Edit Gadget">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
@@ -36,7 +36,7 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnAddGadget" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="Add Gadget">
+                  <Button fx:id="btnAddGadget" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onAddGadgetClicked" prefHeight="35.0" prefWidth="100.0" text="Add Gadget">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
@@ -44,7 +44,7 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnDelete" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="Delete">
+                  <Button fx:id="btnDelete" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onDeleteGadgetClicked" prefHeight="35.0" prefWidth="100.0" text="Delete">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
@@ -110,7 +110,7 @@
             </VBox>
             <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <Button fx:id="btnSubmit" mnemonicParsing="false" prefHeight="35.0" prefWidth="137.0" text="Submit">
+                  <Button fx:id="btnSubmit" mnemonicParsing="false" onAction="#onSubmitClicked" prefHeight="35.0" prefWidth="137.0" text="Submit">
                      <VBox.margin>
                         <Insets top="52.0" />
                      </VBox.margin>
