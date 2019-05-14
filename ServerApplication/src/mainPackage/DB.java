@@ -24,10 +24,10 @@ public class DB {
 
     private void connect() {
         String ip = "localhost";
-        String port = "XXXX";
+        String port = "3306";
         String database = "homeAutoLAAS";
-        String user = "XXXXX";
-        String password = "XXXXX";
+        String user = "userLAAS";
+        String password = "detvarsomtusan";
 
         connection = null;
         String url = "jdbc:mysql://" + ip + ":" + port + "/" + database + "?useSSL=false&user=" + user + "&password=" + password + "&serverTimezone=UTC";
@@ -45,21 +45,21 @@ public class DB {
             try {
                 resultSet.close();
             } catch (SQLException e) {
-                System.out.println("Error on closing ResultSet");
+                System.out.println("Error on closing DB ResultSet");
             }
         }
         if (statement != null) {
             try {
                 statement.close();
             } catch (SQLException e) {
-                System.out.println("Error on closing Statement");
+                System.out.println("Error on closing DB Statement");
             }
         }
         if (connection != null) {
             try {
                 connection.close();
             } catch (SQLException e) {
-                System.out.println("Error on closing connection");
+                System.out.println("Error on closing DB connection");
             }
         }
     }
@@ -84,20 +84,86 @@ public class DB {
                 items[2] = name;
                 items[3] = admin;
                 items[4] = password;
-
             }
             if(results != 1) { //If there was no match, or for some reason, multiple matches
                 throw new Exception("Login failed. Connection is good");
             }
-
         } catch (SQLException e) {
-            throw new Exception("Error on SQL query");
+            throw new Exception("Error on SQL query. Code 1");
         } catch (NullPointerException e) {
             throw new Exception("NullPointer Exception");
         } finally {
             closeConnection();
         }
         return items;
+    }
+
+    public void setGadgetState(int systemID, int gadgetID, int newState) throws Exception {
+        connect();
+        int result;
+        try {
+            result = statement.executeUpdate("UPDATE Gadget SET state= " + newState + " WHERE systemID = " + systemID +" AND gadgetID = " + gadgetID + ";");
+            if(result != 1) {
+                throw new Exception("Gadget update failed");
+            }
+            //Require gadget name to form a log
+            resultSet = statement.executeQuery("SELECT name FROM Gadget WHERE gadgetID = " + gadgetID + ";");
+        } catch (SQLException e) {
+            throw new Exception("Error on SQL query. Code 2");
+        } finally {
+            closeConnection();
+        }
+    }
+
+    public ArrayList<String[]> getGadgets(int systemID, boolean onlyGadgetStates) throws Exception {
+        connect();
+        ArrayList<String[]> gadgetList = new ArrayList<>();
+        int results = 0;
+        try {
+            resultSet = statement.executeQuery("SELECT gadgetID, type, name, room, state, consumption FROM Gadget WHERE systemID = '" + String.valueOf(systemID) + "';");
+            while (resultSet.next()) {
+                results++;
+                String gadgetID = resultSet.getString("gadgetID");
+                String type = resultSet.getString("type");
+                String name = resultSet.getString("name");
+                String room = resultSet.getString("room");
+                String state = resultSet.getString("state");
+                String consumption = resultSet.getString("consumption");
+
+                if(onlyGadgetStates) {
+                    String[] items = {type, gadgetID, state};
+                    gadgetList.add(items);
+                } else {
+                    String[] items = {type, gadgetID, name, room, state, consumption};
+                    gadgetList.add(items);
+                }
+            }
+            if(results < 1) {
+                throw new Exception("No gadgets stored in Server");
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error on SQL query. Code 3");
+        } catch (NullPointerException e) {
+            throw new Exception("NullPointer Exception");
+        } finally {
+            closeConnection();
+        }
+        return gadgetList;
+    }
+
+    public void addGadget(int systemID, String type, String name, String room, String consumption) throws Exception {
+        connect();
+        int result;
+        try {
+            result = statement.executeUpdate("INSERT INTO Gadget (`systemID`, `type`, `name`, `room`, `state`, `consumption`) VALUES ('" + systemID +"', '" + type + "', '" + name + "', '" + room + "', 0, " + consumption +");");
+            if(result != 1) {
+                throw new Exception("Server unable to add gadget. Code 4a");
+            }
+        } catch (SQLException e) {
+            throw new Exception("Server unable to add gadget. Code 4b");
+        } finally {
+            closeConnection();
+        }
     }
 
     public ArrayList<String[]> getLogs(int systemID) throws Exception {
@@ -120,7 +186,7 @@ public class DB {
             }
 
         } catch (SQLException e) {
-            throw new Exception("Error on SQL query");
+            throw new Exception("Error on SQL query. Code 5");
         } catch (NullPointerException e) {
             throw new Exception("NullPointer Exception");
         } finally {
@@ -129,27 +195,63 @@ public class DB {
         return logs;
     }
 
+    public String[] getLogCreationData(String accountID, int gadgetID) throws Exception {
+        connect();
+        String[] items = new String[4];
+        try {
+            resultSet = statement.executeQuery(
+                    "SELECT Account.name AS `accountName`, Gadget.name AS `gadgetName`, Gadget.type, Gadget.room FROM Account, Gadget WHERE Account.accountID = '" + accountID + "' AND Gadget.gadgetID = " + String.valueOf(gadgetID) + ";");
+            /*if (resultSet.getRow() != 1) { //Prints 0 (zero)
+               throw new Exception("Unable to form log message");*/
+            //} else {
+                while (resultSet.next()) {
+                    String accountName = resultSet.getString("accountName");
+                    String gadgetName = resultSet.getString("gadgetName");
+                    String gadgetType = resultSet.getString("type");
+                    String gadgetRoom = resultSet.getString("room");
+                    items[0] = accountName;
+                    items[1] = gadgetName;
+                    items[2] = gadgetType;
+                    items[3] = gadgetRoom;
+                }
+           // }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new Exception("Error on SQL query: getLogCreationData");
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            throw new Exception("NullPointer Exception: getLogCreationData");
+        } finally {
+            closeConnection();
+        }
+        return items;
+    }
+
+
     public void addLog(int systemID, String logMessage) throws Exception {
         connect();
+        int systemLogs = 0;
         try {
             //Count the logs of the system
-            resultSet = statement.executeQuery("SELECT COUNT(*) FROM Log WHERE systemID = "+ String.valueOf(systemID) + ";");
-            int systemLogs = resultSet.getInt(1);
-            //Only store 10 logs for each system. If more; delete oldest
+            resultSet = statement.executeQuery("SELECT COUNT(*) as count FROM Log WHERE systemID = "+ String.valueOf(systemID) + ";");
+            while(resultSet.next()) {
+                systemLogs = resultSet.getInt("count");
+            }
+            //If logs per system exceeds 9; delete oldest
             if (systemLogs >= 10) {
-                statement.executeUpdate("DELETE * FROM Log WHERE systemID = " +String.valueOf(systemID)+ " AND logID = (SELECT MIN(logID) FROM Log WHERE systemID = " +String.valueOf(systemID)+ ")");
+                statement.executeUpdate("DELETE FROM Log WHERE systemID = " + String.valueOf(systemID) + " ORDER By Log.logID LIMIT 1;");
             }
             //Add new log. Note: timestamp is added by default by MySQL
             statement.executeUpdate("INSERT INTO Log (`systemID`, `log`) VALUES ("+String.valueOf(systemID)+", '"+ logMessage +"');");
 
         } catch (SQLException e) {
-            throw new Exception("Error on SQL query");
+            e.printStackTrace();
+            throw new Exception("Error on SQL query. Code 6");
         } catch (NullPointerException e) {
             throw new Exception("NullPointer Exception");
         } finally {
             closeConnection();
         }
     }
-
 }
 
