@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="blueprint" prefHeight="392.0" prefWidth="547.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainPackage.houseFrame.BlueprintController">
+   <children>
+      <ImageView fitHeight="392.0" fitWidth="547.0" layoutX="28.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Blueprint.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="toilet" layoutX="375.0" layoutY="153.0" prefHeight="21.0" prefWidth="64.0" text="Toilet" textFill="#1e97d2">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="bedroom" layoutX="373.0" layoutY="327.0" prefHeight="21.0" prefWidth="64.0" text="Bedroom" textFill="#1e97d2">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="livingroom" layoutX="180.0" layoutY="239.0" prefHeight="21.0" prefWidth="82.0" text="Livingroom" textFill="#1e97d2">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="garage" layoutX="33.0" layoutY="366.0" prefHeight="21.0" prefWidth="50.0" text="Garage" textFill="#1e97d2">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="kitchen" layoutX="33.0" layoutY="195.0" prefHeight="21.0" prefWidth="50.0" text="Kitchen" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
