@@ -94,11 +94,8 @@
 
 
 
-
-
 /*------------------------- DynamicFrame Rooms ------------------------------*/
 
-/*
 .table-view .table-column{
     -fx-alignment: CENTER;
     -fx-text-fill: WHITE;
@@ -107,6 +104,14 @@
 .table-view {
     -fx-text-fill: WHITE;
     -fx-background-color: #231f26;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-column-border-color: transparent;
+    -fx-background-insets: 0 0 0 0, 0, 1,2;
+}
+
+.table-row-cell:focused{
+    -fx-text-fill: WHITE;
+    -fx-background-color: transparent;
     -fx-table-cell-border-color: transparent;
     -fx-table-column-border-color: transparent;
     -fx-background-insets: 0 0 0 0, 0, 1,2;
@@ -168,7 +173,6 @@ visibility:hidden;
     -fx-padding: 0;
     -fx-shape: null;
 }
-*/
 
 /*---------------------------Gadget dynamicFrames--------------------*/
 
