@@ -78,10 +78,10 @@
   -fx-background-color: #444444;
   -fx-color: #666666;
 }
-#addUserButton, #deleteUserButton, #submitButton, #nonAdminButton, #adminButton{
+#addUserButton, #deleteUserButton, #submitButton, #nonAdminButton, #adminButton, #editBtn{
     -fx-background-color: #444444;
     -fx-text-fill: white;
-    -fx-font-size: 16px;
+    -fx-font-size: 12px;
     -fx-border-radius: 3 3 3 3;
     -fx-background-radius: 3 3 3 3;
     -fx-border-width: 0 0 0 0;
@@ -96,6 +96,7 @@
 
 /*------------------------- DynamicFrame Rooms ------------------------------*/
 
+/*
 .table-view .table-column{
     -fx-alignment: CENTER;
     -fx-text-fill: WHITE;
@@ -173,6 +174,8 @@ visibility:hidden;
     -fx-padding: 0;
     -fx-shape: null;
 }
+*/
+
 
 /*---------------------------Gadget dynamicFrames--------------------*/
 
@@ -232,7 +235,3 @@ visibility:hidden;
 .choice-box .menu-item:focused > .label {
 -fx-text-fill: WHITE;
 }
-
-
-
-

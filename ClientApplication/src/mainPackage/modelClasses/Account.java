@@ -1,38 +1,35 @@
 package mainPackage.modelClasses;
 
-/**
- * Just a test class until we got the real one going.
- *
- */
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Account {
-    private String name;
-    private String email;
+    private StringProperty name = new SimpleStringProperty();
+    private StringProperty email = new SimpleStringProperty();
     private int systemID;
-    private boolean admin;
+    private BooleanProperty admin = new SimpleBooleanProperty();
     private String password;
 
     public Account(String name, String email, int systemID, boolean admin, String password){
-        this.name=name;
-        this.email=email;
+        this.name.setValue(name);
+        this.email.setValue(email);
         this.systemID=systemID;
-        this.admin = admin;
+        this.admin.setValue(admin);
         this.password=password;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getName() {
+        return name.get();
     }
 
-    public String getName() {
+    public StringProperty nameProperty() {
         return name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setName(String name) {
+        this.name.set(name);
     }
 
     public int getSystemID() {
@@ -43,19 +40,35 @@ public class Account {
         this.systemID = systemID;
     }
 
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
-    }
-
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email.get();
+    }
+
+    public StringProperty emailProperty() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email.set(email);
+    }
+
+    public boolean isAdmin() {
+        return admin.get();
+    }
+
+    public BooleanProperty adminProperty() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin.set(admin);
     }
 }
