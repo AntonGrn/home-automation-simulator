@@ -92,6 +92,10 @@
     -fx-text-fill: white;
 }
 
+
+
+
+
 /*------------------------- DynamicFrame Rooms ------------------------------*/
 
 /*
@@ -171,8 +175,34 @@ visibility:hidden;
 /*
 #231f26 BLACK like root
 #346189 BLUE like textfields
+#444444 GRAY like buttons
+##656262 like button hover
+#346189 like button pressed
 */
 
+#gridLowerBorder {
+    -fx-border-color: #9d9d9e; /* Top right bottom left*/
+    -fx-border-width: 3 0 0 0;
+}
+
+#btnEditGadget, #btnAddGadget, #btnDelete, #btnSubmit {
+    -fx-background-color: #444444;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-border-radius: 3 3 3 3;
+    -fx-background-radius: 3 3 3 3;
+    -fx-border-width: 0 0 0 0;
+}
+
+#btnEditGadget, #btnAddGadget, #btnDelete, #btnSubmit:hover{
+    -fx-background-color: #656262;
+    -fx-border-width: 0 0 0 0;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-border-radius: 3 3 3 3;
+    -fx-background-radius: 3 3 3 3;
+    -fx-border-width: 0 0 0 0;
+}
 
 .choice-box{
 -fx-background-color: #346189;
