@@ -12,9 +12,9 @@ public class GuiObject {
 
 
     public GuiObject(String typeOfGadget,String gadgetName,String stateOfGadget, int id) {
-        this.typeOfGadget = new ImageView(new Image("mainPackage/images/" + typeOfGadget + ".png"));
+        this.typeOfGadget = new ImageView(new Image("/mainPackage/images/" + typeOfGadget + ".png"));
         this.gadgetName = gadgetName;
-        this.stateOfGadget = new ImageView(new Image("mainPackage/images/" + stateOfGadget + ".png"));
+        this.stateOfGadget = new ImageView(new Image("/mainPackage/images/" + stateOfGadget + ".png"));
         this.id= id;
 
         this.typeOfGadget.setFitHeight(40);
@@ -26,8 +26,6 @@ public class GuiObject {
 
     public GuiObject(String typeOfGadget){
         this.typeOfGadget = new ImageView(new Image("mainPackage/images/" + typeOfGadget + ".png"));
-
-
 
     }
 

@@ -178,7 +178,7 @@ public class MainWindowController {
             }
         }
         //Scene to load when logged in
-        btnRooms.fire();
+        //btnRooms.fire();
     }
 
     public void isNotLoggedIn() {

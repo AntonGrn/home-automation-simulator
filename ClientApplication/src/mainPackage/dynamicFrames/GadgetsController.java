@@ -72,17 +72,21 @@ public class GadgetsController implements DynamicFrame {
 
     @Override
     public void updateFrame() {
-        createGadgetTableItems();
         clmName.setCellValueFactory(new PropertyValueFactory<>("name"));
         clmRoom.setCellValueFactory(new PropertyValueFactory<>("room"));
         clmType.setCellValueFactory(new PropertyValueFactory<>("type"));
 
+        //clears list so it is not duplicated..
+        createGadgetTableItems();
+
         //This will be using a list that has looped through the gadgetList in MainwindowController
+        tblViewCurrentGadgets.getItems().clear();
         tblViewCurrentGadgets.getItems().addAll(gadgetTableItemsList);
 
     }
 
     private void createGadgetTableItems() {
+        gadgetTableItemsList.clear();
         for (Gadget g : Main.getMainWindowController().gadgetList) {
             GadgetTableItem gTI = new GadgetTableItem(g.getName(), g.getClass().getSimpleName(), g.getRoom(), g.getId());
             gadgetTableItemsList.add(gTI);
@@ -107,7 +111,7 @@ public class GadgetsController implements DynamicFrame {
                     String consumption = String.valueOf(g.getConsumption());
 
                     //Creating Laas string according to protocol.
-                    String serverReguest = String.format("%s%s%s%s%s%s%s%s%s%s%s%s%s%s", "5:", type, ":", id, ":", keepOrRemove, ":", name, ":", room, ":", state, ":", consumption);
+                    String serverReguest = String.format("%s%s%s%s%s%s%s%s%s%s%s%s%s%s", "6:", type, ":", id, ":", keepOrRemove, ":", name, ":", room, ":", state, ":", consumption);
                     System.out.println(serverReguest);
 
                             /*try {
@@ -204,7 +208,7 @@ public class GadgetsController implements DynamicFrame {
                                 String room = g.getRoom();
 
                                 //Creating Laas string according to protocol.
-                                String serverRequest = String.format("%s%s%s%s%s%s%s%s%s%s%s%s%s%s", "5:", type, ":", id, ":", keepOrRemove, ":", newName, ":", room, ":", state, ":", newConsumption);
+                                String serverRequest = String.format("%s%s%s%s%s%s%s%s%s%s%s%s%s%s", "6:", type, ":", id, ":", keepOrRemove, ":", newName, ":", room, ":", state, ":", newConsumption);
                                 System.out.println(serverRequest);
                             /*try {
                                 //putting serverRequest into requestToServer list.
@@ -247,12 +251,12 @@ public class GadgetsController implements DynamicFrame {
 
                         if (txtfldConsumption.getText().trim().matches(reg)) {
                             String room = dropMenuRooms.getSelectionModel().getSelectedItem();
-                            String gadget = dropMenuGadgets.getSelectionModel().getSelectedItem();
+                            String type = dropMenuGadgets.getSelectionModel().getSelectedItem();
                             String nameOfGadget = txtfldGadgetName.getText();
                             String consumption = txtfldConsumption.getText();
 
                             //Creating Laas string according to protocol.
-                            String serverRequest = String.format("%s%s%s%s%s%s%s%s", "6:", gadget, ":", nameOfGadget, ":", room, ":", consumption);
+                            String serverRequest = String.format("%s%s%s%s%s%s%s%s", "7:", type, ":", nameOfGadget, ":", room, ":", consumption);
                             System.out.println(serverRequest);
                             try {
                                 //putting serverRequest into requestToServer list.
