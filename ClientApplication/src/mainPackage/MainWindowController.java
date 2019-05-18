@@ -288,6 +288,10 @@ public class MainWindowController {
         }
         currentDynamicFrameController.updateFrame();
 
+        for(Gadget g : gadgetList) {
+            System.out.println(g.getName());
+        }
+
     }
     private void updateGadgetsStates(String[] commands) {
         if (commands[1].equals("notnull")) {

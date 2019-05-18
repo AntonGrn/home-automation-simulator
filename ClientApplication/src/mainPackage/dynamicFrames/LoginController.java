@@ -49,7 +49,7 @@ public class LoginController implements DynamicFrame {
             try {
                 //Request server connection
                 ServerConnection.getInstance().connectToServer();
-                // Form a proper login request, according to communiaction protocol: 1:accountID:password
+                // Form a proper login request, according to communication protocol: 1:accountID:password
                 String serverRequest = String.format("%s%s%s%s", "1:", accountID, ":", password);
                 //Add request to requestsToServer
                 Main.getMainWindowController().requestsToServer.put(serverRequest);
