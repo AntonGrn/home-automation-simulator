@@ -18,31 +18,28 @@
          <children>
             <TableView fx:id="usersTable" layoutY="-2.0" prefHeight="129.0" prefWidth="400.0" stylesheets="@../tableData.css">
               <columns>
-                <TableColumn fx:id="nameColumn" prefWidth="123.0" text="Name" />
-                <TableColumn fx:id="emailColumn" prefWidth="119.0" text="Email" />
-                  <TableColumn fx:id="accesslevelColumn" prefWidth="157.0" text="Password" />
+                <TableColumn fx:id="nameColumn" prefWidth="103.0" text="Name" />
+                <TableColumn fx:id="emailColumn" prefWidth="213.0" text="Email" />
+                  <TableColumn fx:id="accesslevelColumn" prefWidth="83.0" text="Admin" />
               </columns>
             </TableView>
-            <Button fx:id="deleteUserButton" layoutX="317.0" layoutY="127.0" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Delete" AnchorPane.bottomAnchor="7.0" />
-            <Button fx:id="addUserButton" layoutX="239.0" layoutY="127.0" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addUser" prefHeight="25.0" prefWidth="70.0" text="Add User" AnchorPane.bottomAnchor="7.0" />
-            <Button fx:id="editBtn" layoutX="158.0" layoutY="127.0" maxWidth="-Infinity" mnemonicParsing="false" onAction="#editChosen" prefWidth="70.0" text="Edit" AnchorPane.bottomAnchor="7.0" />
+            <Button fx:id="deleteUserButton" layoutX="317.0" layoutY="127.0" maxWidth="-Infinity" mnemonicParsing="false" onAction="#deleteUser" prefHeight="25.0" prefWidth="70.0" text="Delete" AnchorPane.bottomAnchor="5.0" />
+            <Button fx:id="addUserButton" layoutX="239.0" layoutY="127.0" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addUser" prefHeight="25.0" prefWidth="70.0" text="Add User" AnchorPane.bottomAnchor="5.0" />
+            <Button fx:id="editBtn" layoutX="158.0" layoutY="127.0" maxWidth="-Infinity" mnemonicParsing="false" onAction="#editChosen" prefWidth="70.0" text="Edit" AnchorPane.bottomAnchor="5.0" />
          </children>
          <VBox.margin>
             <Insets top="2.0" />
          </VBox.margin>
       </AnchorPane>
-      <AnchorPane fx:id="nonAdminPassWd" prefHeight="39.0" prefWidth="400.0">
+      <AnchorPane fx:id="nonAdminPassWd" prefHeight="89.0" prefWidth="400.0">
          <children>
-            <PasswordField fx:id="nonAdminPwField" layoutX="200.0" layoutY="9.0" promptText="********" />
-            <Button fx:id="nonAdminButton" layoutX="354.0" layoutY="7.0" mnemonicParsing="false" text="Go" />
-            <Label layoutX="51.0" layoutY="11.0" text="Non-Admins Password" />
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="adminPassWd" prefHeight="38.0" prefWidth="400.0">
-         <children>
-            <PasswordField fx:id="adminPwField" layoutX="200.0" layoutY="10.0" promptText="********" />
-            <Button fx:id="adminButton" layoutX="354.0" layoutY="10.0" mnemonicParsing="false" text="Go" />
-            <Label layoutX="51.0" layoutY="17.0" text="Admins Password" />
+            <PasswordField fx:id="nonAdminPwField" layoutX="208.0" layoutY="41.0" onKeyReleased="#nonAdminPassWEditsMade" prefHeight="25.0" prefWidth="180.0" promptText="Password" />
+            <Label alignment="CENTER" layoutX="73.0" layoutY="8.0" prefHeight="17.0" prefWidth="283.0" text="Non-Admins Password">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <Button fx:id="viewNonAdminPassWBtn" layoutX="22.0" layoutY="41.0" mnemonicParsing="false" onMouseEntered="#viewNonAdminPassWord" onMouseExited="#hideNonAdminPassWord" prefHeight="25.0" prefWidth="83.0" text="View current" />
+            <Button fx:id="submitNonAdminPassW" layoutX="117.0" layoutY="41.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="83.0" text="Submit new" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="editUSer" prefHeight="298.0" prefWidth="400.0">
@@ -51,9 +48,9 @@
                <font>
                   <Font size="18.0" />
                </font></Label>
-            <TextField fx:id="nameField" layoutX="19.0" layoutY="43.0" onKeyReleased="#editsMade" prefHeight="25.0" prefWidth="180.0" promptText="Name" />
+            <TextField fx:id="nameField" layoutX="19.0" layoutY="43.0" onKeyReleased="#editsMade" prefHeight="25.0" prefWidth="180.0" promptText="Name" AnchorPane.topAnchor="44.0" />
             <TextField fx:id="emailField" layoutX="18.0" layoutY="79.0" onKeyReleased="#editsMade" prefHeight="25.0" prefWidth="180.0" promptText="Email" />
-            <PasswordField fx:id="passwordField" layoutX="203.0" layoutY="43.0" onKeyReleased="#editsMade" prefHeight="25.0" prefWidth="180.0" promptText="********" AnchorPane.topAnchor="43.0" />
+            <PasswordField fx:id="passwordField" layoutX="203.0" layoutY="43.0" onKeyReleased="#editsMade" prefHeight="25.0" prefWidth="180.0" promptText="Password" AnchorPane.topAnchor="44.0" />
             <CheckBox fx:id="checkboxAdmin" layoutX="205.0" layoutY="83.0" mnemonicParsing="false" text="Admin" />
             <Button fx:id="submitButton" layoutX="310.0" layoutY="79.0" mnemonicParsing="false" onAction="#submit" prefHeight="25.0" prefWidth="73.0" text="Submit" />
             <Label fx:id="statusLabel" alignment="CENTER" layoutX="40.0" layoutY="125.0" prefHeight="17.0" prefWidth="295.0" text="Label" />
