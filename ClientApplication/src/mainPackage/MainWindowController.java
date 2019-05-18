@@ -376,7 +376,7 @@ public class MainWindowController {
         logsList.clear();
         int count = 0;
         while (true) {
-            String timestamp = commands[count + 1].replace("&", ":"); // Reformat to regain colon in timestamp
+            String timestamp = commands [count + 1].replace("&", ":"); // Reformat to regain colon in timestamp
             String logMessage = commands[count + 2];
 
             String[] log = {timestamp, logMessage};
