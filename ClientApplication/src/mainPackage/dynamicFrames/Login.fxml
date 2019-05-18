@@ -10,7 +10,7 @@
    <children>
       <TextField fx:id="usernametextfield" layoutX="105.0" layoutY="92.0" prefHeight="25.0" prefWidth="199.0" />
       <PasswordField fx:id="passfield" layoutX="105.0" layoutY="141.0" prefHeight="25.0" prefWidth="199.0" />
-      <Button layoutX="169.0" layoutY="188.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="71.0" text="Login" />
+      <Button fx:id="loginButton" layoutX="169.0" layoutY="188.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="71.0" text="Login" />
       <Label fx:id="inputErrorLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="29.0" layoutY="241.0" prefHeight="17.0" prefWidth="351.0" />
    </children>
 </AnchorPane>
