@@ -1,42 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="blueprint" maxHeight="387.0" prefHeight="387.0" prefWidth="547.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainPackage.houseFrame.BlueprintController">
+<AnchorPane fx:id="blueprint" maxHeight="390.0" prefHeight="390.0" prefWidth="547.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainPackage.houseFrame.BlueprintController">
    <children>
       <ImageView fitHeight="392.0" fitWidth="450.0" layoutX="46.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Blueprint.png" />
          </image>
       </ImageView>
-      <Label fx:id="toilet" layoutX="426.0" layoutY="4.0" prefHeight="21.0" prefWidth="39.0" text="Toilet" textFill="WHITE">
+      <Label fx:id="toilet" layoutX="410.0" layoutY="10.0" prefHeight="21.0" prefWidth="39.0" text="Toilet" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="bedroom" layoutX="414.0" layoutY="177.0" prefHeight="21.0" prefWidth="64.0" text="Bedroom" textFill="WHITE">
+      <Label fx:id="bedRoom" layoutX="397.0" layoutY="169.0" prefHeight="21.0" prefWidth="64.0" text="Bedroom" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="livingroom" layoutX="235.0" layoutY="4.0" prefHeight="21.0" prefWidth="82.0" text="Livingroom" textFill="WHITE">
+      <Label fx:id="livingRoom" layoutX="235.0" layoutY="10.0" prefHeight="21.0" prefWidth="82.0" text="Livingroom" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="garage" layoutX="75.0" layoutY="216.0" prefHeight="21.0" prefWidth="50.0" text="Garage" textFill="WHITE">
+      <Label fx:id="garage" layoutX="88.0" layoutY="206.0" prefHeight="21.0" prefWidth="50.0" text="Garage" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="kitchen" layoutX="75.0" layoutY="4.0" prefHeight="21.0" prefWidth="50.0" text="Kitchen" textFill="WHITE">
+      <Label fx:id="kitchen" layoutX="88.0" layoutY="10.0" prefHeight="21.0" prefWidth="50.0" text="Kitchen" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
+      <TableView fx:id="tblVKitchen" layoutX="48.0" layoutY="30.0" prefHeight="176.0" prefWidth="135.0">
+        <columns>
+          <TableColumn fx:id="clmKitchen" prefWidth="134.0" text="show" />
+        </columns>
+      </TableView>
+      <TableView fx:id="tblVLivingRoom" layoutX="186.0" layoutY="30.0" prefHeight="218.0" prefWidth="176.0">
+         <columns>
+            <TableColumn fx:id="clmLivingroom" prefWidth="175.0" text="show" />
+         </columns>
+      </TableView>
+      <TableView fx:id="tblVToilet" layoutX="365.0" layoutY="30.0" prefHeight="140.0" prefWidth="128.0">
+         <columns>
+            <TableColumn fx:id="clmToilet" prefWidth="127.0" text="show" />
+         </columns>
+      </TableView>
+      <TableView fx:id="tblVBedRoom" layoutX="365.0" layoutY="187.0" prefHeight="144.0" prefWidth="128.0">
+         <columns>
+            <TableColumn fx:id="clmBedroom" prefWidth="127.0" text="show" />
+         </columns>
+      </TableView>
+      <TableView fx:id="tblVGarage" layoutX="49.0" layoutY="226.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="141.0" prefWidth="134.0">
+         <columns>
+            <TableColumn fx:id="clmGarage" prefWidth="133.0" text="show" />
+         </columns>
+      </TableView>
    </children>
 </AnchorPane>
