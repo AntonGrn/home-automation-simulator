@@ -22,13 +22,7 @@
 #nonAdminPassWd, #adminPassWd, #editUSer, #tableAnchorPane {
     -fx-border-color: #9d9d9e;
     -fx-border-width: 3 0 0 0;
-
-
-
-
 }
-
-
 
 /*-------------------------- LABELS ------------------------------*/
 
@@ -78,10 +72,10 @@
   -fx-background-color: #444444;
   -fx-color: #666666;
 }
-#addUserButton, #deleteUserButton, #submitButton, #nonAdminButton, #adminButton{
+#addUserButton, #deleteUserButton, #submitButton, #nonAdminButton, #adminButton, #editBtn, #viewNonAdminPassWBtn, #submitNonAdminPassW{
     -fx-background-color: #444444;
     -fx-text-fill: white;
-    -fx-font-size: 16px;
+    -fx-font-size: 12px;
     -fx-border-radius: 3 3 3 3;
     -fx-background-radius: 3 3 3 3;
     -fx-border-width: 0 0 0 0;
@@ -164,3 +158,4 @@ visibility:hidden;
     -fx-shape: null;
 }
 */
+

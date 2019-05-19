@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 
 public class Server {
 
-    private BlockingQueue<ClientRequest> serverRequest;
+    public BlockingQueue<ClientRequest> serverRequest;
 
     //Maybe add a queue for serverOutputs to clients, which method outputToClient could scan from a new thread
 
@@ -39,10 +39,6 @@ public class Server {
             instance = new Server();
         }
         return instance;
-    }
-
-    public BlockingQueue<ClientRequest> getServerRequest() {
-        return serverRequest;
     }
 
     public void run() {
@@ -229,17 +225,23 @@ public class Server {
                         case "6": //Request to alter gadget's info
                             break;
                         case "7": //Request to add a gadget
-                            updateAddGadget(commands, clientRequest.getClient());
+                            addGadget(commands, clientRequest.getClient());
+                            //outputToClients(true, false, "15:Adding gadgets not available at the moment", clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
                             break;
                         case "9": // Individual request for all users info
+                            if(clientRequest.getClient().isAdmin()) {
+                                outputAccounts(clientRequest.getClient(), true);
+                            }
                             break;
                         case "10": // Request to alter user info
                             break;
                         case "11": // Request add a user
                             break;
                         case "13": //Log request
-                           logRequest(clientRequest.getClient());
+                            logRequest(clientRequest.getClient());
                             break;
+                        default:
+                            outputToClients(true, false, "15:Invalid server request", clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
                     }
                 }
             } catch (InterruptedException e) {
@@ -253,22 +255,22 @@ public class Server {
         int systemID = fromClient.getSystemID();
         int gadgetID = Integer.parseInt(commands[1]);
         int newState = Integer.parseInt(commands[2]);
-        try{
+        try {
             DB.getInstance().setGadgetState(systemID, gadgetID, newState);
             //output to clients
             gadgetsRequest(fromClient, true, false);
-        } catch(Exception e) {
+        } catch (Exception e) {
             outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
         }
         //Add gadget usage log
         try {
             addLog(fromClient, gadgetID, newState);
         } catch (Exception e) {
-            System.out.println("Adding logs error " + e.getMessage() );
+            System.out.println("Adding logs error " + e.getMessage());
         }
     }
 
-    private void updateAddGadget(String[] commands, Client fromClient) {
+    private void addGadget(String[] commands, Client fromClient) {
         String type = commands[1];
         String name = commands[2];
         String room = commands[3];
@@ -292,7 +294,7 @@ public class Server {
             } else {
                 clientOutput = clientOutput.concat("notnull:");
                 // Send gadget state info ("4:XXX")
-                if(onlyGadgetStates) {
+                if (onlyGadgetStates) {
                     for (int i = 0; i < gadgetList.size(); i++) {
                         String gadgetID = gadgetList.get(i)[1];
                         String state = gadgetList.get(i)[2];
@@ -307,7 +309,7 @@ public class Server {
                         }
                     }
                     // Sends full gadgets info ("8:XXX")
-                }else {
+                } else {
                     for (int i = 0; i < gadgetList.size(); i++) {
                         String type = gadgetList.get(i)[0];
                         String gadgetID = gadgetList.get(i)[1];
@@ -333,6 +335,32 @@ public class Server {
         }
     }
 
+    private void outputAccounts(Client fromClient, boolean onlyToIndividual) {
+        try{
+            ArrayList<String[]> accountList = DB.getInstance().getAccounts(fromClient.getSystemID());
+            String clientOutput = "12:";
+
+            for (int i = 0; i < accountList.size(); i++) {
+                String accountID = accountList.get(i)[0];
+                String name = accountList.get(i)[1];
+                String password = accountList.get(i)[2];
+                String admin = accountList.get(i)[3];
+
+                clientOutput = String.format("%s%s%s%s%s%s%s%s",
+                        clientOutput, accountID, ":", name, ":", password, ":", admin);
+
+                if (i == accountList.size() - 1) {
+                    clientOutput = clientOutput.concat(":null");
+                } else {
+                    clientOutput = clientOutput.concat(":next:");
+                }
+            }
+            outputToClients(onlyToIndividual, true, clientOutput, fromClient.getSocket(), fromClient.getSystemID());
+        }catch(Exception e) {
+            outputToClients(true, true, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
+        }
+    }
+
     private void addLog(Client fromClient, int gadgetID, int newState) throws Exception {
         String items[] = new String[4];
         try {
@@ -350,10 +378,10 @@ public class Server {
                     logMessage = String.format("%s%s%s%s%s", logMessage, " turned heat to ", newState, " C in ", gadgetRoom);
                     break;
                 case "Door":
-                    logMessage = String.format("%s%s%s", logMessage, (newState == 1 ? " locked ":" unlocked "), gadgetName);
+                    logMessage = String.format("%s%s%s", logMessage, (newState == 1 ? " locked " : " unlocked "), gadgetName);
                     break;
                 default:
-                    logMessage = String.format("%s%s%s%s%s%s", logMessage, " turned ", (newState == 1 ? "on ":"off "), gadgetName, " in ", gadgetRoom);
+                    logMessage = String.format("%s%s%s%s%s%s", logMessage, " turned ", (newState == 1 ? "on " : "off "), gadgetName, " in ", gadgetRoom);
                     break;
             }
             DB.getInstance().addLog(fromClient.getSystemID(), logMessage);
@@ -404,7 +432,6 @@ public class Server {
                                 try {
                                     client.getOutput().writeUTF(message);
                                 } catch (IOException e) {
-                                    //Won't be used. Inactive clients are removed before this
                                     System.out.println("Unable to write to: " + client.getAccountID());
                                 }
                             }

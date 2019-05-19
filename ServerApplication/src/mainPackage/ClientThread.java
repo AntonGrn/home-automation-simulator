@@ -39,7 +39,7 @@ public class ClientThread extends Thread {
 
                         try {
                             //Add to Server request list
-                            Server.getInstance().getServerRequest().put(clientRequest);
+                            Server.getInstance().serverRequest.put(clientRequest);
                             //System.out.println("Message from client has been added to serverRequests");
                         } catch (InterruptedException i) {
                             i.printStackTrace();

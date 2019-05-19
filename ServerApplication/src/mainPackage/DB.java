@@ -24,10 +24,10 @@ public class DB {
 
     private void connect() {
         String ip = "localhost";
-        String port = "3306";
-        String database = "homeAutoLAAS";
-        String user = "userLAAS";
-        String password = "detvarsomtusan";
+        String port = "XXXX";
+        String database = "XXXXX";
+        String user = "XXXXX";
+        String password = "XXXXX";
 
         connection = null;
         String url = "jdbc:mysql://" + ip + ":" + port + "/" + database + "?useSSL=false&user=" + user + "&password=" + password + "&serverTimezone=UTC";
@@ -85,7 +85,7 @@ public class DB {
                 items[3] = admin;
                 items[4] = password;
             }
-            if(results != 1) { //If there was no match, or for some reason, multiple matches
+            if (results != 1) { //If there was no match, or for some reason, multiple matches
                 throw new Exception("Login failed. Connection is good");
             }
         } catch (SQLException e) {
@@ -102,8 +102,8 @@ public class DB {
         connect();
         int result;
         try {
-            result = statement.executeUpdate("UPDATE Gadget SET state= " + newState + " WHERE systemID = " + systemID +" AND gadgetID = " + gadgetID + ";");
-            if(result != 1) {
+            result = statement.executeUpdate("UPDATE Gadget SET state= " + newState + " WHERE systemID = " + systemID + " AND gadgetID = " + gadgetID + ";");
+            if (result != 1) {
                 throw new Exception("Gadget update failed");
             }
             //Require gadget name to form a log
@@ -130,7 +130,7 @@ public class DB {
                 String state = resultSet.getString("state");
                 String consumption = resultSet.getString("consumption");
 
-                if(onlyGadgetStates) {
+                if (onlyGadgetStates) {
                     String[] items = {type, gadgetID, state};
                     gadgetList.add(items);
                 } else {
@@ -138,7 +138,7 @@ public class DB {
                     gadgetList.add(items);
                 }
             }
-            if(results < 1) {
+            if (results < 1) {
                 throw new Exception("No gadgets stored in Server");
             }
         } catch (SQLException e) {
@@ -155,8 +155,8 @@ public class DB {
         connect();
         int result;
         try {
-            result = statement.executeUpdate("INSERT INTO Gadget (`systemID`, `type`, `name`, `room`, `state`, `consumption`) VALUES ('" + systemID +"', '" + type + "', '" + name + "', '" + room + "', 0, " + consumption +");");
-            if(result != 1) {
+            result = statement.executeUpdate("INSERT INTO Gadget (`systemID`, `type`, `name`, `room`, `state`, `consumption`) VALUES ('" + systemID + "', '" + type + "', '" + name + "', '" + room + "', 0, " + consumption + ");");
+            if (result != 1) {
                 throw new Exception("Server unable to add gadget. Code 4a");
             }
         } catch (SQLException e) {
@@ -181,7 +181,7 @@ public class DB {
                 logs.add(items);
             }
 
-            if(results < 1) {
+            if (results < 1) {
                 throw new Exception("No logs stored");
             }
 
@@ -204,17 +204,17 @@ public class DB {
             /*if (resultSet.getRow() != 1) { //Prints 0 (zero)
                throw new Exception("Unable to form log message");*/
             //} else {
-                while (resultSet.next()) {
-                    String accountName = resultSet.getString("accountName");
-                    String gadgetName = resultSet.getString("gadgetName");
-                    String gadgetType = resultSet.getString("type");
-                    String gadgetRoom = resultSet.getString("room");
-                    items[0] = accountName;
-                    items[1] = gadgetName;
-                    items[2] = gadgetType;
-                    items[3] = gadgetRoom;
-                }
-           // }
+            while (resultSet.next()) {
+                String accountName = resultSet.getString("accountName");
+                String gadgetName = resultSet.getString("gadgetName");
+                String gadgetType = resultSet.getString("type");
+                String gadgetRoom = resultSet.getString("room");
+                items[0] = accountName;
+                items[1] = gadgetName;
+                items[2] = gadgetType;
+                items[3] = gadgetRoom;
+            }
+            // }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new Exception("Error on SQL query: getLogCreationData");
@@ -233,8 +233,8 @@ public class DB {
         int systemLogs = 0;
         try {
             //Count the logs of the system
-            resultSet = statement.executeQuery("SELECT COUNT(*) as count FROM Log WHERE systemID = "+ String.valueOf(systemID) + ";");
-            while(resultSet.next()) {
+            resultSet = statement.executeQuery("SELECT COUNT(*) as count FROM Log WHERE systemID = " + String.valueOf(systemID) + ";");
+            while (resultSet.next()) {
                 systemLogs = resultSet.getInt("count");
             }
             //If logs per system exceeds 9; delete oldest
@@ -242,7 +242,7 @@ public class DB {
                 statement.executeUpdate("DELETE FROM Log WHERE systemID = " + String.valueOf(systemID) + " ORDER By Log.logID LIMIT 1;");
             }
             //Add new log. Note: timestamp is added by default by MySQL
-            statement.executeUpdate("INSERT INTO Log (`systemID`, `log`) VALUES ("+String.valueOf(systemID)+", '"+ logMessage +"');");
+            statement.executeUpdate("INSERT INTO Log (`systemID`, `log`) VALUES (" + String.valueOf(systemID) + ", '" + logMessage + "');");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -252,6 +252,39 @@ public class DB {
         } finally {
             closeConnection();
         }
+    }
+
+    public ArrayList<String[]> getAccounts(int systemID) throws Exception {
+        connect();
+        ArrayList<String[]> accountList = new ArrayList<>();
+        int results = 0;
+        try {
+            resultSet = statement.executeQuery("SELECT accountID, name, password, admin FROM Account WHERE systemID = '" + systemID + "';");
+            while (resultSet.next()) {
+                results++;
+                String accountID = resultSet.getString("accountID");
+                String name = resultSet.getString("name");
+                String password = resultSet.getString("password");
+                String admin = resultSet.getString("admin");
+
+                //Don't return password of other admins
+                if (admin.equals("1")) {
+                    password = "accessDenied";
+                }
+                String[] items = {accountID, name, password, admin};
+                accountList.add(items);
+            }
+            if (results < 1) {
+                throw new Exception("Unable to return accounts from server");
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error on SQL query. Code 3");
+        } catch (NullPointerException e) {
+            throw new Exception("NullPointer Exception");
+        } finally {
+            closeConnection();
+        }
+        return accountList;
     }
 }
 

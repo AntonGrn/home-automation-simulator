@@ -2,9 +2,11 @@ package mainPackage.dynamicFrames;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import mainPackage.AccountLoggedin;
 import mainPackage.DynamicFrame;
 import mainPackage.Main;
@@ -30,6 +32,7 @@ public class LoginController implements DynamicFrame {
 
     @FXML
     void login(ActionEvent event) {
+
         inputErrorLabel.setVisible(false);
         String accountID = usernametextfield.getText();
         String password = passfield.getText();
@@ -46,7 +49,7 @@ public class LoginController implements DynamicFrame {
             try {
                 //Request server connection
                 ServerConnection.getInstance().connectToServer();
-                // Form a proper login request, according to communiaction protocol: 1:accountID:password
+                // Form a proper login request, according to communication protocol: 1:accountID:password
                 String serverRequest = String.format("%s%s%s%s", "1:", accountID, ":", password);
                 //Add request to requestsToServer
                 Main.getMainWindowController().requestsToServer.put(serverRequest);
