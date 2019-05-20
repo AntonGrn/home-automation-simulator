@@ -38,7 +38,7 @@ public class  Main extends Application {
     public void stop() {
         System.out.println("Closing application");
         try {
-            Main.getMainWindowController().requestsToServer.put("14"); //Closes clean at server + ClientInputThread
+            Main.getMainWindowController().requestsToServer.put("16"); //Closes clean at server + ClientInputThread
             Thread.sleep(500);
             ServerConnection.getInstance().closeResources(); //Closes at server + entire client
         }catch (InterruptedException e) {

@@ -220,25 +220,33 @@ public class Server {
                             updateGadgetState(commands, clientRequest.getClient());
                             break;
                         case "5": //Individual request for all gadgets info
-                            gadgetsRequest(clientRequest.getClient(), false, true);
+                            outputGadgets(clientRequest.getClient(), false, true);
                             break;
-                        case "6": //Request to alter gadget's info
+                        case "6": //Request to edit gadget's info
+                            editGadgetsInfo(commands, clientRequest.getClient());
                             break;
-                        case "7": //Request to add a gadget
+                        case "7a": //Request to add a gadget
                             addGadget(commands, clientRequest.getClient());
-                            //outputToClients(true, false, "15:Adding gadgets not available at the moment", clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
+                            break;
+                        case "7b": //Request to delete a gadget
+                            deleteGadget(commands, clientRequest.getClient());
                             break;
                         case "9": // Individual request for all users info
                             if(clientRequest.getClient().isAdmin()) {
                                 outputAccounts(clientRequest.getClient(), true);
                             }
                             break;
-                        case "10": // Request to alter user info
+                        case "10": // Request to edit user info
+                            editAccountsInfo(commands, clientRequest.getClient());
                             break;
-                        case "11": // Request add a user
+                        case "11a": // Request add a user
+                            addAccount(commands, clientRequest.getClient());
+                            break;
+                        case "11b": // Request to delete a user
+                            deleteAccount(commands, clientRequest.getClient());
                             break;
                         case "13": //Log request
-                            logRequest(clientRequest.getClient());
+                            outputLogs(clientRequest.getClient());
                             break;
                         default:
                             outputToClients(true, false, "15:Invalid server request", clientRequest.getClient().getSocket(), clientRequest.getClient().getSystemID());
@@ -258,7 +266,7 @@ public class Server {
         try {
             DB.getInstance().setGadgetState(systemID, gadgetID, newState);
             //output to clients
-            gadgetsRequest(fromClient, true, false);
+            outputGadgets(fromClient, true, false);
         } catch (Exception e) {
             outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
         }
@@ -277,14 +285,40 @@ public class Server {
         String consumption = commands[4];
         try {
             DB.getInstance().addGadget(fromClient.getSystemID(), type, name, room, consumption);
-            gadgetsRequest(fromClient, false, false);
+            outputGadgets(fromClient, false, false);
+        } catch (Exception e) {
+            outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
+        }
+    }
+
+    private void deleteGadget(String[] commands, Client fromClient) {
+        int systemID = fromClient.getSystemID();
+        int gadgetID = Integer.parseInt(commands[1]);
+        try {
+            DB.getInstance().deleteGadget(systemID, gadgetID);
+            outputGadgets(fromClient, false, false);
+        } catch (Exception e) {
+            outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
+        }
+    }
+
+    private void editGadgetsInfo(String[] commands, Client fromClient) {
+        int systemID = fromClient.getSystemID();
+        String type = commands[1];
+        int gadgetID = Integer.parseInt(commands[2]);
+        String name = commands[3];
+        String room = commands[4];
+        int consumption = Integer.parseInt(commands[5]);
+        try {
+            DB.getInstance().editGadgetsInfo(systemID, type, gadgetID, name, room, consumption);
+            outputGadgets(fromClient, false, false);
         } catch (Exception e) {
             outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
         }
     }
 
     // Produces output commands 4 and 8 of LAAS communication protocol
-    private void gadgetsRequest(Client fromClient, boolean onlyGadgetStates, boolean onlyToIndividual) {
+    private void outputGadgets(Client fromClient, boolean onlyGadgetStates, boolean onlyToIndividual) {
         String clientOutput = onlyGadgetStates ? "4:" : "8:";
         try {
             ArrayList<String[]> gadgetList = DB.getInstance().getGadgets(fromClient.getSystemID(), onlyGadgetStates);
@@ -330,6 +364,46 @@ public class Server {
                 }
             }
             outputToClients(onlyToIndividual, false, clientOutput, fromClient.getSocket(), fromClient.getSystemID());
+        } catch (Exception e) {
+            outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
+        }
+    }
+
+    //String accountID, int systemID, String name, String admin, String password
+    private void addAccount(String[] commands, Client fromClient) {
+        String accountID = commands[1];
+        int systemID = fromClient.getSystemID();
+        String name = commands[2];
+        String admin = commands[3];
+        String password = commands[4];
+        try {
+            DB.getInstance().addAccount(accountID, systemID, name, admin, password);
+            outputAccounts(fromClient, false);
+        } catch (Exception e) {
+            outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
+        }
+    }
+
+    private void deleteAccount(String[] commands, Client fromClient) {
+        int systemID = fromClient.getSystemID();
+        String accountID = commands[1];
+        try {
+            DB.getInstance().deleteAccount(systemID, accountID);
+            outputAccounts(fromClient, false);
+        } catch (Exception e) {
+            outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
+        }
+    }
+
+    private void editAccountsInfo(String[] commands, Client fromClient) {
+        int systemID = fromClient.getSystemID();
+        String accountID = commands[1];
+        String name = commands[2];
+        String admin = commands[3].equals("1") ? "1" : "0";
+        String password = commands[4];
+        try {
+            DB.getInstance().editAccountsInfo(systemID, accountID, name, admin, password);
+            outputAccounts(fromClient, false);
         } catch (Exception e) {
             outputToClients(true, false, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
         }
@@ -391,7 +465,7 @@ public class Server {
     }
 
     //Produces command 14
-    private void logRequest(Client fromClient) {
+    private void outputLogs(Client fromClient) {
         try {
             ArrayList<String[]> logs = DB.getInstance().getLogs(fromClient.getSystemID());
 
@@ -420,7 +494,7 @@ public class Server {
         }
     }
 
-    //The output operation
+    //The final output operation
     private void outputToClients(boolean onlyToIndividual, boolean onlyToAdmins, String message, Socket connection, int systemID) {
         synchronized (activeClients) {
             //System.out.println("LIST SIZE = " + activeClients.size());
