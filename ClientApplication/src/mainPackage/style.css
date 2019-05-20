@@ -244,3 +244,13 @@
 .choice-box .menu-item:focused > .label {
 -fx-text-fill: WHITE;
 }
+
+/*------------------------- BluePrint Controller ------------------------------*/
+
+#tblVKitchen, #tblVLivingRoom, #tblVToilet, #tblVBedRoom, #tblVGarage, .table-view{
+-fx-background-color: transparent;
+}
+
+#clmKitchen, #clmLivingroom, #clmToilet, #clmBedroom, #clmGarage, .table-view .table-row-cell{
+-fx-background-color: transparent;
+}

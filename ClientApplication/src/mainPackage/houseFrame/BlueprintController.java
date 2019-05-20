@@ -31,6 +31,7 @@ public class BlueprintController implements DynamicFrame {
 
     @FXML
     private TableView<GuiObject> tblVLivingRoom;
+    //TODO fixa namn på livingroom
     @FXML
     private TableColumn<GuiObject, ImageView> clmLivingroom;
 
@@ -40,6 +41,7 @@ public class BlueprintController implements DynamicFrame {
     private TableColumn<GuiObject, ImageView> clmToilet;
 
     @FXML
+    //TODO fixa namn på bedroom
     private TableView<GuiObject> tblVBedRoom;
     @FXML
     private TableColumn<GuiObject, ImageView> clmBedroom;
@@ -64,6 +66,12 @@ public class BlueprintController implements DynamicFrame {
         clmToilet.setCellValueFactory(new PropertyValueFactory<>("typeOfGadget"));
         clmGarage.setCellValueFactory(new PropertyValueFactory<>("typeOfGadget"));
         clmBedroom.setCellValueFactory(new PropertyValueFactory<>("typeOfGadget"));
+
+        tblVKitchen.setPlaceholder(new Label(""));
+        tblVLivingRoom.setPlaceholder(new Label(""));
+        tblVToilet.setPlaceholder(new Label(""));
+        tblVGarage.setPlaceholder(new Label(""));
+        tblVBedRoom.setPlaceholder(new Label(""));
 
         for (Node node : blueprint.getChildren()) {
             if (node instanceof Label) {
