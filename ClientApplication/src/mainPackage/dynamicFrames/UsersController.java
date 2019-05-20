@@ -77,7 +77,7 @@ public class UsersController implements DynamicFrame {
                 (obs, oldSelection, newSelection) -> {
                     if (newSelection != null) {
 
-                        if (newSelection.isAdmin()) {
+                        if (newSelection.isAdmin() & !newSelection.getEmail().equals(AccountLoggedin.getInstance().getLoggedInAccount().getEmail())) {
                             editBtn.setDisable(true);
                             deleteUserButton.setDisable(true);
                         } else {
@@ -218,7 +218,7 @@ public class UsersController implements DynamicFrame {
             if (addUser) {
                 try {
                     // Form a proper request, according to communiaction protocolrd
-                    String serverRequest = String.format("%s%s%s%s%s%s%s%s", "11:", email, ":", name, ":", admin, ":", password);
+                    String serverRequest = String.format("%s%s%s%s%s%s%s%s", "11a:", email, ":", name, ":", admin, ":", password);
                     //Add request to requestsToServer
                     Main.getMainWindowController().requestsToServer.put(serverRequest);
                 } catch (InterruptedException e) {
@@ -251,7 +251,7 @@ public class UsersController implements DynamicFrame {
     void deleteUser() {
         String accountID = accountList.get(usersTable.getSelectionModel().getFocusedIndex()).getEmail();
         try {
-            String serverRequest = String.format("%s%s", "19:", accountID);
+            String serverRequest = String.format("%s%s", "11b:", accountID);
             Main.getMainWindowController().requestsToServer.put(serverRequest);
         } catch (InterruptedException e) {
             e.printStackTrace();
