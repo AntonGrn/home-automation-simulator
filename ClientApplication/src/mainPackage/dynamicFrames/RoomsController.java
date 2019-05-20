@@ -81,6 +81,9 @@ public class RoomsController implements DynamicFrame {
         //add to tblView roomsHeader, will never be changed
         tblViewRooms.getItems().addAll(listOfRoomButtonsHeader);
 
+        //setting prompt text in tableview
+        tblViewDynamicGadgets.setPlaceholder(new Label("You have no gadgets available"));
+
         //update all clients and tables and such, when a request is confirmed from server.
         updateFrame();
 
@@ -149,8 +152,8 @@ public class RoomsController implements DynamicFrame {
                 if (g.getRoom().equals(roomName)) {
 
                     String stateOfGadget;
-                    String gadgetName = "";
-                    String typeOfGadget = "";
+                    String gadgetName;
+                    String typeOfGadget;
                     if (g.getState() instanceof Boolean) {
                         if (g.getState().equals(true)) {
                             stateOfGadget = "switchButtonOn";
@@ -162,7 +165,10 @@ public class RoomsController implements DynamicFrame {
                         GuiObject guiObject = new GuiObject(typeOfGadget, gadgetName, stateOfGadget, g.getId());
                         gadgetList.add(guiObject);
                     } else {
-                        stateOfGadget = g.getClass().getSimpleName() + String.valueOf(g.getState()); //example 'Heat20'
+                        gadgetName = g.getName();
+                        typeOfGadget = g.getClass().getSimpleName() + String.valueOf(g.getState()); //example 'Heat20'
+                        stateOfGadget = "HeatIncrement";
+                        System.out.println(typeOfGadget);
                         GuiObject guiObject = new GuiObject(typeOfGadget, gadgetName, stateOfGadget, g.getId());
                         gadgetList.add(guiObject);
                     }
@@ -186,7 +192,7 @@ public class RoomsController implements DynamicFrame {
 
             if (tableColumn.getCellObservableValue(gui).getValue() instanceof ImageView) {
                 ImageView data = (ImageView) tableColumn.getCellObservableValue(gui).getValue();
-                if (data.getImage().getUrl().contains("switchButton") || data.getImage().getUrl().contains("Heat2")) {
+                if (data.getImage().getUrl().contains("switchButton") || data.getImage().getUrl().contains("Heat")) {
 
                     //clears selection directly after a cell has been clicked
                     tblViewDynamicGadgets.getSelectionModel().clearSelection();
@@ -205,8 +211,8 @@ public class RoomsController implements DynamicFrame {
                                 serverRequest = String.format("%s%s%s%s", "3:", id, ":", (state ? "1" : "0"));
                             } else {
                                 //create a protocol string according to Laas protocol.
-                                temp = (Integer) g.getState();
-                                serverRequest = String.format("/s/s/s/s", "3:", id, ":", String.valueOf(temp));
+                                temp = alterHeatState(String.valueOf(g.getState()));
+                                serverRequest = String.format("%s%s%s%s", "3:", id, ":", String.valueOf(temp));
                             }
                             try {
                                 //add to request to server
@@ -225,9 +231,35 @@ public class RoomsController implements DynamicFrame {
             } else {
                 tblViewDynamicGadgets.getSelectionModel().clearSelection();
             }
-        }catch (RuntimeException e){
-            System.out.println("ROOMSCONTROLLER PLEASE SELECT A GADGET AND NOT EMPTY ROW, \n WE NEED TO FIX GUYS HEH");
+        } catch (RuntimeException e) {
+            //TODO
+            System.out.println("Need to fix selection of this bitch here roomscontroller LLOOOOK HERE GUYS ");
         }
+    }
+
+    public int alterHeatState(String temp) {
+        int newTemp = 0;
+        switch (temp) {
+            case "0":
+                newTemp = 20;
+                break;
+            case "20":
+                newTemp = 22;
+                break;
+            case "22":
+                newTemp = 24;
+                break;
+            case "24":
+                newTemp = 26;
+                break;
+            case "26":
+                newTemp = 28;
+                break;
+            case "28":
+                newTemp = 0;
+                break;
+        }
+        return newTemp;
     }
 
     public void scrollLeft() {

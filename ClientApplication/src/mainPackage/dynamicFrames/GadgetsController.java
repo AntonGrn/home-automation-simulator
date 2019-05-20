@@ -70,6 +70,9 @@ public class GadgetsController implements DynamicFrame {
         Main.getMainWindowController().setCurrentDynamicFrameController(this);
 
         gadgetTableItemsList = new ArrayList<>();
+
+        //setting prompt text in the tableview
+        tblViewCurrentGadgets.setPlaceholder(new Label("You have no gadgets available"));
         updateFrame();
     }
 
@@ -199,23 +202,27 @@ public class GadgetsController implements DynamicFrame {
                                 String room = dropMenuRooms.getSelectionModel().getSelectedItem();
                                 String newConsumption = txtfldConsumption.getText();
 
-                                //Creating Laas string according to protocol.
-                                String serverRequest = String.format("%s%s%s%s%s%s%s%s%s%s", "6:", type, ":", id, ":", newName, ":", room, ":", newConsumption);
-                                try {
-                                    //putting serverRequest into requestToServer list.
-                                    Main.getMainWindowController().requestsToServer.put(serverRequest);
+                                if (newName.contains(":")) {
+                                    Main.getMainWindowController().exceptionLabel.setText("Please don't use ':' in name of gadget");
+                                } else {
+                                    //Creating Laas string according to protocol.
+                                    String serverRequest = String.format("%s%s%s%s%s%s%s%s%s%s", "6:", type, ":", id, ":", newName, ":", room, ":", newConsumption);
+                                    try {
+                                        //putting serverRequest into requestToServer list.
+                                        Main.getMainWindowController().requestsToServer.put(serverRequest);
 
-                                    //setting all buttons,textfields and dropmenus as disabled so user have to click for example "add gadget"
-                                    //after the request has been sent and none exceptions has been caught
-                                    txtfldConsumption.setDisable(true);
-                                    txtfldGadgetName.setDisable(true);
-                                    dropMenuGadgets.setDisable(true);
-                                    dropMenuRooms.setDisable(true);
-                                    btnSubmit.setDisable(true);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                } catch (Exception e) {
-                                    Main.getMainWindowController().exceptionLabel.setText("Could not update gadget info..");
+                                        //setting all buttons,textfields and dropmenus as disabled so user have to click for example "add gadget"
+                                        //after the request has been sent and none exceptions has been caught
+                                        txtfldConsumption.setDisable(true);
+                                        txtfldGadgetName.setDisable(true);
+                                        dropMenuGadgets.setDisable(true);
+                                        dropMenuRooms.setDisable(true);
+                                        btnSubmit.setDisable(true);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    } catch (Exception e) {
+                                        Main.getMainWindowController().exceptionLabel.setText("Could not update gadget info..");
+                                    }
                                 }
                             }
                         }
@@ -243,23 +250,26 @@ public class GadgetsController implements DynamicFrame {
                             String room = dropMenuRooms.getSelectionModel().getSelectedItem();
                             String consumption = txtfldConsumption.getText();
 
-                            //Creating Laas string according to protocol.
-                            String serverRequest = String.format("%s%s%s%s%s%s%s%s", "7a:", type, ":", nameOfGadget, ":", room, ":", consumption);
-                            try {
-                                //putting serverRequest into requestToServer list.
-                                Main.getMainWindowController().requestsToServer.put(serverRequest);
+                            if (nameOfGadget.contains(":")) {
+                                Main.getMainWindowController().exceptionLabel.setText("Please don't use ':' in name of gadget");
+                            } else {
+                                //Creating Laas string according to protocol.
+                                String serverRequest = String.format("%s%s%s%s%s%s%s%s", "7a:", type, ":", nameOfGadget, ":", room, ":", consumption);
+                                try {
+                                    //putting serverRequest into requestToServer list.
+                                    Main.getMainWindowController().requestsToServer.put(serverRequest);
 
-                                //setting all buttons,textfields and dropmenus as disabled so user have to click for example "add gadget"
-                                //after the request has been sent and none exceptions has been caught
-                                txtfldConsumption.setDisable(true);
-                                txtfldGadgetName.setDisable(true);
-                                dropMenuGadgets.setDisable(true);
-                                dropMenuRooms.setDisable(true);
-                                btnSubmit.setDisable(true);
-                            } catch (InterruptedException ie) {
-                                ie.printStackTrace();
-                            } catch (Exception e) {
-                                Main.getMainWindowController().exceptionLabel.setText("Could not add gadget..");
+                                    //setting all buttons,textfields and dropmenus as disabled so user have to click for example "add gadget"
+                                    txtfldConsumption.setDisable(true);
+                                    txtfldGadgetName.setDisable(true);
+                                    dropMenuGadgets.setDisable(true);
+                                    dropMenuRooms.setDisable(true);
+                                    btnSubmit.setDisable(true);
+                                } catch (InterruptedException ie) {
+                                    ie.printStackTrace();
+                                } catch (Exception e) {
+                                    Main.getMainWindowController().exceptionLabel.setText("Could not add gadget..");
+                                }
                             }
                         } else {
                             Main.getMainWindowController().exceptionLabel.setText("Please enter a valid consumption number..");
