@@ -71,7 +71,7 @@ public class MainWindowController {
     public StringProperty chosenRoom;
 
     //Fake button for the enabling of loginScene
-    private Button btnLogin;
+    private Button btnLogin,btnWelcome;
 
     @FXML
     public void initialize() {
@@ -86,6 +86,11 @@ public class MainWindowController {
         btnLogin = new Button();
         btnLogin.setUserData("Login");
         btnLogin.setOnAction(this::setDynamicFrame);
+        //using this btn to fire the welcome screen after login
+        btnWelcome = new Button();
+        btnWelcome.setUserData("Welcome");
+        btnWelcome.setOnAction(this::setDynamicFrame);
+
 
         gadgetList = new ArrayList<>();
         logsList = new ArrayList<>();
@@ -186,7 +191,7 @@ public class MainWindowController {
             }
         }
         //Scene to load when logged in
-        //btnRooms.fire();
+        btnWelcome.fire();
     }
 
     public void isNotLoggedIn() {
