@@ -96,7 +96,6 @@
 
 /*------------------------- DynamicFrame Rooms ------------------------------*/
 
-/*
 .table-view .table-column{
     -fx-alignment: CENTER;
     -fx-text-fill: WHITE;
@@ -107,46 +106,63 @@
     -fx-background-color: #231f26;
     -fx-table-cell-border-color: transparent;
     -fx-table-column-border-color: transparent;
-    -fx-background-insets: 0 0 0 0, 0, 1,2;
+    -fx-background-insets: 0;
 }
 
-.table-row-cell:focused{
+.table-view:pressed .table-view{
     -fx-text-fill: WHITE;
-    -fx-background-color: transparent;
+    -fx-background-color: #231f26;
     -fx-table-cell-border-color: transparent;
     -fx-table-column-border-color: transparent;
-    -fx-background-insets: 0 0 0 0, 0, 1,2;
+    -fx-background-insets: 0;
 }
 
 .table-view .column-header-background{
     -fx-min-height: 0;
     -fx-max-height: 0;
     -fx-pref-height: 6;
-    -fx-background-insets: 0 0 0 0, 0, 1,2;
+    -fx-background-insets: 0;
 }
 
-.table-view .table-row{
-visibility:hidden;
+.table-view .table-row:selected{
     -fx-border-color: transparent;
     -fx-background-color: transparent;
-    -fx-background-insets: 0 0 0 0, 0, 1,2;
+    -fx-background-insets: 0;
+}
+
+.table-view .table-row:pressed .table-row{
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
 }
 
 .table-view .table-row-cell{
     -fx-background-color: #231f26;
     -fx-border-color: transparent;
-    -fx-border-width: 0;
     -fx-table-cell-border-color: transparent;
-    -fx-background-insets: 0 0 0 0, 0, 1,2;
+    -fx-background-insets: 0;
 }
 
-.table-view .table-row-cell:selected{
+.table-view .table-row-cell:selected .table-cell{
     -fx-background-color: #231f26;
     -fx-border-color: transparent;
-    -fx-border-width: 0;
+    -fx-table-cell-border-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.table-view .table-row-cell:pressed .table-cell{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.table-view .table-row-cell:focused .table-cell{
+    -fx-background-color: #231f26;
+    -fx-border-color: transparent;
     -fx-text-fill: WHITE;
     -fx-table-cell-border-color: transparent;
-    -fx-background-insets: 0 0 0 0, 0, 1,2;
+        -fx-background-insets: 0;
 }
 
 .table-view .scroll-bar:vertical .thumb{
@@ -174,7 +190,6 @@ visibility:hidden;
     -fx-padding: 0;
     -fx-shape: null;
 }
-*/
 
 
 /*---------------------------Gadget dynamicFrames--------------------*/

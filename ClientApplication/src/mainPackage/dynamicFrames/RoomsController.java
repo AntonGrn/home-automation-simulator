@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -26,6 +27,7 @@ import mainPackage.modelClasses.GuiObject;
 import mainPackage.modelClasses.Lamp;
 import mainPackage.modelClasses.RoomSlider;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -64,6 +66,9 @@ public class RoomsController implements DynamicFrame {
     private String currentRoomButtonSelected;
 
     public void initialize() {
+        //setting tablieview so it doesnt autoFocus it..
+        tblViewDynamicGadgets.setFocusTraversable(false);
+
         //making sure so the mainwindow knows which controller that is in charge.
         Main.getMainWindowController().setCurrentDynamicFrameController(this);
 
@@ -173,48 +178,55 @@ public class RoomsController implements DynamicFrame {
 
 
     public void onChangeStateOfGadget() {
-        TablePosition pos = (TablePosition) tblViewDynamicGadgets.getSelectionModel().getSelectedCells().get(0);
-        int row = pos.getRow();
-        TableColumn tableColumn = pos.getTableColumn();
-        GuiObject gui = tblViewDynamicGadgets.getItems().get(row);
+        try {
+            TablePosition pos = (TablePosition) tblViewDynamicGadgets.getSelectionModel().getSelectedCells().get(0);
+            int row = pos.getRow();
+            TableColumn tableColumn = pos.getTableColumn();
+            GuiObject gui = tblViewDynamicGadgets.getItems().get(row);
 
-        if (tableColumn.getCellObservableValue(gui).getValue() instanceof ImageView) {
-            ImageView data = (ImageView) tableColumn.getCellObservableValue(gui).getValue();
-            if (data.getImage().getUrl().contains("switchButton") || data.getImage().getUrl().contains("Heat2")) {
+            if (tableColumn.getCellObservableValue(gui).getValue() instanceof ImageView) {
+                ImageView data = (ImageView) tableColumn.getCellObservableValue(gui).getValue();
+                if (data.getImage().getUrl().contains("switchButton") || data.getImage().getUrl().contains("Heat2")) {
 
-                //clears selection directly after a cell has been clicked
-                tblViewDynamicGadgets.getSelectionModel().clearSelection();
+                    //clears selection directly after a cell has been clicked
+                    tblViewDynamicGadgets.getSelectionModel().clearSelection();
 
-                for (Gadget g : Main.getMainWindowController().gadgetList) {
-                    if (g.getId() == gui.getId() && g.getName() == gui.getGadgetName()) {
+                    for (Gadget g : Main.getMainWindowController().gadgetList) {
+                        if (g.getId() == gui.getId() && g.getName() == gui.getGadgetName()) {
 
-                        String serverRequest;
-                        String id = String.valueOf(g.getId());
-                        boolean state;
-                        int temp;
+                            String serverRequest;
+                            String id = String.valueOf(g.getId());
+                            boolean state;
+                            int temp;
 
-                        if (g.getState() instanceof Boolean) {
-                            state = !(Boolean) g.getState();
-                            //create a protocol string according to Laas protocol.
-                            serverRequest = String.format("%s%s%s%s", "3:", id, ":", (state ? "1" : "0"));
-                            System.out.println(serverRequest);
-                        } else {
-                            System.out.println("2");
-                            //create a protocol string according to Laas protocol.
-                            temp = (Integer) g.getState();
-                            serverRequest = String.format("/s/s/s/s", "3:", id, ":", String.valueOf(temp));
-                        }
-                        try {
-                            //add to request to server
-                            Main.getMainWindowController().requestsToServer.put(serverRequest);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (Exception ex) {
-                            Main.getMainWindowController().exceptionLabel.setText("Could not change state of gadget");
+                            if (g.getState() instanceof Boolean) {
+                                state = !(Boolean) g.getState();
+                                //create a protocol string according to Laas protocol.
+                                serverRequest = String.format("%s%s%s%s", "3:", id, ":", (state ? "1" : "0"));
+                            } else {
+                                //create a protocol string according to Laas protocol.
+                                temp = (Integer) g.getState();
+                                serverRequest = String.format("/s/s/s/s", "3:", id, ":", String.valueOf(temp));
+                            }
+                            try {
+                                //add to request to server
+                                Main.getMainWindowController().requestsToServer.put(serverRequest);
+                                tblViewDynamicGadgets.getSelectionModel().clearSelection();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (Exception ex) {
+                                Main.getMainWindowController().exceptionLabel.setText("Could not change state of gadget");
+                            }
                         }
                     }
+                } else {
+                    tblViewDynamicGadgets.getSelectionModel().clearSelection();
                 }
+            } else {
+                tblViewDynamicGadgets.getSelectionModel().clearSelection();
             }
+        }catch (RuntimeException e){
+            System.out.println("ROOMSCONTROLLER PLEASE SELECT A GADGET AND NOT EMPTY ROW, \n WE NEED TO FIX GUYS HEH");
         }
     }
 

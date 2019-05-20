@@ -54,7 +54,7 @@
                   </Button>
                </children>
             </HBox>
-            <TableView fx:id="tblViewCurrentGadgets" prefHeight="200.0" prefWidth="200.0">
+            <TableView fx:id="tblViewCurrentGadgets" prefHeight="200.0" prefWidth="200.0" stylesheets="@../tableData.css">
               <columns>
                 <TableColumn fx:id="clmType" prefWidth="133.0" text="Type" />
                 <TableColumn fx:id="clmName" prefWidth="133.0" text="Name" />
