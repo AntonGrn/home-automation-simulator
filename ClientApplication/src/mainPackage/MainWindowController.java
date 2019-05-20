@@ -52,6 +52,7 @@ public class MainWindowController {
     public Label exceptionLabel, loggedInLabel;
 
     private DynamicFrame currentDynamicFrameController;
+    private DynamicFrame bluePrint;
 
     public ArrayList<Gadget> gadgetList;
     public ArrayList<String[]> logsList;
@@ -189,7 +190,7 @@ public class MainWindowController {
         //Go to login screen
         btnLogin.fire();
 
-        //Set all menu buttons to dosabled
+        //Set all menu buttons to disabled
         for (Node node : menuFrame.getChildren()) {
             if (node instanceof Button) {
                 ((Button) node).setDisable(true);
@@ -284,12 +285,9 @@ public class MainWindowController {
             exceptionLabel.setText("Unable to update from server");
         }
         currentDynamicFrameController.updateFrame();
-
-        for(Gadget g : gadgetList) {
-            System.out.println(g.getName());
-        }
-
+        bluePrint.updateFrame();
     }
+
     private void updateGadgetsStates(String[] commands) {
         if (commands[1].equals("notnull")) {
             int count = 1;
