@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;;
+import mainPackage.AccountLoggedin;
 import mainPackage.Main;
 import mainPackage.ServerConnection;
 import mainPackage.DynamicFrame;
@@ -67,7 +68,7 @@ public class TestController implements DynamicFrame {
         String consumption = "25";
         try {
             Main.getMainWindowController().requestsToServer.put(
-                    "7:" + type +":" + name + ":" + room + ":" + consumption);
+                    "7a:" + type +":" + name + ":" + room + ":" + consumption);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

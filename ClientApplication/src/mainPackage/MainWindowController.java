@@ -52,6 +52,7 @@ public class MainWindowController {
     public Label exceptionLabel, loggedInLabel;
 
     private DynamicFrame currentDynamicFrameController;
+    private DynamicFrame bluePrint;
 
     public ArrayList<Gadget> gadgetList;
     public ArrayList<String[]> logsList;
@@ -97,12 +98,13 @@ public class MainWindowController {
         chosenRoom = new SimpleStringProperty("null");
 
         //Until we can get Gadgets from Server:
-        gadgetList.add(new Lamp("LampOne", false, 25, "Kitchen", 1));
-        gadgetList.add(new Lamp("LampTwo", false, 25, "Kitchen", 2));
-        gadgetList.add(new Lamp("LampThree", false, 25, "Bedroom", 3));
+        gadgetList.add(new Lamp("LampOne",false,25,"Kitchen",1));
+        gadgetList.add(new Lamp("LampTwo",false,25,"Kitchen",2));
+        gadgetList.add(new Lamp("LampThree",false,25,"Bedroom",3));
+        gadgetList.add(new Door("DoorOne",false,25,"Livingroom",4));
+        gadgetList.add(new Lamp("LampFour",true,25,"Bedroom",5));
+        gadgetList.add(new Lamp("LampFive",false,25,"Bedroom",6));
 
-        //Loads the blueprint into the mainwindow HouseFrame
-        setBlueprint();
 
         //Add listener to loggedInAccount object's loggedInAccountProperty
         AccountLoggedin.getInstance().loggedInAccountProperty().addListener(
@@ -144,7 +146,17 @@ public class MainWindowController {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                //Set initial state to not logged in
                 isNotLoggedIn();
+
+                //Loads the blueprint into the mainwindow HouseFrame
+                try {
+                    houseFrame.getChildren().clear();
+                    houseFrame.getChildren().add(FXMLLoader.load(getClass().getResource("houseFrame/Blueprint.fxml")));
+                } catch (IOException e) {
+                    Main.getMainWindowController().exceptionLabel.setText("Could not load blueprint into mainframe");
+
+                }
             }
         });
     }
@@ -176,7 +188,7 @@ public class MainWindowController {
             }
         }
         //Scene to load when logged in
-        btnRooms.fire();
+        //btnRooms.fire();
     }
 
     public void isNotLoggedIn() {
@@ -191,7 +203,7 @@ public class MainWindowController {
         //Go to login screen
         btnLogin.fire();
 
-        //Set all menu buttons to dosabled
+        //Set all menu buttons to disabled
         for (Node node : menuFrame.getChildren()) {
             if (node instanceof Button) {
                 ((Button) node).setDisable(true);
@@ -201,6 +213,10 @@ public class MainWindowController {
 
     public void setCurrentDynamicFrameController(DynamicFrame controller) {
         currentDynamicFrameController = controller;
+    }
+
+    public void setBluePrintController(DynamicFrame bluePrint) {
+        currentDynamicFrameController = bluePrint;
     }
 
     @FXML
@@ -233,16 +249,6 @@ public class MainWindowController {
         } catch (NullPointerException e) {
             e.printStackTrace();
             exceptionLabel.setText("Unable to load new scene.");
-        }
-    }
-
-    //Adding blueprint to houseframe window
-    public void setBlueprint() {
-        try {
-            houseFrame.getChildren().clear();
-            houseFrame.getChildren().add(FXMLLoader.load(getClass().getResource("houseFrame/Blueprint.fxml")));
-        } catch (IOException e) {
-
         }
     }
 
@@ -287,12 +293,9 @@ public class MainWindowController {
             exceptionLabel.setText("Unable to update from server");
         }
         currentDynamicFrameController.updateFrame();
-
-        for(Gadget g : gadgetList) {
-            System.out.println(g.getName());
-        }
-
+        bluePrint.updateFrame();
     }
+
     private void updateGadgetsStates(String[] commands) {
         if (commands[1].equals("notnull")) {
             int count = 1;
