@@ -4,6 +4,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import mainPackage.AccountLoggedin;
 import mainPackage.DynamicFrame;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -30,6 +31,7 @@ public class BlueprintController implements DynamicFrame {
 
     @FXML
     private TableView<GuiObject> tblVLivingRoom;
+    //TODO fixa namn på livingroom
     @FXML
     private TableColumn<GuiObject, ImageView> clmLivingroom;
 
@@ -39,6 +41,7 @@ public class BlueprintController implements DynamicFrame {
     private TableColumn<GuiObject, ImageView> clmToilet;
 
     @FXML
+    //TODO fixa namn på bedroom
     private TableView<GuiObject> tblVBedRoom;
     @FXML
     private TableColumn<GuiObject, ImageView> clmBedroom;
@@ -56,11 +59,19 @@ public class BlueprintController implements DynamicFrame {
     ArrayList<GuiObject> garageGadgetList = new ArrayList<>();
 
     public void initialize() {
+        Main.getMainWindowController().setBluePrintController(this);
+
         clmKitchen.setCellValueFactory(new PropertyValueFactory<>("typeOfGadget"));
         clmLivingroom.setCellValueFactory(new PropertyValueFactory<>("typeOfGadget"));
         clmToilet.setCellValueFactory(new PropertyValueFactory<>("typeOfGadget"));
         clmGarage.setCellValueFactory(new PropertyValueFactory<>("typeOfGadget"));
         clmBedroom.setCellValueFactory(new PropertyValueFactory<>("typeOfGadget"));
+
+        tblVKitchen.setPlaceholder(new Label(""));
+        tblVLivingRoom.setPlaceholder(new Label(""));
+        tblVToilet.setPlaceholder(new Label(""));
+        tblVGarage.setPlaceholder(new Label(""));
+        tblVBedRoom.setPlaceholder(new Label(""));
 
         for (Node node : blueprint.getChildren()) {
             if (node instanceof Label) {
@@ -110,6 +121,11 @@ public class BlueprintController implements DynamicFrame {
 
     public void showGadgetOnBlueprint() {
         String typeOfGadget;
+        kitchenGadgetList.clear();
+        livingroomGadgetList.clear();
+        toiletGadgetList.clear();
+        garageGadgetList.clear();
+        bedroomGadgetList.clear();
         try {
             for (Gadget g : Main.getMainWindowController().gadgetList) {
                 switch (g.getRoom()) {
@@ -153,6 +169,17 @@ public class BlueprintController implements DynamicFrame {
         } catch (Exception e) {
             e.printStackTrace();
             Main.getMainWindowController().exceptionLabel.setText("Could not load gadgets into blueprint");
+        }
+
+        try {
+            AccountLoggedin.getInstance().getLoggedInAccount().getEmail();
+        }catch(NullPointerException e) {
+            for (Node node : blueprint.getChildren()) {
+                if (node instanceof Label) {
+                    node.setVisible(false);
+                    node.setStyle("");
+                }
+            }
         }
     }
 }

@@ -71,7 +71,7 @@ public class MainWindowController {
     public StringProperty chosenRoom;
 
     //Fake button for the enabling of loginScene
-    private Button btnLogin;
+    private Button btnLogin,btnWelcome;
 
     @FXML
     public void initialize() {
@@ -86,6 +86,11 @@ public class MainWindowController {
         btnLogin = new Button();
         btnLogin.setUserData("Login");
         btnLogin.setOnAction(this::setDynamicFrame);
+        //using this btn to fire the welcome screen after login
+        btnWelcome = new Button();
+        btnWelcome.setUserData("Welcome");
+        btnWelcome.setOnAction(this::setDynamicFrame);
+
 
         gadgetList = new ArrayList<>();
         logsList = new ArrayList<>();
@@ -98,12 +103,13 @@ public class MainWindowController {
         chosenRoom = new SimpleStringProperty("null");
 
         //Until we can get Gadgets from Server:
-        gadgetList.add(new Lamp("LampOne", false, 25, "Kitchen", 1));
-        gadgetList.add(new Lamp("LampTwo", false, 25, "Kitchen", 2));
-        gadgetList.add(new Lamp("LampThree", false, 25, "Bedroom", 3));
+        gadgetList.add(new Lamp("LampOne",false,25,"Kitchen",1));
+        gadgetList.add(new Lamp("LampTwo",false,25,"Kitchen",2));
+        gadgetList.add(new Lamp("LampThree",false,25,"Bedroom",3));
+        gadgetList.add(new Door("DoorOne",false,25,"Livingroom",4));
+        gadgetList.add(new Lamp("LampFour",true,25,"Bedroom",5));
+        gadgetList.add(new Lamp("LampFive",false,25,"Bedroom",6));
 
-        //Loads the blueprint into the mainwindow HouseFrame
-        setBlueprint();
 
         //Add listener to loggedInAccount object's loggedInAccountProperty
         AccountLoggedin.getInstance().loggedInAccountProperty().addListener(
@@ -145,6 +151,14 @@ public class MainWindowController {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                //Loads the blueprint into the mainwindow HouseFrame
+                try {
+                    houseFrame.getChildren().clear();
+                    houseFrame.getChildren().add(FXMLLoader.load(getClass().getResource("houseFrame/Blueprint.fxml")));
+                } catch (IOException e) {
+                    Main.getMainWindowController().exceptionLabel.setText("Could not load blueprint into mainframe");
+                }
+                //Set initial state to not logged in
                 isNotLoggedIn();
             }
         });
@@ -177,7 +191,7 @@ public class MainWindowController {
             }
         }
         //Scene to load when logged in
-        btnRooms.fire();
+        btnWelcome.fire();
     }
 
     public void isNotLoggedIn() {
@@ -188,6 +202,7 @@ public class MainWindowController {
         requestsFromServer.clear();
 
         loggedInLabel.setText("Not logged in");
+        bluePrint.updateFrame();
 
         //Go to login screen
         btnLogin.fire();
@@ -202,6 +217,10 @@ public class MainWindowController {
 
     public void setCurrentDynamicFrameController(DynamicFrame controller) {
         currentDynamicFrameController = controller;
+    }
+
+    public void setBluePrintController(DynamicFrame bluePrint) {
+        this.bluePrint = bluePrint;
     }
 
     @FXML
@@ -234,16 +253,6 @@ public class MainWindowController {
         } catch (NullPointerException e) {
             e.printStackTrace();
             exceptionLabel.setText("Unable to load new scene.");
-        }
-    }
-
-    //Adding blueprint to houseframe window
-    public void setBlueprint() {
-        try {
-            houseFrame.getChildren().clear();
-            houseFrame.getChildren().add(FXMLLoader.load(getClass().getResource("houseFrame/Blueprint.fxml")));
-        } catch (IOException e) {
-
         }
     }
 

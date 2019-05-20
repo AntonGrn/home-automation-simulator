@@ -12,22 +12,23 @@ public class GuiObject {
 
 
     public GuiObject(String typeOfGadget,String gadgetName,String stateOfGadget, int id) {
-        this.typeOfGadget = new ImageView(new Image("mainPackage/images/" + typeOfGadget + ".png"));
+        this.typeOfGadget = new ImageView(new Image("/mainPackage/images/" + typeOfGadget + ".png"));
         this.gadgetName = gadgetName;
-        this.stateOfGadget = new ImageView(new Image("mainPackage/images/" + stateOfGadget + ".png"));
+        this.stateOfGadget = new ImageView(new Image("/mainPackage/images/" + stateOfGadget + ".png"));
         this.id= id;
 
-        this.typeOfGadget.setFitHeight(25);
-        this.typeOfGadget.setFitWidth(60);
+        this.typeOfGadget.setFitHeight(40);
+        this.typeOfGadget.setFitWidth(40);
 
-        this.stateOfGadget.setFitHeight(25);
-        this.stateOfGadget.setFitWidth(60);
+        this.stateOfGadget.setFitHeight(30);
+        this.stateOfGadget.setFitWidth(70);
     }
 
     public GuiObject(String typeOfGadget){
         this.typeOfGadget = new ImageView(new Image("mainPackage/images/" + typeOfGadget + ".png"));
-        this.typeOfGadget.setFitHeight(25);
-        this.typeOfGadget.setFitWidth(60);
+
+        this.typeOfGadget.setFitHeight(30);
+        this.typeOfGadget.setFitWidth(30);
     }
 
     public String getGadgetName() {

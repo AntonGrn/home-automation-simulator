@@ -86,60 +86,87 @@
     -fx-text-fill: white;
 }
 
-/*------------------------- DynamicFrame Rooms ------------------------------*/
 
+
+/*------------------------- DynamicFrame Rooms ------------------------------*/
 /*
-#tblViewRooms .table-column{
+.table-view .table-column{
     -fx-alignment: CENTER;
+    -fx-text-fill: WHITE;
 }
 
-#tblViewRooms {
+.table-view {
     -fx-text-fill: WHITE;
     -fx-background-color: #231f26;
     -fx-table-cell-border-color: transparent;
     -fx-table-column-border-color: transparent;
-    -fx-background-insets: 0 0 0 0, 0, 1,2;
+    -fx-background-insets: 0;
 }
 
-#tblViewRooms .column-header-background{
+.table-view:pressed .table-view{
+    -fx-text-fill: WHITE;
+    -fx-background-color: #231f26;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-column-border-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.table-view .column-header-background{
     -fx-min-height: 0;
     -fx-max-height: 0;
-    -fx-pref-height: 0;
-    -fx-background-insets: 0 0 0 0, 0, 1,2;
+    -fx-pref-height: 6;
+    -fx-background-insets: 0;
 }
 
-#tblViewRooms .table-row{
-visibility:hidden;
+.table-view .table-row:selected{
     -fx-border-color: transparent;
     -fx-background-color: transparent;
-    -fx-background-insets: 0 0 0 0, 0, 1,2;
+    -fx-background-insets: 0;
 }
 
-#tblViewRooms .table-row-cell{
+.table-view .table-row:pressed .table-row{
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.table-view .table-row-cell{
     -fx-background-color: #231f26;
     -fx-border-color: transparent;
-    -fx-border-width: 0;
     -fx-table-cell-border-color: transparent;
-    -fx-background-insets: 0 0 0 0, 0, 1,2;
+    -fx-background-insets: 0;
 }
 
-#tblViewRooms .table-row-cell:selected{
+.table-view .table-row-cell:selected .table-cell{
     -fx-background-color: #231f26;
     -fx-border-color: transparent;
-    -fx-border-width: 0;
+    -fx-table-cell-border-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.table-view .table-row-cell:pressed .table-cell{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.table-view .table-row-cell:focused .table-cell{
+    -fx-background-color: #231f26;
+    -fx-border-color: transparent;
     -fx-text-fill: WHITE;
     -fx-table-cell-border-color: transparent;
-    -fx-background-insets: 0 0 0 0, 0, 1,2;
+        -fx-background-insets: 0;
 }
 
-#tblViewRooms.scroll-bar:vertical .thumb{
+.table-view .scroll-bar:vertical .thumb{
     -fx-background-color: #231f26;
 }
 
-#tblViewRooms *.scroll-bar:horizontal *.increment-arrow,
-#tblViewRooms *.scroll-bar:horizontal *.decrement-arrow,
-#tblViewRooms *.scroll-bar:horizontal *.increment-button,
-#tblViewRooms *.scroll-bar:horizontal *.decrement-button{
+.table-view *.scroll-bar:horizontal *.increment-arrow,
+.table-view *.scroll-bar:horizontal *.decrement-arrow,
+.table-view *.scroll-bar:horizontal *.increment-button,
+.table-view *.scroll-bar:horizontal *.decrement-button{
     -fx-background-color: null;
     -fx-background-radius: 0;
     -fx-background-insets: 0;
@@ -147,10 +174,10 @@ visibility:hidden;
     -fx-shape: null;
 }
 
-#tblViewRooms *.scroll-bar:vertical *.increment-arrow,
-#tblViewRooms *.scroll-bar:vertical *.decrement-arrow,
-#tblViewRooms *.scroll-bar:vertical *.increment-button,
-#tblViewRooms *.scroll-bar:vertical *.decrement-button{
+.table-view *.scroll-bar:vertical *.increment-arrow,
+.table-view *.scroll-bar:vertical *.decrement-arrow,
+.table-view *.scroll-bar:vertical *.increment-button,
+.table-view *.scroll-bar:vertical *.decrement-button{
     -fx-background-color: null;
     -fx-background-radius: 0;
     -fx-background-insets: 0;
@@ -159,3 +186,71 @@ visibility:hidden;
 }
 */
 
+/*---------------------------Gadget dynamicFrames--------------------*/
+
+/*
+#231f26 BLACK like root
+#346189 BLUE like textfields
+#444444 GRAY like buttons
+##656262 like button hover
+#346189 like button pressed
+*/
+
+#gridLowerBorder {
+    -fx-border-color: #9d9d9e; /* Top right bottom left*/
+    -fx-border-width: 3 0 0 0;
+}
+
+#btnEditGadget, #btnAddGadget, #btnDelete, #btnSubmit {
+    -fx-background-color: #444444;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-border-radius: 3 3 3 3;
+    -fx-background-radius: 3 3 3 3;
+    -fx-border-width: 0 0 0 0;
+}
+
+#btnEditGadget, #btnAddGadget, #btnDelete, #btnSubmit:hover{
+    -fx-background-color: #656262;
+    -fx-border-width: 0 0 0 0;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-border-radius: 3 3 3 3;
+    -fx-background-radius: 3 3 3 3;
+    -fx-border-width: 0 0 0 0;
+}
+
+.choice-box{
+-fx-background-color: #346189;
+-fx-mark-color: #231f26;
+}
+
+/* Background color of the whole context menu */
+.choice-box .context-menu {
+-fx-background-color: #346189;
+}
+
+/* Focused item background color in the list */
+.choice-box .menu-item:focused {
+-fx-background-color: #231f26;
+}
+
+/* Text color of non-focused items in the list */
+.choice-box .menu-item > .label {
+ -fx-text-fill: WHITE§;
+ }
+
+/* Text color of focused item in the list */
+.choice-box .menu-item:focused > .label {
+-fx-text-fill: WHITE;
+}
+
+/*------------------------- BluePrint Controller ------------------------------*/
+
+#tblVKitchen, #tblVLivingRoom, #tblVToilet, #tblVBedRoom, #tblVGarage, .table-view{
+-fx-background-color: transparent;
+}
+
+#clmKitchen, #clmLivingroom, #clmToilet, #clmBedroom, #clmGarage, .table-view .table-row-cell{
+-fx-background-color: transparent;
+}
