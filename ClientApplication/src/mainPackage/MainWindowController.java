@@ -101,9 +101,6 @@ public class MainWindowController {
         gadgetList.add(new Lamp("LampTwo", false, 25, "Kitchen", 2));
         gadgetList.add(new Lamp("LampThree", false, 25, "Bedroom", 3));
 
-        //Loads the blueprint into the mainwindow HouseFrame
-        setBlueprint();
-
         //Add listener to loggedInAccount object's loggedInAccountProperty
         AccountLoggedin.getInstance().loggedInAccountProperty().addListener(
                 new ChangeListener<Account>() {
@@ -140,6 +137,14 @@ public class MainWindowController {
                     }
                 }
         );
+        //Loads the blueprint into the mainwindow HouseFrame
+        try {
+            houseFrame.getChildren().clear();
+            houseFrame.getChildren().add(FXMLLoader.load(getClass().getResource("houseFrame/Blueprint.fxml")));
+        } catch (IOException e) {
+            Main.getMainWindowController().exceptionLabel.setText("Could not load blueprint into mainframe");
+
+        }
 
         Platform.runLater(new Runnable() {
             @Override
@@ -233,16 +238,6 @@ public class MainWindowController {
         } catch (NullPointerException e) {
             e.printStackTrace();
             exceptionLabel.setText("Unable to load new scene.");
-        }
-    }
-
-    //Adding blueprint to houseframe window
-    public void setBlueprint() {
-        try {
-            houseFrame.getChildren().clear();
-            houseFrame.getChildren().add(FXMLLoader.load(getClass().getResource("houseFrame/Blueprint.fxml")));
-        } catch (IOException e) {
-
         }
     }
 
