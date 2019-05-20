@@ -138,19 +138,21 @@ public class MainWindowController {
                     }
                 }
         );
-        //Loads the blueprint into the mainwindow HouseFrame
-        try {
-            houseFrame.getChildren().clear();
-            houseFrame.getChildren().add(FXMLLoader.load(getClass().getResource("houseFrame/Blueprint.fxml")));
-        } catch (IOException e) {
-            Main.getMainWindowController().exceptionLabel.setText("Could not load blueprint into mainframe");
-
-        }
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                //Set initial state to not logged in
                 isNotLoggedIn();
+
+                //Loads the blueprint into the mainwindow HouseFrame
+                try {
+                    houseFrame.getChildren().clear();
+                    houseFrame.getChildren().add(FXMLLoader.load(getClass().getResource("houseFrame/Blueprint.fxml")));
+                } catch (IOException e) {
+                    Main.getMainWindowController().exceptionLabel.setText("Could not load blueprint into mainframe");
+
+                }
             }
         });
     }
@@ -207,6 +209,10 @@ public class MainWindowController {
 
     public void setCurrentDynamicFrameController(DynamicFrame controller) {
         currentDynamicFrameController = controller;
+    }
+
+    public void setBluePrintController(DynamicFrame bluePrint) {
+        currentDynamicFrameController = bluePrint;
     }
 
     @FXML

@@ -56,6 +56,8 @@ public class BlueprintController implements DynamicFrame {
     ArrayList<GuiObject> garageGadgetList = new ArrayList<>();
 
     public void initialize() {
+        Main.getMainWindowController().setBluePrintController(this);
+
         clmKitchen.setCellValueFactory(new PropertyValueFactory<>("typeOfGadget"));
         clmLivingroom.setCellValueFactory(new PropertyValueFactory<>("typeOfGadget"));
         clmToilet.setCellValueFactory(new PropertyValueFactory<>("typeOfGadget"));
