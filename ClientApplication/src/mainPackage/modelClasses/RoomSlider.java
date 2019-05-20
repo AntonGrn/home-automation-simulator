@@ -31,7 +31,7 @@ public class RoomSlider {
         this.kitchen.get().setPrefSize(100, 60);
         this.garage.get().setPrefSize(100, 60);
         this.toilet.get().setPrefSize(100, 60);
-        this.livingRoom.get().setPrefSize(100, 60);
+        this.livingRoom.get().setPrefSize(200, 60);
     }
 
     public static RoomSlider getRoomSliderInstance() {
