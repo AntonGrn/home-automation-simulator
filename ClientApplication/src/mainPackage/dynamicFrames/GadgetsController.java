@@ -40,8 +40,6 @@ public class GadgetsController implements DynamicFrame {
 
 
     public void initialize() {
-        System.out.println(Main.getMainWindowController().gadgetList.size());
-
         //disabling textfields and buttons so user have to press for example "add gadget" for activation.
         txtfldConsumption.setDisable(true);
         txtfldGadgetName.setDisable(true);
