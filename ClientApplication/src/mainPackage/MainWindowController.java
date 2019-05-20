@@ -52,9 +52,11 @@ public class MainWindowController {
     public Label exceptionLabel, loggedInLabel;
 
     private DynamicFrame currentDynamicFrameController;
+    private DynamicFrame bluePrint;
 
     public ArrayList<Gadget> gadgetList;
     public ArrayList<String[]> logsList;
+    public ArrayList<Account> accountList;
 
     //Producer-consumer pattern. Thread safe. Add requests to send to server.
     //Maybe have private, with getters
@@ -87,6 +89,7 @@ public class MainWindowController {
 
         gadgetList = new ArrayList<>();
         logsList = new ArrayList<>();
+        accountList = new ArrayList<>();
         requestsToServer = new ArrayBlockingQueue<>(10);
         requestsFromServer = new ArrayBlockingQueue<>(10);
 
@@ -193,7 +196,7 @@ public class MainWindowController {
         //Go to login screen
         btnLogin.fire();
 
-        //Set all menu buttons to dosabled
+        //Set all menu buttons to disabled
         for (Node node : menuFrame.getChildren()) {
             if (node instanceof Button) {
                 ((Button) node).setDisable(true);
@@ -269,6 +272,7 @@ public class MainWindowController {
                     updateGadgetsInfo(commands);
                     break;
                 case "12": //Users' info has been updated
+                    updateAccounts(commands);
                     break;
                 case "14": //Log(s) has been received
                     updateLogs(commands);
@@ -288,8 +292,9 @@ public class MainWindowController {
             exceptionLabel.setText("Unable to update from server");
         }
         currentDynamicFrameController.updateFrame();
-
+        bluePrint.updateFrame();
     }
+
     private void updateGadgetsStates(String[] commands) {
         if (commands[1].equals("notnull")) {
             int count = 1;
@@ -351,11 +356,29 @@ public class MainWindowController {
         }
     }
 
+    private void updateAccounts(String[] commands) {
+        accountList.clear();
+        int count = 0;
+        while (true) {
+            String accountID = commands[count + 1];
+            String name = commands[count + 2];
+            String password = commands[count + 3];
+            boolean admin = commands[count + 4].equals("1");
+
+            Account a1 = new Account(name, accountID, AccountLoggedin.getInstance().getLoggedInAccount().getSystemID(), admin, password );
+            accountList.add(a1);
+            if (commands[count + 5].equals("null")) {
+                break;
+            }
+            count += 5;
+        }
+    }
+
     private void updateLogs(String[] commands) {
         logsList.clear();
         int count = 0;
         while (true) {
-            String timestamp = commands[count + 1].replace("&", ":"); // Reformat to regain colon in timestamp
+            String timestamp = commands [count + 1].replace("&", ":"); // Reformat to regain colon in timestamp
             String logMessage = commands[count + 2];
 
             String[] log = {timestamp, logMessage};

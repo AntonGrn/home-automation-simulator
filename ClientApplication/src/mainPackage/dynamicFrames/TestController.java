@@ -1,12 +1,12 @@
 package mainPackage.dynamicFrames;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.Label;;
+import mainPackage.AccountLoggedin;
 import mainPackage.Main;
 import mainPackage.ServerConnection;
-import mainPackage.modelClasses.Account;
-import mainPackage.AccountLoggedin;
 import mainPackage.DynamicFrame;
 import mainPackage.modelClasses.Gadget;
 import mainPackage.modelClasses.Lamp;
@@ -15,11 +15,20 @@ import java.security.SecureRandom;
 
 public class TestController implements DynamicFrame {
 
+    @FXML
+    public Label label1, label2, label3;
+
 
     @FXML
     public void initialize() {
         Main.getMainWindowController().setCurrentDynamicFrameController(this);
 
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                updateFrame();
+            }
+        });
     }
 
     @FXML
@@ -59,17 +68,15 @@ public class TestController implements DynamicFrame {
         String consumption = "25";
         try {
             Main.getMainWindowController().requestsToServer.put(
-                    "7:" + type +":" + name + ":" + room + ":" + consumption);
+                    "7a:" + type +":" + name + ":" + room + ":" + consumption);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
     public void updateFrame() {
-        System.out.println("UpdateFrame");
-        for(Gadget g : Main.getMainWindowController().gadgetList) {
-            System.out.println("Gadget state =  " + g.getState());
-        }
+        label1.setText(Main.getMainWindowController().gadgetList.get(0).getName() + " = " + Main.getMainWindowController().gadgetList.get(0).getState());
+        label2.setText(Main.getMainWindowController().gadgetList.get(1).getName() + "  = " + Main.getMainWindowController().gadgetList.get(1).getState());
+        label3.setText(Main.getMainWindowController().gadgetList.get(2).getName() + "  = " + Main.getMainWindowController().gadgetList.get(2).getState());
     }
 }
