@@ -4,6 +4,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import mainPackage.AccountLoggedin;
 import mainPackage.DynamicFrame;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -112,6 +113,11 @@ public class BlueprintController implements DynamicFrame {
 
     public void showGadgetOnBlueprint() {
         String typeOfGadget;
+        kitchenGadgetList.clear();
+        livingroomGadgetList.clear();
+        toiletGadgetList.clear();
+        garageGadgetList.clear();
+        bedroomGadgetList.clear();
         try {
             for (Gadget g : Main.getMainWindowController().gadgetList) {
                 switch (g.getRoom()) {
@@ -155,6 +161,17 @@ public class BlueprintController implements DynamicFrame {
         } catch (Exception e) {
             e.printStackTrace();
             Main.getMainWindowController().exceptionLabel.setText("Could not load gadgets into blueprint");
+        }
+
+        try {
+            AccountLoggedin.getInstance().getLoggedInAccount().getEmail();
+        }catch(NullPointerException e) {
+            for (Node node : blueprint.getChildren()) {
+                if (node instanceof Label) {
+                    node.setVisible(false);
+                    node.setStyle("");
+                }
+            }
         }
     }
 }
