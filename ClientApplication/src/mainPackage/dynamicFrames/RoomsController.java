@@ -9,12 +9,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,9 +24,10 @@ import mainPackage.MainWindowController;
 import mainPackage.ServerConnection;
 import mainPackage.modelClasses.Gadget;
 import mainPackage.modelClasses.GuiObject;
-import mainPackage.modelClasses.Room;
+import mainPackage.modelClasses.Lamp;
 import mainPackage.modelClasses.RoomSlider;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -67,12 +66,20 @@ public class RoomsController implements DynamicFrame {
     private String currentRoomButtonSelected;
 
     public void initialize() {
+        //setting tablieview so it doesnt autoFocus it..
+        tblViewDynamicGadgets.setFocusTraversable(false);
+
         //making sure so the mainwindow knows which controller that is in charge.
         Main.getMainWindowController().setCurrentDynamicFrameController(this);
 
-        //Later on we will set the btnLeftHover and btnRightHover opacity to 0 so they are not visible.
+        //Make so only one cell is selected at once in tblview
+        tblViewDynamicGadgets.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        tblViewDynamicGadgets.getSelectionModel().setCellSelectionEnabled(true);
 
         listOfRoomButtonsHeader = FXCollections.observableArrayList(RoomSlider.getRoomSliderInstance());
+
+        //add to tblView roomsHeader, will never be changed
+        tblViewRooms.getItems().addAll(listOfRoomButtonsHeader);
 
         //update all clients and tables and such, when a request is confirmed from server.
         updateFrame();
@@ -128,13 +135,6 @@ public class RoomsController implements DynamicFrame {
         clmId.setCellValueFactory(new PropertyValueFactory<>("gadgetName"));
         clmState.setCellValueFactory(new PropertyValueFactory<>("stateOfGadget"));
 
-        /*from beginning the tableview will not have any items inside it,
-        when a room button is pressed then it will go through gadgetList in MainWindow
-        and add all rooms with the same name as button. */
-
-        //add to tblView roomsHeader, will never be changed
-        tblViewRooms.getItems().addAll(listOfRoomButtonsHeader);
-
         /*This variable is important so the application knows which room it is going to reload when
         a request is sent back from server, for example if you have turned on a lamp in bedroom
         the tableview is going to reload bedroom with the gadget turned on. */
@@ -147,6 +147,7 @@ public class RoomsController implements DynamicFrame {
         try {
             for (Gadget g : Main.getMainWindowController().gadgetList) {
                 if (g.getRoom().equals(roomName)) {
+
                     String stateOfGadget;
                     String gadgetName = "";
                     String typeOfGadget = "";
@@ -158,16 +159,17 @@ public class RoomsController implements DynamicFrame {
                         }
                         gadgetName = g.getName(); // example 'Lamp One'
                         typeOfGadget = g.getClass().getSimpleName() + g.getState(); //example 'Lampfalse'
+                        GuiObject guiObject = new GuiObject(typeOfGadget, gadgetName, stateOfGadget, g.getId());
+                        gadgetList.add(guiObject);
                     } else {
                         stateOfGadget = g.getClass().getSimpleName() + String.valueOf(g.getState()); //example 'Heat20'
+                        GuiObject guiObject = new GuiObject(typeOfGadget, gadgetName, stateOfGadget, g.getId());
+                        gadgetList.add(guiObject);
                     }
-                    GuiObject guiObject = new GuiObject(typeOfGadget, gadgetName, stateOfGadget, g.getId());
-                    gadgetList.add(guiObject);
                 }
             }
             tblViewDynamicGadgets.getItems().clear();
             tblViewDynamicGadgets.getItems().addAll(gadgetList);
-
         } catch (Exception ex) {
             ex.printStackTrace();
             Main.getMainWindowController().exceptionLabel.setText("Could not load gadgets..hmm");
@@ -175,35 +177,56 @@ public class RoomsController implements DynamicFrame {
     }
 
 
-    private void onChangeStateOfGadget(ActionEvent event) {
-        GuiObject gui = tblViewDynamicGadgets.getSelectionModel().getSelectedItem();
+    public void onChangeStateOfGadget() {
+        try {
+            TablePosition pos = (TablePosition) tblViewDynamicGadgets.getSelectionModel().getSelectedCells().get(0);
+            int row = pos.getRow();
+            TableColumn tableColumn = pos.getTableColumn();
+            GuiObject gui = tblViewDynamicGadgets.getItems().get(row);
 
-        for (Gadget g : Main.getMainWindowController().gadgetList) {
-            if (g.getId() == gui.getId() && g.getName() == gui.getGadgetName()) {
+            if (tableColumn.getCellObservableValue(gui).getValue() instanceof ImageView) {
+                ImageView data = (ImageView) tableColumn.getCellObservableValue(gui).getValue();
+                if (data.getImage().getUrl().contains("switchButton") || data.getImage().getUrl().contains("Heat2")) {
 
-                String serverRequest;
-                String id = String.valueOf(g.getId());
-                boolean state;
-                int temp;
+                    //clears selection directly after a cell has been clicked
+                    tblViewDynamicGadgets.getSelectionModel().clearSelection();
 
-                if (g.getState() instanceof Boolean){
-                    state = !(Boolean)g.getState();
-                    //create a protocol string according to Laas protocol.
-                    serverRequest = String.format("/s/s/s/s", "3:", id, ":", (state ? "1" :"0"));
-                }else {
-                    //create a protocol string according to Laas protocol.
-                    temp = (Integer)g.getState();
-                    serverRequest = String.format("/s/s/s/s", "3:", id, ":", String.valueOf(temp));
+                    for (Gadget g : Main.getMainWindowController().gadgetList) {
+                        if (g.getId() == gui.getId() && g.getName() == gui.getGadgetName()) {
+
+                            String serverRequest;
+                            String id = String.valueOf(g.getId());
+                            boolean state;
+                            int temp;
+
+                            if (g.getState() instanceof Boolean) {
+                                state = !(Boolean) g.getState();
+                                //create a protocol string according to Laas protocol.
+                                serverRequest = String.format("%s%s%s%s", "3:", id, ":", (state ? "1" : "0"));
+                            } else {
+                                //create a protocol string according to Laas protocol.
+                                temp = (Integer) g.getState();
+                                serverRequest = String.format("/s/s/s/s", "3:", id, ":", String.valueOf(temp));
+                            }
+                            try {
+                                //add to request to server
+                                Main.getMainWindowController().requestsToServer.put(serverRequest);
+                                tblViewDynamicGadgets.getSelectionModel().clearSelection();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (Exception ex) {
+                                Main.getMainWindowController().exceptionLabel.setText("Could not change state of gadget");
+                            }
+                        }
+                    }
+                } else {
+                    tblViewDynamicGadgets.getSelectionModel().clearSelection();
                 }
-                try {
-                    //add to request to server
-                    Main.getMainWindowController().requestsToServer.put(serverRequest);
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                }catch (Exception ex){
-                    Main.getMainWindowController().exceptionLabel.setText("Could not change state of gadget");
-                }
+            } else {
+                tblViewDynamicGadgets.getSelectionModel().clearSelection();
             }
+        }catch (RuntimeException e){
+            System.out.println("ROOMSCONTROLLER PLEASE SELECT A GADGET AND NOT EMPTY ROW, \n WE NEED TO FIX GUYS HEH");
         }
     }
 

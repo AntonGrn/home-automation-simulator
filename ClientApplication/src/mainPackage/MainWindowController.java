@@ -98,9 +98,13 @@ public class MainWindowController {
         chosenRoom = new SimpleStringProperty("null");
 
         //Until we can get Gadgets from Server:
-        gadgetList.add(new Lamp("LampOne", false, 25, "Kitchen", 1));
-        gadgetList.add(new Lamp("LampTwo", false, 25, "Kitchen", 2));
-        gadgetList.add(new Lamp("LampThree", false, 25, "Bedroom", 3));
+        gadgetList.add(new Lamp("LampOne",false,25,"Kitchen",1));
+        gadgetList.add(new Lamp("LampTwo",false,25,"Kitchen",2));
+        gadgetList.add(new Lamp("LampThree",false,25,"Bedroom",3));
+        gadgetList.add(new Door("DoorOne",false,25,"Livingroom",4));
+        gadgetList.add(new Lamp("LampFour",true,25,"Bedroom",5));
+        gadgetList.add(new Lamp("LampFive",false,25,"Bedroom",6));
+
 
         //Add listener to loggedInAccount object's loggedInAccountProperty
         AccountLoggedin.getInstance().loggedInAccountProperty().addListener(
@@ -184,7 +188,7 @@ public class MainWindowController {
             }
         }
         //Scene to load when logged in
-        btnRooms.fire();
+        //btnRooms.fire();
     }
 
     public void isNotLoggedIn() {
