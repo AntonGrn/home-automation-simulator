@@ -146,17 +146,15 @@ public class MainWindowController {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                //Set initial state to not logged in
-                isNotLoggedIn();
-
                 //Loads the blueprint into the mainwindow HouseFrame
                 try {
                     houseFrame.getChildren().clear();
                     houseFrame.getChildren().add(FXMLLoader.load(getClass().getResource("houseFrame/Blueprint.fxml")));
                 } catch (IOException e) {
                     Main.getMainWindowController().exceptionLabel.setText("Could not load blueprint into mainframe");
-
                 }
+                //Set initial state to not logged in
+                isNotLoggedIn();
             }
         });
     }
@@ -199,6 +197,7 @@ public class MainWindowController {
         requestsFromServer.clear();
 
         loggedInLabel.setText("Not logged in");
+        bluePrint.updateFrame();
 
         //Go to login screen
         btnLogin.fire();
@@ -216,7 +215,7 @@ public class MainWindowController {
     }
 
     public void setBluePrintController(DynamicFrame bluePrint) {
-        currentDynamicFrameController = bluePrint;
+        this.bluePrint = bluePrint;
     }
 
     @FXML
