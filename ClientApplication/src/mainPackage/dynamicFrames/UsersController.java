@@ -1,5 +1,6 @@
 package mainPackage.dynamicFrames;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -114,6 +115,8 @@ public class UsersController implements DynamicFrame {
                             }
                             //if not admin
                         } else {
+                            adminPasswordField.clear();
+                            adminPasswordField.setPromptText("Password of admin");
                             adminPasswordField.setDisable(true);
                             btnViewAdminPassword.setDisable(true);
                             statusLabel.setText("");
@@ -150,6 +153,13 @@ public class UsersController implements DynamicFrame {
         } catch (InterruptedException e) {
             Main.getMainWindowController().exceptionLabel.setText("Server request failed");
         }
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                btnViewAdminPassword.setDisable(true);
+            }
+        });
     }
 
     public void updateFrame() {
@@ -262,8 +272,18 @@ public class UsersController implements DynamicFrame {
     //When user text fields has been altered
     @FXML
     void editsMade() {
-        btnSubmitA.setDisable(false);
-        btnCancelEditUser.setDisable(false);
+        if(emailField.getText().trim().isEmpty() || nameField.getText().trim().isEmpty()) {
+            btnSubmitA.setDisable(true);
+            btnCancelEditUser.setDisable(true);
+        }else {
+            btnSubmitA.setDisable(false);
+            btnCancelEditUser.setDisable(false);
+        }
+        if(adminPasswordField.getText().trim().isEmpty()) {
+            btnViewAdminPassword.setDisable(true);
+        } else {
+            btnViewAdminPassword.setDisable(false);
+        }
         usersPW = adminPasswordField.getText();
     }
 
