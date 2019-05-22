@@ -45,7 +45,7 @@
           <TableColumn fx:id="clmKitchen" prefWidth="134.0" text="show" />
         </columns>
       </TableView>
-      <TableView fx:id="tblVLivingRoom" layoutX="186.0" layoutY="30.0" prefHeight="218.0" prefWidth="176.0">
+      <TableView fx:id="tblVLivingroom" layoutX="186.0" layoutY="30.0" prefHeight="218.0" prefWidth="176.0">
          <columns>
             <TableColumn fx:id="clmLivingroom" prefWidth="175.0" text="show" />
          </columns>
@@ -55,7 +55,7 @@
             <TableColumn fx:id="clmToilet" prefWidth="127.0" text="show" />
          </columns>
       </TableView>
-      <TableView fx:id="tblVBedRoom" layoutX="365.0" layoutY="187.0" prefHeight="144.0" prefWidth="128.0">
+      <TableView fx:id="tblVBedroom" layoutX="365.0" layoutY="187.0" prefHeight="144.0" prefWidth="128.0">
          <columns>
             <TableColumn fx:id="clmBedroom" prefWidth="127.0" text="show" />
          </columns>
