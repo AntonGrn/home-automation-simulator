@@ -76,12 +76,6 @@ public class EnergyController implements DynamicFrame {
         progressindicator.setProgress(progress);
     }
 
-    public void replacePromptText(){
-        progressindicator.applyCss();
-        Text text = (Text)progressindicator.lookup(".text.percentage");
-        text.setText("");
-    }
-
     public Double calculateSingleRoomConsumption(String room) {
         Double consumption = 0.0;
         for (Gadget g : Main.getMainWindowController().gadgetList) {
@@ -90,7 +84,6 @@ public class EnergyController implements DynamicFrame {
                 currentConsumption = currentConsumption + g.getConsumption();
             }
         }
-        System.out.println("Currentconsumtion: " + currentConsumption);
         return consumption;
     }
 }
