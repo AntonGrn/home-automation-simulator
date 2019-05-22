@@ -236,8 +236,11 @@ public class Server {
                                 outputAccounts(clientRequest.getClient(), true);
                             }
                             break;
-                        case "10": // Request to edit user info
+                        case "10a": // Request to edit user info
                             editAccountsInfo(commands, clientRequest.getClient());
+                            break;
+                        case "10b": // Request to edit a system's non-admin password
+                            editNonAdminPassword(commands, clientRequest.getClient());
                             break;
                         case "11a": // Request add a user
                             addAccount(commands, clientRequest.getClient());
@@ -409,6 +412,17 @@ public class Server {
         }
     }
 
+    private void editNonAdminPassword(String[] commands, Client fromClient) {
+        int systemID = fromClient.getSystemID();
+        String password = commands[1];
+        try {
+            DB.getInstance().editNonAdminPassword(systemID, password);
+            outputAccounts(fromClient, false);
+        } catch (Exception e) {
+            outputToClients(true, true, "15:".concat(e.getMessage()), fromClient.getSocket(), fromClient.getSystemID());
+        }
+    }
+
     private void outputAccounts(Client fromClient, boolean onlyToIndividual) {
         try{
             ArrayList<String[]> accountList = DB.getInstance().getAccounts(fromClient.getSystemID());
@@ -417,8 +431,9 @@ public class Server {
             for (int i = 0; i < accountList.size(); i++) {
                 String accountID = accountList.get(i)[0];
                 String name = accountList.get(i)[1];
-                String password = accountList.get(i)[2];
                 String admin = accountList.get(i)[3];
+                //Don't return password of other admins:
+                String password = accountID.equals(fromClient.getAccountID()) || admin.equals("0") ? accountList.get(i)[2] : "Access denied";
 
                 clientOutput = String.format("%s%s%s%s%s%s%s%s",
                         clientOutput, accountID, ":", name, ":", password, ":", admin);

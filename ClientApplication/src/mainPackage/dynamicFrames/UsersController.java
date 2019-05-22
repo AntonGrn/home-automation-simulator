@@ -29,64 +29,75 @@ public class UsersController implements DynamicFrame {
     private TableColumn<Account, Boolean> accesslevelColumn;
 
     @FXML
-    private Button submitButton, submitNonAdminPassW, deleteUserButton, addUserButton, editBtn;
+    private Button btnSubmitA, btnAddUser, btnEdit, btnSubmitNonAdminPassword, btnCancelNonAdminPasswordEdit, btnCancelEditUser, btnViewAdminPassword;
 
     @FXML
-    private PasswordField nonAdminPwField, passwordField;
+    private PasswordField nonAdminPasswordField, adminPasswordField;
 
     @FXML
     private AnchorPane tableAnchorPane, nonAdminPassWd, editUSer;
 
     @FXML
-    private Label addOrEditUserLabel, statusLabel;
+    private Label addOrEditUserLabel, statusLabel, deleteLabel;
 
     @FXML
     private TextField nameField, emailField;
 
     @FXML
-    private CheckBox checkboxAdmin;
+    private CheckBox checkboxAdmin, checkboxDeleteUser;
 
     private ObservableList<Account> accountList;
     private boolean addUser;
+    private String nonAdminPW;
+    private String usersPW;
 
     @FXML
     void initialize() {
 
         Main.getMainWindowController().setCurrentDynamicFrameController(this);
 
-        addUserButton.fire();
-
         //Set defualt states
-        deleteUserButton.setDisable(true);
-        editBtn.setDisable(true);
-        submitButton.setDisable(true);
+        btnEdit.setDisable(true);
+        btnSubmitA.setDisable(true);
         statusLabel.setText("");
         statusLabel.setStyle("-fx-text-fill: red;");
-        submitButton.setUserData("Edit");
-        passwordField.setDisable(true);
-        submitNonAdminPassW.setDisable(true);
+        deleteLabel.setStyle("-fx-text-fill: red;");
+        checkboxDeleteUser.setStyle("-fx-text-fill: white;");
+        deleteLabel.setVisible(false);
+        btnSubmitA.setUserData("Edit");
+        adminPasswordField.setDisable(true);
+
+        btnAddUser.fire();
 
         updateFrame();
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         accesslevelColumn.setCellValueFactory(new PropertyValueFactory<>("admin"));
-        //PropertyValueFactory will look for getters
+
+        //Display boolean values as Yes/No in table
+        accesslevelColumn.setCellFactory(col -> new TableCell<Account, Boolean>() {
+            @Override
+            protected void updateItem(Boolean item, boolean empty) {
+                super.updateItem(item, empty) ;
+                setText(empty ? null : item ? "Yes" : "No" );
+            }
+        });
 
         // Add listener in the table, to perform actions when a user is selected
         usersTable.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldSelection, newSelection) -> {
                     if (newSelection != null) {
 
-                        if (newSelection.isAdmin()) {
-                            editBtn.setDisable(true);
-                            deleteUserButton.setDisable(true);
+                        if (newSelection.isAdmin() & !newSelection.getEmail().equals(AccountLoggedin.getInstance().getLoggedInAccount().getEmail())) {
+                            btnEdit.setDisable(true);
+                            //deleteUserButton.setDisable(true);
                         } else {
-                            editBtn.setDisable(false);
-                            deleteUserButton.setDisable(false);
+                            btnEdit.setDisable(false);
+                            //deleteUserButton.setDisable(false);
                         }
                     } else {
-                        deleteUserButton.setDisable(true);
-                        editBtn.setDisable(true);
+                        //deleteUserButton.setDisable(true);
+                        btnEdit.setDisable(true);
                     }
                 });
 
@@ -94,10 +105,41 @@ public class UsersController implements DynamicFrame {
                 new ChangeListener<Boolean>() {
                     @Override
                     public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        //if admin
                         if (newValue) {
-                            passwordField.setDisable(false);
+                            adminPasswordField.setDisable(false);
+                            btnViewAdminPassword.setDisable(false);
+                            if(addUser) {
+                                statusLabel.setText("New admin accounts can only be managed by that account");
+                            }
+                            //if not admin
                         } else {
-                            passwordField.setDisable(true);
+                            adminPasswordField.setDisable(true);
+                            btnViewAdminPassword.setDisable(true);
+                            statusLabel.setText("");
+                        }
+                    }
+                }
+        );
+
+        checkboxDeleteUser.selectedProperty().addListener(
+                new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        if (newValue) {
+                            deleteLabel.setVisible(true);
+                            emailField.setDisable(true);
+                            nameField.setDisable(true);
+                            checkboxAdmin.setDisable(true);
+                            adminPasswordField.setDisable(true);
+                            btnSubmitA.setDisable(false);
+                        } else {
+                            deleteLabel.setVisible(false);
+                            emailField.setDisable(false);
+                            nameField.setDisable(false);
+                            checkboxAdmin.setDisable(false);
+                            adminPasswordField.setDisable(false);
+                            btnSubmitA.setDisable(true);
                         }
                     }
                 }
@@ -114,25 +156,35 @@ public class UsersController implements DynamicFrame {
         accountList = FXCollections.observableArrayList(Main.getMainWindowController().accountList);
         usersTable.getItems().clear();
         usersTable.setItems(accountList);
+        nonAdminPW = getNonAdminPassword();
+        resetNonAdminPasswordEdit();
     }
 
     //When a user has been selected for Edit
     @FXML
     void editChosen() {
         Account account = accountList.get(usersTable.getSelectionModel().getFocusedIndex());
+        checkboxDeleteUser.setVisible(true);
+        checkboxDeleteUser.setSelected(false);
+        btnCancelEditUser.setDisable(true);
+        addUser = false;
+        usersPW = account.getPassword();
 
         statusLabel.setText("");
-        submitButton.setDisable(true);
+        btnSubmitA.setDisable(true);
         // Change label according to user
         if (account.getEmail().equals(
                 AccountLoggedin.getInstance().getLoggedInAccount().getEmail())) {
             addOrEditUserLabel.setText("Your info");
             //Editing users existing profile, not adding new
-            addUser = false;
+
         } else {
-            addOrEditUserLabel.setText("Edit: " + accountList.get(
-                    usersTable.getSelectionModel().getFocusedIndex()).getName());
+            addOrEditUserLabel.setText("Edit: " + account.getName());
+            //adminPasswordField.clear();
+            //adminPasswordField.setText(account.getPassword());
         }
+        adminPasswordField.clear();
+        adminPasswordField.setText(usersPW);
         // Load data to text fields
         nameField.setText(account.getName());
         emailField.setText(account.getEmail());
@@ -142,23 +194,62 @@ public class UsersController implements DynamicFrame {
     //Clear table selection and buttons to: no user selected
     @FXML
     public void clearTableSelection() {
-        editBtn.setDisable(true);
-        deleteUserButton.setDisable(true);
+        btnEdit.setDisable(true);
         usersTable.getSelectionModel().clearSelection();
     }
 
     @FXML
-    public void viewNonAdminPassWord() {
-        nonAdminPwField.setPromptText(getNonAdminPassW());
+    public void viewNonAdminPassword() {
+        nonAdminPasswordField.clear();
+        nonAdminPasswordField.setPromptText(nonAdminPW);
+        nonAdminPassWd.requestFocus();
     }
 
     @FXML
-    public void hideNonAdminPassWord() {
-        nonAdminPwField.setPromptText("Password");
+    public void hideNonAdminPassword() {
+        nonAdminPasswordField.setText(nonAdminPW);
     }
 
-    private String getNonAdminPassW() {
-        String passW = "No non-admin password";
+    //When user text fields has been altered
+    @FXML
+    void nonAdminPasswordEditsMade() {
+        if(nonAdminPasswordField.getText().trim().isEmpty()) {
+            btnSubmitNonAdminPassword.setDisable(true);
+        }else {
+            btnSubmitNonAdminPassword.setDisable(false);
+            btnCancelNonAdminPasswordEdit.setDisable(false);
+        }
+        nonAdminPW = nonAdminPasswordField.getText();
+    }
+
+    @FXML
+    public void resetNonAdminPasswordEdit() {
+        nonAdminPW = getNonAdminPassword();
+        nonAdminPasswordField.clear();
+        nonAdminPasswordField.setText(nonAdminPW);
+        btnSubmitNonAdminPassword.setDisable(true);
+        btnCancelNonAdminPasswordEdit.setDisable(true);
+    }
+
+    @FXML
+    public void submitNonAdminPasswordEdits() {
+        if(nonAdminPasswordField.getText().trim().isEmpty()) {
+            statusLabel.setText("Field empty");
+        } else if(nonAdminPasswordField.getText().contains(":")) {
+            statusLabel.setText("Password may not contain colon");
+        } else {
+            try {
+                String serverRequest = String.format("%s%s", "10b:", nonAdminPasswordField.getText());
+                Main.getMainWindowController().requestsToServer.put(serverRequest);
+            } catch (InterruptedException e) {
+                statusLabel.setText("Unable to edit non-admin password");
+            }
+        }
+    }
+
+    //Collect current non-admin password
+    private String getNonAdminPassword() {
+        String passW = "";
         for (Account a1 : Main.getMainWindowController().accountList) {
             if (!a1.isAdmin()) {
                 passW = a1.getPassword();
@@ -171,67 +262,94 @@ public class UsersController implements DynamicFrame {
     //When user text fields has been altered
     @FXML
     void editsMade() {
-        submitButton.setDisable(false);
+        btnSubmitA.setDisable(false);
+        btnCancelEditUser.setDisable(false);
+        usersPW = adminPasswordField.getText();
     }
 
-    //When user text fields has been altered
     @FXML
-    void nonAdminPassWEditsMade() {
-        submitNonAdminPassW.setDisable(false);
+    public void viewUsersPassword() {
+        adminPasswordField.clear();
+        adminPasswordField.setPromptText(usersPW);
+        nonAdminPassWd.requestFocus();
+
+        //nonAdminPasswordField.setDisable(true);
     }
 
-    //When a user has been selected for Edit
+    @FXML
+    public void hideUsersPassword() {
+       adminPasswordField.setText(usersPW);
+    }
+
+    //Set the GUI correct for adding a user
     @FXML
     void addUser() {
         clearTableSelection();
         nameField.clear();
         emailField.clear();
-        passwordField.clear();
+        adminPasswordField.clear();
+        adminPasswordField.setPromptText("");
         checkboxAdmin.setSelected(false);
+        checkboxDeleteUser.setVisible(false);
+        checkboxDeleteUser.setSelected(false);
+        btnCancelEditUser.setDisable(true);
         addOrEditUserLabel.setText("Add new user");
+        usersPW = "";
         addUser = true;
     }
 
     @FXML
     public void submit() {
         statusLabel.setText("");
-        //Check that no fields are empty
-        if (nameField.getText().trim().isEmpty() || emailField.getText().trim().isEmpty() ||
-                (checkboxAdmin.isSelected() & passwordField.getText().trim().isEmpty())) {
-            statusLabel.setText("Please fill out all fields");
-        } else if (nameField.getText().contains(":") || emailField.getText().contains(":") ||
-                (checkboxAdmin.isSelected() & passwordField.getText().contains(":"))) {
-            statusLabel.setText("It should not contain colon ' : '");
-        } else if (!emailField.getText().contains("@") || !emailField.getText().contains(".")) {
-            statusLabel.setText("Example@homeautomation.se");
-        } else {
-            //Get data from text fields and send request to server to add gedaget
-            String email = emailField.getText();
-            String name = nameField.getText();
-            String admin = checkboxAdmin.isSelected() ? "1" : "0";
-            String password;
-            if (checkboxAdmin.isSelected()) {
-                password = passwordField.getText();
-            } else {
-                password = getNonAdminPassW();
+        //DELETE USER
+        if (checkboxDeleteUser.isSelected()) {
+            try {
+                Main.getMainWindowController().requestsToServer.put("11b:" + accountList.get(usersTable.getSelectionModel().getFocusedIndex()).getEmail());
+            } catch (InterruptedException e) {
+                statusLabel.setText("Unable to delete user");
             }
-            if (addUser) {
-                try {
-                    // Form a proper request, according to communiaction protocolrd
-                    String serverRequest = String.format("%s%s%s%s%s%s%s%s", "11:", email, ":", name, ":", admin, ":", password);
-                    //Add request to requestsToServer
-                    Main.getMainWindowController().requestsToServer.put(serverRequest);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            addUser();
+        } else {
+            //Check that no fields are empty, does not contain colon and that email conforms correctly
+            if (nameField.getText().trim().isEmpty() || emailField.getText().trim().isEmpty() ||
+                    (checkboxAdmin.isSelected() & adminPasswordField.getText().trim().isEmpty())) {
+                statusLabel.setText("Please fill out all fields");
+            } else if (nameField.getText().contains(":") || emailField.getText().contains(":") ||
+                    (checkboxAdmin.isSelected() & adminPasswordField.getText().contains(":"))) {
+                statusLabel.setText("Fields may not contain colon");
+            } else if (!emailField.getText().contains("@") || !emailField.getText().contains(".")) {
+                statusLabel.setText("Invalid email format");
             } else {
-                //Alter existing account info
-                try {
-                    String serverRequest = String.format("%s%s%s%s%s%s%s%s%s%s", "10:", email, ":", name, ":", admin, ":", password, ":", "keep");
-                    Main.getMainWindowController().requestsToServer.put(serverRequest);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                //Get data from text fields and send request to server to add gedaget
+                String email = emailField.getText();
+                String name = nameField.getText();
+                String admin = checkboxAdmin.isSelected() ? "1" : "0";
+                String password;
+                if (checkboxAdmin.isSelected()) {
+                    password = adminPasswordField.getText();
+                } else {
+                    password = getNonAdminPassword();
                 }
+                //ADD USER
+                if (addUser) {
+                    try {
+                        // Form a proper request, according to communication protocol
+                        String serverRequest = String.format("%s%s%s%s%s%s%s%s", "11a:", email, ":", name, ":", admin, ":", password);
+                        //Add request to requestsToServer
+                        Main.getMainWindowController().requestsToServer.put(serverRequest);
+                    } catch (InterruptedException e) {
+                        statusLabel.setText("Unable to add user");
+                    }
+                    //EDIT USER INFO
+                } else {
+                    try {
+                        String serverRequest = String.format("%s%s%s%s%s%s%s%s%s%s", "10a:", email, ":", name, ":", admin, ":", password, ":", "keep");
+                        Main.getMainWindowController().requestsToServer.put(serverRequest);
+                    } catch (InterruptedException e) {
+                        statusLabel.setText("Unable to edit user");
+                    }
+                }
+                addUser();
             }
         }
     }
@@ -245,18 +363,6 @@ public class UsersController implements DynamicFrame {
         } else {
             return false;
         }
-    }
-
-    @FXML
-    void deleteUser() {
-        String accountID = accountList.get(usersTable.getSelectionModel().getFocusedIndex()).getEmail();
-        try {
-            String serverRequest = String.format("%s%s", "19:", accountID);
-            Main.getMainWindowController().requestsToServer.put(serverRequest);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
     }
 
 }
