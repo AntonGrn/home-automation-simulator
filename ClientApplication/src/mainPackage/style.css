@@ -168,17 +168,6 @@ progress-indicator .text {
 }
 
 
-/*------------------------- BluePrint Controller ------------------------------*/
-
-#tblVKitchen, #tblVLivingRoom, #tblVToilet, #tblVBedRoom, #tblVGarage, .table-view{
--fx-background-color: transparent;
-}
-
-#clmKitchen, #clmLivingroom, #clmToilet, #clmBedroom, #clmGarage, .table-view .table-row-cell{
--fx-background-color: transparent;
-}
-
-
 /*--------------------------Settings dynamicframe--------------------------*/
 .text-area .content{
 -fx-background-color: #444444;
