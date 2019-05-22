@@ -82,7 +82,7 @@ public class RoomsController implements DynamicFrame {
         tblViewRooms.getItems().addAll(listOfRoomButtonsHeader);
 
         //setting prompt text in tableview
-        tblViewDynamicGadgets.setPlaceholder(new Label("You have no gadgets available"));
+        tblViewDynamicGadgets.setPlaceholder(new Label("No gadgets in this room"));
 
         //update all clients and tables and such, when a request is confirmed from server.
         updateFrame();
