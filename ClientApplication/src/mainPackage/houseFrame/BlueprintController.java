@@ -30,8 +30,8 @@ public class BlueprintController implements DynamicFrame {
     private TableColumn<GuiObject, ImageView> clmKitchen;
 
     @FXML
-    private TableView<GuiObject> tblVLivingRoom;
-    //TODO fixa namn på livingroom
+    private TableView<GuiObject> tblVLivingroom;
+
     @FXML
     private TableColumn<GuiObject, ImageView> clmLivingroom;
 
@@ -41,8 +41,7 @@ public class BlueprintController implements DynamicFrame {
     private TableColumn<GuiObject, ImageView> clmToilet;
 
     @FXML
-    //TODO fixa namn på bedroom
-    private TableView<GuiObject> tblVBedRoom;
+    private TableView<GuiObject> tblVBedroom;
     @FXML
     private TableColumn<GuiObject, ImageView> clmBedroom;
 
@@ -68,10 +67,10 @@ public class BlueprintController implements DynamicFrame {
         clmBedroom.setCellValueFactory(new PropertyValueFactory<>("typeOfGadget"));
 
         tblVKitchen.setPlaceholder(new Label(""));
-        tblVLivingRoom.setPlaceholder(new Label(""));
+        tblVLivingroom.setPlaceholder(new Label(""));
         tblVToilet.setPlaceholder(new Label(""));
         tblVGarage.setPlaceholder(new Label(""));
-        tblVBedRoom.setPlaceholder(new Label(""));
+        tblVBedroom.setPlaceholder(new Label(""));
 
         for (Node node : blueprint.getChildren()) {
             if (node instanceof Label) {
@@ -158,14 +157,14 @@ public class BlueprintController implements DynamicFrame {
             }
             tblVKitchen.getItems().clear();
             tblVKitchen.getItems().addAll(kitchenGadgetList);
-            tblVLivingRoom.getItems().clear();
-            tblVLivingRoom.getItems().addAll(livingroomGadgetList);
+            tblVLivingroom.getItems().clear();
+            tblVLivingroom.getItems().addAll(livingroomGadgetList);
             tblVToilet.getItems().clear();
             tblVToilet.getItems().addAll(toiletGadgetList);
             tblVGarage.getItems().clear();
             tblVGarage.getItems().addAll(garageGadgetList);
-            tblVBedRoom.getItems().clear();
-            tblVBedRoom.getItems().addAll(bedroomGadgetList);
+            tblVBedroom.getItems().clear();
+            tblVBedroom.getItems().addAll(bedroomGadgetList);
         } catch (Exception e) {
             e.printStackTrace();
             Main.getMainWindowController().exceptionLabel.setText("Could not load gadgets into blueprint");
