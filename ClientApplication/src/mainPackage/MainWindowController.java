@@ -82,7 +82,7 @@ public class MainWindowController {
         btnEnergy.setUserData("Energy");
         btnLogs.setUserData("Logs");
         //temporary, shall be named setting later on
-        btnSettings.setUserData("Test");
+        btnSettings.setUserData("Settings");
         btnLogin = new Button();
         btnLogin.setUserData("Login");
         btnLogin.setOnAction(this::setDynamicFrame);

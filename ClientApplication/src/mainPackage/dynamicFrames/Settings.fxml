@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -7,19 +8,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainPackage.dynamicFrames.SettingsController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="420.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainPackage.dynamicFrames.SettingsController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints maxHeight="461.0" minHeight="10.0" prefHeight="454.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="394.0" minHeight="10.0" prefHeight="146.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="360.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <TextArea fx:id="textAreaInfoAboutUs" editable="false" prefHeight="200.0" prefWidth="200.0" text="The LAAS-application was by four first grade computer science students at HKR. It was finished (YYYY-MM-DD).&#10;The application is a simulation of a smarthome. It is connected to a server application, communication with a remote database. This way clients don't have to close and reopen the application to get the latest updates.&#10;&#10;Abdifatah Abdulkadir&#10;Anton Göransson&#10;Ludvig Jönsson&#10;Sebastian Mårtensson&#10;" wrapText="true">
+      <TextArea fx:id="textAreaInfoAboutUs" editable="false" prefHeight="200.0" prefWidth="200.0" text="The LAAS-application was made by four first grade computer science students at HKR. It was finished (YYYY-MM-DD).&#10;The application is a simulation of a smarthome. It is connected to a server application, communication with a remote database. This way clients don't have to close and reopen the application to get the latest updates.&#10;&#10;Abdifatah Abdulkadir, Anton Göransson, Ludvig Jönsson, Sebastian Mårtensson.&#10;" wrapText="true">
          <GridPane.margin>
             <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
          </GridPane.margin>
+         <font>
+            <Font size="17.0" />
+         </font>
       </TextArea>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
          <children>
