@@ -291,10 +291,6 @@ public class DB {
                 String password = resultSet.getString("password");
                 String admin = resultSet.getString("admin");
 
-                //Don't return password of other admins
-                if (admin.equals("1")) {
-                    password = "accessDenied";
-                }
                 String[] items = {accountID, name, password, admin};
                 accountList.add(items);
             }
@@ -342,6 +338,21 @@ public class DB {
             statement.executeUpdate("DELETE FROM Account WHERE systemID = " + systemID + " AND accountID = '" + accountID + "';");
         } catch (SQLException e) {
             throw new Exception("Server unable to delete account.");
+        } finally {
+            closeConnection();
+        }
+    }
+
+    public void editNonAdminPassword(int systemID, String newPassword) throws Exception {
+        connect();
+        int result;
+        try {
+            result = statement.executeUpdate("UPDATE Account SET password = '" + newPassword + "' WHERE systemID = " + systemID + " AND admin = 0;");
+            if (result < 1) {
+                throw new Exception("No non-admins in this system");
+            }
+        } catch (SQLException e) {
+            throw new Exception("Server unable to update non-admin passwords.");
         } finally {
             closeConnection();
         }
