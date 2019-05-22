@@ -14,8 +14,9 @@
     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="400.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="220.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="200.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="225.0" minHeight="-Infinity" prefHeight="220.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="170.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
       <GridPane>
@@ -23,46 +24,47 @@
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="400.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="160.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="-Infinity" prefHeight="160.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
                <children>
-                  <ProgressIndicator fx:id="progressindicator" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="400.0" progress="0.0" />
+                  <ProgressIndicator fx:id="progressindicator" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="400.0" progress="0.0" HBox.hgrow="NEVER" />
                </children>
             </HBox>
             <Label fx:id="lblOverview" text="Energy consumption overview" />
          </children>
       </GridPane>
-      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
          <children>
             <Label fx:id="lblBedroom" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Bedroom:">
                <VBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </VBox.margin>
             </Label>
             <Label fx:id="lblKitchen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Kitchen:">
                <VBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </VBox.margin>
             </Label>
             <Label fx:id="lblToilet" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Toilet:">
                <VBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </VBox.margin>
             </Label>
             <Label fx:id="lblLivingroom" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Livingroom:">
                <VBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </VBox.margin>
             </Label>
             <Label fx:id="lblGarage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Garage:">
                <VBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </VBox.margin>
             </Label>
          </children>
       </VBox>
+      <Label fx:id="lblCurrentWattage" alignment="CENTER" prefHeight="27.0" prefWidth="384.0" text="Currenty used wattage out of " GridPane.rowIndex="1" />
    </children>
 </GridPane>
