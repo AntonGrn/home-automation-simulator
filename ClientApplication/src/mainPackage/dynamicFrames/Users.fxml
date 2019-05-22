@@ -8,6 +8,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -23,9 +25,8 @@
                   <TableColumn fx:id="accesslevelColumn" prefWidth="83.0" text="Admin" />
               </columns>
             </TableView>
-            <Button fx:id="deleteUserButton" layoutX="317.0" layoutY="127.0" maxWidth="-Infinity" mnemonicParsing="false" onAction="#deleteUser" prefHeight="25.0" prefWidth="70.0" text="Delete" AnchorPane.bottomAnchor="5.0" />
-            <Button fx:id="addUserButton" layoutX="239.0" layoutY="127.0" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addUser" prefHeight="25.0" prefWidth="70.0" text="Add User" AnchorPane.bottomAnchor="5.0" />
-            <Button fx:id="editBtn" layoutX="158.0" layoutY="127.0" maxWidth="-Infinity" mnemonicParsing="false" onAction="#editChosen" prefWidth="70.0" text="Edit" AnchorPane.bottomAnchor="5.0" />
+            <Button fx:id="btnAddUser" layoutX="303.0" layoutY="131.0" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addUser" prefHeight="25.0" prefWidth="83.0" text="Add User" AnchorPane.bottomAnchor="5.0" />
+            <Button fx:id="btnEdit" layoutX="209.0" layoutY="131.0" maxWidth="-Infinity" mnemonicParsing="false" onAction="#editChosen" prefWidth="83.0" text="Edit" AnchorPane.bottomAnchor="5.0" />
          </children>
          <VBox.margin>
             <Insets top="2.0" />
@@ -33,13 +34,21 @@
       </AnchorPane>
       <AnchorPane fx:id="nonAdminPassWd" prefHeight="89.0" prefWidth="400.0">
          <children>
-            <PasswordField fx:id="nonAdminPwField" layoutX="208.0" layoutY="41.0" onKeyReleased="#nonAdminPassWEditsMade" prefHeight="25.0" prefWidth="180.0" promptText="Password" />
+            <PasswordField fx:id="nonAdminPasswordField" layoutX="244.0" layoutY="41.0" onKeyReleased="#nonAdminPasswordEditsMade" prefHeight="25.0" prefWidth="144.0" />
             <Label alignment="CENTER" layoutX="73.0" layoutY="8.0" prefHeight="17.0" prefWidth="283.0" text="Non-Admins Password">
                <font>
                   <Font size="18.0" />
                </font></Label>
-            <Button fx:id="viewNonAdminPassWBtn" layoutX="22.0" layoutY="41.0" mnemonicParsing="false" onMouseEntered="#viewNonAdminPassWord" onMouseExited="#hideNonAdminPassWord" prefHeight="25.0" prefWidth="83.0" text="View current" />
-            <Button fx:id="submitNonAdminPassW" layoutX="117.0" layoutY="41.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="83.0" text="Submit new" />
+            <Button fx:id="btnViewNonAdminPassword" layoutX="206.0" layoutY="41.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseEntered="#viewNonAdminPassword" onMouseExited="#hideNonAdminPassword" prefHeight="25.0" prefWidth="30.0">
+               <graphic>
+                  <ImageView fitHeight="10.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/eye.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button fx:id="btnSubmitNonAdminPassword" layoutX="14.0" layoutY="41.0" mnemonicParsing="false" onAction="#submitNonAdminPasswordEdits" prefHeight="25.0" prefWidth="83.0" text="Submit new" />
+            <Button fx:id="btnCancelNonAdminPasswordEdit" layoutX="106.0" layoutY="41.0" mnemonicParsing="false" onAction="#resetNonAdminPasswordEdit" prefWidth="83.0" text="Cancel" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="editUSer" prefHeight="298.0" prefWidth="400.0">
@@ -48,12 +57,24 @@
                <font>
                   <Font size="18.0" />
                </font></Label>
-            <TextField fx:id="nameField" layoutX="19.0" layoutY="43.0" onKeyReleased="#editsMade" prefHeight="25.0" prefWidth="180.0" promptText="Name" AnchorPane.topAnchor="44.0" />
+            <TextField fx:id="nameField" layoutX="18.0" layoutY="44.0" onKeyReleased="#editsMade" prefHeight="25.0" prefWidth="180.0" promptText="Name" />
             <TextField fx:id="emailField" layoutX="18.0" layoutY="79.0" onKeyReleased="#editsMade" prefHeight="25.0" prefWidth="180.0" promptText="Email" />
-            <PasswordField fx:id="passwordField" layoutX="203.0" layoutY="43.0" onKeyReleased="#editsMade" prefHeight="25.0" prefWidth="180.0" promptText="Password" AnchorPane.topAnchor="44.0" />
-            <CheckBox fx:id="checkboxAdmin" layoutX="205.0" layoutY="83.0" mnemonicParsing="false" text="Admin" />
-            <Button fx:id="submitButton" layoutX="310.0" layoutY="79.0" mnemonicParsing="false" onAction="#submit" prefHeight="25.0" prefWidth="73.0" text="Submit" />
-            <Label fx:id="statusLabel" alignment="CENTER" layoutX="40.0" layoutY="125.0" prefHeight="17.0" prefWidth="295.0" text="Label" />
+            <PasswordField fx:id="adminPasswordField" layoutX="239.0" layoutY="43.0" onKeyReleased="#editsMade" prefHeight="25.0" prefWidth="144.0" promptText="Password" />
+            <CheckBox fx:id="checkboxAdmin" layoutX="211.0" layoutY="83.0" mnemonicParsing="false" text="Admin" />
+            <Button fx:id="btnSubmitA" layoutX="300.0" layoutY="79.0" mnemonicParsing="false" onAction="#submit" prefHeight="25.0" prefWidth="83.0" text="Submit" />
+            <Label fx:id="statusLabel" alignment="CENTER" layoutX="18.0" layoutY="141.0" prefHeight="17.0" prefWidth="370.0" text="Label" />
+            <CheckBox fx:id="checkboxDeleteUser" layoutX="19.0" layoutY="115.0" mnemonicParsing="false" text="Delete this user" />
+            <Label fx:id="deleteLabel" layoutX="132.0" layoutY="115.0" prefHeight="17.0" prefWidth="160.0" text="Warning: User will be deleted" />
+            <Button fx:id="btnViewAdminPassword" layoutX="203.0" layoutY="44.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseEntered="#viewUsersPassword" onMouseExited="#hideUsersPassword" prefHeight="25.0" prefWidth="30.0">
+               <graphic>
+                  <ImageView fitHeight="10.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/eye.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnCancelEditUser" layoutX="300.0" layoutY="111.0" mnemonicParsing="false" onAction="#addUser" prefWidth="83.0" text="Cancel" />
          </children>
       </AnchorPane>
    </children>

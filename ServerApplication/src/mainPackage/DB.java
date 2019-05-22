@@ -24,10 +24,10 @@ public class DB {
 
     private void connect() {
         String ip = "localhost";
-        String port = "XXXX";
-        String database = "XXXX";
-        String user = "XXXX";
-        String password = "XXXX";
+        String port = "3306";
+        String database = "homeAutoLAAS";
+        String user = "userLAAS";
+        String password = "detvarsomtusan";
 
         connection = null;
         String url = "jdbc:mysql://" + ip + ":" + port + "/" + database + "?useSSL=false&user=" + user + "&password=" + password + "&serverTimezone=UTC";
@@ -136,9 +136,9 @@ public class DB {
                     gadgetList.add(items);
                 }
             }
-            if (results < 1) {
+            /*if (results < 1) {
                 throw new Exception("No gadgets stored in Server");
-            }
+            }*/
         } catch (SQLException e) {
             throw new Exception("Error on SQL query. Code 3");
         } catch (NullPointerException e) {
@@ -291,10 +291,6 @@ public class DB {
                 String password = resultSet.getString("password");
                 String admin = resultSet.getString("admin");
 
-                //Don't return password of other admins
-                if (admin.equals("1")) {
-                    password = "accessDenied";
-                }
                 String[] items = {accountID, name, password, admin};
                 accountList.add(items);
             }
@@ -342,6 +338,21 @@ public class DB {
             statement.executeUpdate("DELETE FROM Account WHERE systemID = " + systemID + " AND accountID = '" + accountID + "';");
         } catch (SQLException e) {
             throw new Exception("Server unable to delete account.");
+        } finally {
+            closeConnection();
+        }
+    }
+
+    public void editNonAdminPassword(int systemID, String newPassword) throws Exception {
+        connect();
+        int result;
+        try {
+            result = statement.executeUpdate("UPDATE Account SET password = '" + newPassword + "' WHERE systemID = " + systemID + " AND admin = 0;");
+            if (result < 1) {
+                throw new Exception("No non-admins in this system");
+            }
+        } catch (SQLException e) {
+            throw new Exception("Server unable to update non-admin passwords.");
         } finally {
             closeConnection();
         }
