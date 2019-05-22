@@ -239,13 +239,29 @@
 
 /* Text color of non-focused items in the list */
 .choice-box .menu-item > .label {
- -fx-text-fill: WHITE§;
+ -fx-text-fill: WHITE;
  }
 
 /* Text color of focused item in the list */
 .choice-box .menu-item:focused > .label {
 -fx-text-fill: WHITE;
 }
+
+
+/*--------------------------Energy dynamicframe -------------------------------*/
+
+.progress-indicator .indicator {
+-fx-background-color: #444444;
+}
+
+.progress-indicator .tick {
+-fx-background-color: null;
+}
+
+.progress-indicator .progress {
+-fx-background-color: #346189;
+}
+
 
 /*------------------------- BluePrint Controller ------------------------------*/
 
