@@ -257,7 +257,7 @@
 }
 
 progress-indicator .text {
-
+-fx-text-fill: null;
 }
 
 .progress-indicator .progress {
@@ -284,7 +284,7 @@ progress-indicator .text {
 
 .text-area{
 -fx-text-fill: WHITE;
--fx-font-size: 14;
+-fx-font-size: 13;
 -fx-focus-color: transparent;
 -fx-background-radius: 0.0;
 -fx-border-style: null;
@@ -298,7 +298,7 @@ progress-indicator .text {
 
 .text-area:focus {
 -fx-text-fill: WHITE;
--fx-font-size: 14;
+-fx-font-size: 13;
 -fx-focus-color: transparent;
 -fx-background-radius: 0.0;
 -fx-border-style: null;

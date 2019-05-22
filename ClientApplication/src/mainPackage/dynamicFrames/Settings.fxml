@@ -13,8 +13,8 @@
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="360.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="320.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" valignment="TOP" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
       <TextArea fx:id="textAreaInfoAboutUs" editable="false" prefHeight="200.0" prefWidth="200.0" text="The LAAS-application was made by four first grade computer science students at HKR. It was finished (YYYY-MM-DD).&#10;The application is a simulation of a smarthome. It is connected to a server application, communication with a remote database. This way clients don't have to close and reopen the application to get the latest updates.&#10;&#10;Abdifatah Abdulkadir, Anton Göransson, Ludvig Jönsson, Sebastian Mårtensson.&#10;" wrapText="true">
@@ -27,7 +27,15 @@
       </TextArea>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
          <children>
-            <Button fx:id="btnLogOut" mnemonicParsing="false" onAction="#logout" text="Log out " />
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Button fx:id="btnLogOut" mnemonicParsing="false" onAction="#logout" text="Log out ">
+                     <VBox.margin>
+                        <Insets top="14.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
          </children>
       </VBox>
    </children>
