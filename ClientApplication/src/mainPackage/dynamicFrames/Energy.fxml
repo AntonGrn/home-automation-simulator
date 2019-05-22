@@ -42,26 +42,41 @@
                <VBox.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </VBox.margin>
+               <padding>
+                  <Insets left="14.0" />
+               </padding>
             </Label>
             <Label fx:id="lblKitchen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Kitchen:">
                <VBox.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </VBox.margin>
+               <padding>
+                  <Insets left="14.0" />
+               </padding>
             </Label>
             <Label fx:id="lblToilet" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Toilet:">
                <VBox.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </VBox.margin>
+               <padding>
+                  <Insets left="14.0" />
+               </padding>
             </Label>
             <Label fx:id="lblLivingroom" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Livingroom:">
                <VBox.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </VBox.margin>
+               <padding>
+                  <Insets left="14.0" />
+               </padding>
             </Label>
             <Label fx:id="lblGarage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="Garage:">
                <VBox.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </VBox.margin>
+               <padding>
+                  <Insets left="14.0" />
+               </padding>
             </Label>
          </children>
       </VBox>
