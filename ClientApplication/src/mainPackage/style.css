@@ -90,6 +90,8 @@
 
 /*--------------------------Energy dynamicframe -------------------------------*/
 
+<<<<<<< HEAD
+=======
 .progress-indicator .indicator {
 -fx-background-color: #444444;
 }
@@ -196,4 +198,56 @@ progress-indicator .text {
 /* Text color of focused item in the list */
 .choice-box .menu-item:focused > .label {
 -fx-text-fill: WHITE;
+}
+
+
+/*--------------------------Energy dynamicframe -------------------------------*/
+
+.progress-indicator .indicator {
+-fx-background-color: #444444;
+}
+
+.progress-indicator .tick {
+-fx-background-color: null;
+}
+
+progress-indicator .text {
+-fx-text-fill: null;
+}
+
+.progress-indicator .progress {
+-fx-background-color: #346189;
+}
+
+
+/*--------------------------Settings dynamicframe--------------------------*/
+.text-area .content{
+-fx-background-color: #444444;
+}
+
+.text-area{
+-fx-text-fill: WHITE;
+-fx-font-size: 13;
+-fx-focus-color: transparent;
+-fx-background-radius: 0.0;
+-fx-border-style: null;
+-fx-border-radius: 0.0;
+-fx-border-insets: 0.0;
+-fx-border-color: #9d9d9e;
+-fx-highlight-fill: #1e97d2;
+-fx-background-insets: 0.0;
+}
+
+
+.text-area:focus {
+-fx-text-fill: WHITE;
+-fx-font-size: 13;
+-fx-focus-color: transparent;
+-fx-background-radius: 0.0;
+-fx-border-style: null;
+-fx-border-radius: 0.0;
+-fx-border-insets: 0.0;
+-fx-border-color: #9d9d9e;
+-fx-highlight-fill: #1e97d2;
+-fx-background-insets: 0.0;
 }
