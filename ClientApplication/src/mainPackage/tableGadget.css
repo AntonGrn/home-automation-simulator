@@ -1,0 +1,106 @@
+/*------------------------- DynamicFrame Rooms ------------------------------*/
+
+.table-view .table-column{
+    -fx-alignment: CENTER;
+    -fx-text-fill: WHITE;
+}
+
+.table-view {
+    -fx-text-fill: WHITE;
+    -fx-background-color: #231f26;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-column-border-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.table-view:pressed .table-view{
+    -fx-text-fill: WHITE;
+    -fx-background-color: #231f26;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-column-border-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.table-view .column-header-background{
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+    -fx-pref-height: 6;
+    -fx-background-insets: 0;
+}
+
+.table-view .table-row:selected{
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.table-view .table-row:pressed .table-row{
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.table-view .table-row-cell{
+    -fx-background-color: #231f26;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.table-view .table-row-cell:selected .table-cell{
+    -fx-background-color: #231f26;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.table-view .table-row-cell:pressed .table-cell{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.table-view .table-row-cell:focused .table-cell{
+    -fx-background-color: #231f26;
+    -fx-border-color: transparent;
+    -fx-text-fill: WHITE;
+    -fx-table-cell-border-color: transparent;
+        -fx-background-insets: 0;
+}
+
+.table-view .scroll-bar:vertical .thumb{
+    -fx-background-color: #231f26;
+}
+
+.table-view *.scroll-bar:horizontal *.increment-arrow,
+.table-view *.scroll-bar:horizontal *.decrement-arrow,
+.table-view *.scroll-bar:horizontal *.increment-button,
+.table-view *.scroll-bar:horizontal *.decrement-button{
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-shape: null;
+}
+
+.table-view *.scroll-bar:vertical *.increment-arrow,
+.table-view *.scroll-bar:vertical *.decrement-arrow,
+.table-view *.scroll-bar:vertical *.increment-button,
+.table-view *.scroll-bar:vertical *.decrement-button{
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-shape: null;
+}
+
+/*------------------------- BluePrint Controller ------------------------------*/
+
+#tblVKitchen, #tblVLivingRoom, #tblVToilet, #tblVBedRoom, #tblVGarage, .table-view{
+-fx-background-color: transparent;
+}
+
+#clmKitchen, #clmLivingroom, #clmToilet, #clmBedroom, #clmGarage, .table-view .table-row-cell{
+-fx-background-color: transparent;
+}
