@@ -179,7 +179,6 @@ public class UsersController implements DynamicFrame {
         btnCancelEditUser.setDisable(true);
         addUser = false;
         usersPW = account.getPassword();
-
         statusLabel.setText("");
         btnSubmitA.setDisable(true);
         // Change label according to user
@@ -190,8 +189,6 @@ public class UsersController implements DynamicFrame {
 
         } else {
             addOrEditUserLabel.setText("Edit: " + account.getName());
-            //adminPasswordField.clear();
-            //adminPasswordField.setText(account.getPassword());
         }
         adminPasswordField.clear();
         adminPasswordField.setText(usersPW);
@@ -292,8 +289,6 @@ public class UsersController implements DynamicFrame {
         adminPasswordField.clear();
         adminPasswordField.setPromptText(usersPW);
         nonAdminPassWd.requestFocus();
-
-        //nonAdminPasswordField.setDisable(true);
     }
 
     @FXML

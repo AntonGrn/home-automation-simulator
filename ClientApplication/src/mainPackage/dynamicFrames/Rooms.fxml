@@ -8,11 +8,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane maxHeight="600.0" maxWidth="400.0" minHeight="600.0" minWidth="400.0" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainPackage.dynamicFrames.RoomsController">
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="420.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainPackage.dynamicFrames.RoomsController">
    <center>
-      <Pane fx:id="dynamicFrameRooms" maxHeight="500.0" maxWidth="400.0" minHeight="500.0" minWidth="400.0" prefHeight="500.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+      <Pane fx:id="dynamicFrameRooms" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="tblViewDynamicGadgets" layoutX="10.0" layoutY="10.0" maxHeight="480.0" maxWidth="380.0" minHeight="480.0" minWidth="380.0" onMouseClicked="#onChangeStateOfGadget" prefHeight="480.0" prefWidth="380.0" stylesheets="@../tableGadget.css">
+            <TableView fx:id="tblViewDynamicGadgets" layoutX="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onChangeStateOfGadget" prefHeight="300.0" prefWidth="380.0" stylesheets="@../tableGadget.css">
               <columns>
                 <TableColumn fx:id="clmType" editable="false" prefWidth="126.0" sortable="false" text="Type" />
                 <TableColumn fx:id="clmId" editable="false" prefWidth="126.0" sortable="false" text="Id" />
@@ -22,7 +23,7 @@
          </children></Pane>
    </center>
    <top>
-      <HBox maxHeight="100.0" maxWidth="400.0" minHeight="100.0" minWidth="400.0" prefHeight="100.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="400.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="btnLeftHover" maxHeight="60.0" maxWidth="20.0" minHeight="60.0" minWidth="20.0" mnemonicParsing="false" onMouseEntered="#scrollLeft" onMouseExited="#stopScrollLeft" prefHeight="60.0" prefWidth="20.0" text="&lt;">
                <HBox.margin>
