@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class  Main extends Application {
@@ -22,7 +23,7 @@ public class  Main extends Application {
         mainWindowController = (MainWindowController) loader.getController();
 
         primaryStage.setScene(new Scene(root));
-        // For setting icon: primaryStage.getIcons().add(new Image("IMAGE URL"));
+        primaryStage.getIcons().add(new Image("mainPackage/images/icon48b.png"));
         primaryStage.setTitle("LAAS");
 
         primaryStage.show();
