@@ -109,7 +109,6 @@ public class GadgetsController implements DynamicFrame {
 
                     //Creating Laas string according to protocol.
                     String serverReguest = String.format("%s%s", "7b:", id);
-                    System.out.println(serverReguest);
 
                     try {
                         Main.getMainWindowController().requestsToServer.put(serverReguest);
@@ -172,7 +171,6 @@ public class GadgetsController implements DynamicFrame {
         } else {
             Main.getMainWindowController().exceptionLabel.setText("Select a row with valid information in it..");
         }
-
     }
 
     public void onSubmitClicked() {

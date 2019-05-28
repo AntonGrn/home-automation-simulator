@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import mainPackage.DynamicFrame;
 import mainPackage.Main;
+import mainPackage.MainWindowController;
 import mainPackage.ServerConnection;
 
 public class SettingsController implements DynamicFrame {
@@ -33,7 +34,7 @@ public class SettingsController implements DynamicFrame {
             Thread.sleep(100);
             ServerConnection.getInstance().closeResources();
         } catch (InterruptedException e) {
-            System.out.println("Exit interrupted");
+            Main.getMainWindowController().exceptionLabel.setText("Exit interrupted");
         }
     }
 }
