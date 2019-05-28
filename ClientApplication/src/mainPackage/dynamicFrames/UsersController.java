@@ -368,17 +368,5 @@ public class UsersController implements DynamicFrame {
             }
         }
     }
-
-    public boolean validateEmal() {
-        Pattern pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$");
-        Matcher matcher = pattern.matcher(nameField.getText());
-
-        if (matcher.find() && matcher.group().equals(nameField.getText())) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 }
 
