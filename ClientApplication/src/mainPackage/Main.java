@@ -37,13 +37,13 @@ public class  Main extends Application {
     //Cleanup executed before closing application
     @Override
     public void stop() {
-        System.out.println("Closing application");
+        //System.out.println("Closing application");
         try {
             Main.getMainWindowController().requestsToServer.put("16"); //Closes clean at server + ClientInputThread
             Thread.sleep(500);
             ServerConnection.getInstance().closeResources(); //Closes at server + entire client
         }catch (InterruptedException e) {
-            System.out.println("Exit interrupted");
+            Main.getMainWindowController().exceptionLabel.setText("Log out interrupted");
         }
     }
 }

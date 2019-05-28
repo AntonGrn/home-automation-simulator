@@ -39,7 +39,7 @@ public class ClientOutputThread extends Thread{
         try {
             output.close();
             socket.close();
-            System.out.println("Output Thread closed");
+            //System.out.println("Output Thread closed");
         } catch (IOException e) {
             e.printStackTrace();
         }

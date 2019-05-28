@@ -24,10 +24,10 @@ public class DB {
 
     private void connect() {
         String ip = "localhost";
-        String port = "XXXX";
-        String database = "XXXX";
-        String user = "XXXX";
-        String password = "XXXX";
+        String port = "3306";
+        String database = "homeAutoLAAS";
+        String user = "userLAAS";
+        String password = "detvarsomtusan";
 
         connection = null;
         String url = "jdbc:mysql://" + ip + ":" + port + "/" + database + "?useSSL=false&user=" + user + "&password=" + password + "&serverTimezone=UTC";
