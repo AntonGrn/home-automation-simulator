@@ -20,7 +20,7 @@ public class ClientThread extends Thread {
                 ClientRequest loginRequest = new ClientRequest(client, request);
                 client = Server.getInstance().login(loginRequest); //Assign the complete client information gathered by the login operation.
             } catch (IOException e) {
-                System.out.println("IOException on login in ClientThread " + Thread.currentThread().getName() + "Client IP " + client.getSocket().getInetAddress());
+                System.out.println("Invalid login format detected " + Thread.currentThread().getName() + "Client IP " + client.getSocket().getInetAddress());
             }
 
             if(!client.getAccountID().equals("null")) { //If login succeeded (account has been assigned with other than "null"; proceed:
@@ -54,10 +54,6 @@ public class ClientThread extends Thread {
                 System.out.println("Client did not log in successfully. Client: " + client.getSocket().getInetAddress());
                 closeResources();
             }
-        }
-
-        private boolean loginAttempt() {
-            return true;
         }
 
         private void closeResources() {

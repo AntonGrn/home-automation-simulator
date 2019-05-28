@@ -124,6 +124,7 @@ public class RoomsController implements DynamicFrame {
         });
 
         updateTableView("Livingroom");
+        Main.getMainWindowController().chosenRoom.setValue("Livingroom");
     }
 
     @Override

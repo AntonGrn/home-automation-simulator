@@ -24,7 +24,6 @@ public class ClientInputThread extends Thread {
             try {
                 //Read data from server
                 messageFromServer = input.readUTF();
-                System.out.println("Message received to inputThread " + Thread.currentThread());
                 //Send data from server to queue: requestsFromServer
                 Main.getMainWindowController().requestsFromServer.put(messageFromServer);
                 //Notify JavaFX-thread to update
@@ -33,11 +32,11 @@ public class ClientInputThread extends Thread {
                 closeResources();
                 break;
             } catch (SocketException e) {
-                System.out.println("No connection with server");
+                //System.out.println("No connection with server");
                 closeResources();
                 break;
             } catch (EOFException e) { //If server shuts down
-                System.out.println("No connection with server");
+                //System.out.println("No connection with server");
                 /*try {
                     //SOLVE THIS IN ANOTHER WAY
                     Main.getMainWindowController().requestsFromServer.put("17"); //Signal connection error
@@ -59,7 +58,7 @@ public class ClientInputThread extends Thread {
         try {
             input.close();
             socket.close();
-            System.out.println("Input Thread closed");
+            //System.out.println("Input Thread closed");
         } catch (IOException e) {
             e.printStackTrace();
         }

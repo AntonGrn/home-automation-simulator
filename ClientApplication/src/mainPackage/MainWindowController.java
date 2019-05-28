@@ -156,7 +156,7 @@ public class MainWindowController {
                     houseFrame.getChildren().clear();
                     houseFrame.getChildren().add(FXMLLoader.load(getClass().getResource("houseFrame/Blueprint.fxml")));
                 } catch (IOException e) {
-                    Main.getMainWindowController().exceptionLabel.setText("Could not load blueprint into mainframe");
+                    exceptionLabel.setText("Could not load blueprint into mainframe");
                 }
                 //Set initial state to not logged in
                 isNotLoggedIn();
@@ -171,7 +171,7 @@ public class MainWindowController {
         try {
             requestsToServer.put("5");
         } catch (InterruptedException e) {
-            System.out.println("Unable to request gadgets at log in");
+            exceptionLabel.setText("Unable to request gadgets from server");
         }
 
         //Access to system according to if logged in account is admin or not
@@ -226,6 +226,7 @@ public class MainWindowController {
     @FXML
     void setDynamicFrame(ActionEvent event) {
         exceptionLabel.setText("");
+        chosenRoom.setValue("");
 
         //Set all buttons to default layout.
         for (Node node : menuFrame.getChildren()) {
