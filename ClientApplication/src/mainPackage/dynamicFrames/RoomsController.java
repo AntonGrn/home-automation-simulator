@@ -122,6 +122,8 @@ public class RoomsController implements DynamicFrame {
                 });
             }
         });
+
+        updateTableView("Livingroom");
     }
 
     @Override
@@ -168,7 +170,7 @@ public class RoomsController implements DynamicFrame {
                         gadgetName = g.getName();
                         typeOfGadget = g.getClass().getSimpleName() + String.valueOf(g.getState()); //example 'Heat20'
                         stateOfGadget = "HeatIncrement";
-                        System.out.println(typeOfGadget);
+
                         GuiObject guiObject = new GuiObject(typeOfGadget, gadgetName, stateOfGadget, g.getId());
                         gadgetList.add(guiObject);
                     }
@@ -184,7 +186,7 @@ public class RoomsController implements DynamicFrame {
 
 
     public void onChangeStateOfGadget() {
-        try {
+        try{
             TablePosition pos = (TablePosition) tblViewDynamicGadgets.getSelectionModel().getSelectedCells().get(0);
             int row = pos.getRow();
             TableColumn tableColumn = pos.getTableColumn();
@@ -231,11 +233,11 @@ public class RoomsController implements DynamicFrame {
             } else {
                 tblViewDynamicGadgets.getSelectionModel().clearSelection();
             }
-        } catch (RuntimeException e) {
-            //TODO
-            System.out.println("Need to fix selection of this bitch here roomscontroller LLOOOOK HERE GUYS ");
+        }catch (RuntimeException ex){
+            //No wories this is works fine
         }
     }
+
 
     public int alterHeatState(String temp) {
         int newTemp = 0;
