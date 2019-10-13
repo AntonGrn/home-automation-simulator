@@ -1,5 +1,5 @@
 # HomeAutomationSimulator
-LAAS is a client-server application made by four first grade computer science students at HKR, Sweden.
+LAAS HomeAutomationSimulator is a client-server application made by four first grade computer science students at HKR, Sweden, 2019.
 
 <img src="./prtScrCli1.png " width="700">
 
